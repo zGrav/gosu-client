@@ -1,0 +1,89 @@
+syntax = "proto3";
+
+package proto;
+option java_package = "maple.proto";
+option go_package = "gosuproto";
+
+import "any.proto";
+import "profile.proto";
+import "hub_base.proto";
+import "hub.proto";
+
+// RPC - Userlist
+
+service UserlistService {
+    rpc GetChannelUsers (RPCUserlistGetChannelUsersRequest) returns (RPCUserlistGetChannelUsersResponse);
+    rpc GetHubMembers (RPCUserlistGetHubMembersRequest) returns (RPCUserlistGetHubMembersResponse);
+    rpc SearchHubMembers (RPCUserlistSearchHubMembersRequest) returns (RPCUserlistSearchHubMembersResponse);
+    rpc GetUserCounts (RPCUserlistGetUserCountsRequest) returns (RPCUserlistGetUserCountsResponse);
+}
+
+message RPCUserlistGetChannelUsersRequest {
+    string requesting_user_id = 1;
+    string channel_id = 2;
+    int64 size = 3;
+    int64 from = 4;
+    bool exclude_offline = 5;
+}
+
+message RPCUserlistGetChannelUsersResponse {
+    enum ErrorType {
+        NONE = 0;
+        UNKNOWN_ERROR = 1;
+        BAD_REQUEST = 2;
+        FORBIDDEN = 3;
+    }
+    ErrorType error = 1;
+    int64 total_users = 2;
+    int64 from = 3;
+    repeated ChannelUser users = 4;
+    int64 online_users = 5;
+    int64 paged_users = 6;
+}
+
+message RPCUserlistGetHubMembersRequest {
+    string requesting_user_id = 1;
+    string hub_id = 2;
+    int64 size = 3;
+    int64 from = 4;
+}
+
+message RPCUserlistGetHubMembersResponse {
+    enum ErrorType {
+        NONE = 0;
+        UNKNOWN_ERROR = 1;
+        BAD_REQUEST = 2;
+        FORBIDDEN = 3;
+    }
+    ErrorType error = 1;
+    int64 total_users = 2;
+    int64 from = 3;
+    repeated MembershipEntry users = 4;
+    int64 paged_users = 6;
+}
+
+message RPCUserlistSearchHubMembersRequest {
+    string requesting_user_id = 1;
+    string hub_id = 2;
+    int64 size = 3;
+    int64 from = 4;
+    string term = 5;
+    bool fuzzy = 6;
+}
+
+message RPCUserlistSearchHubMembersResponse {
+    SearchMembersResponse.ErrorType error = 1;
+    int64 from = 2;
+    repeated MembershipEntry users = 3;
+    int64 paged_users = 4;
+}
+
+message RPCUserlistGetUserCountsRequest {
+    string requesting_user_id = 1;
+    repeated string hub_ids = 2;
+    bool exclude_offline = 3;
+}
+
+message RPCUserlistGetUserCountsResponse {
+    map<string, int64> counts = 1;
+}

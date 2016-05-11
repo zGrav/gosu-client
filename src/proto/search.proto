@@ -1,0 +1,145 @@
+syntax = "proto3";
+
+package proto;
+option java_package = "maple.proto";
+option go_package = "gosuproto";
+
+import "any.proto";
+import "profile.proto";
+import "hub_base.proto";
+
+// RPC - Search
+
+service SearchService {
+    rpc Search (SearchRequest) returns (SearchResponse);
+    rpc IndexGroup (Group) returns (IndexResponse);
+    rpc DeleteGroup (Group) returns (DeleteResponse);
+    rpc IndexUser (User) returns (IndexResponse);
+    rpc DeleteUser (User) returns (DeleteResponse);
+
+    rpc GetSuggestions (SuggestionRequest) returns (SuggestionResponse);
+}
+
+message SearchRequest {
+    repeated string types = 1;
+    repeated string fields = 2;
+    string text = 3;
+    bool fuzzy = 4;
+    int32 size = 5;
+    int32 from = 6;
+}
+
+message SearchResponse {
+    map<string, SearchHits> hits = 1;
+    int32 from = 2;
+}
+
+message SearchHits {
+    repeated SearchHit hits = 1;
+    string type = 2;
+    int64 total = 3;
+}
+
+message SearchHit {
+    enum Type {
+        UNKNOWN = 0;
+        GROUP = 1;
+        USER = 2;
+        GAME = 3;
+        COMMUNITY = 4;
+    }
+
+    float score = 1;
+    string index = 2;
+    Type type = 3;
+    string id = 4;
+
+    map<string, Highlights> highlights = 5;
+
+    oneof source {
+        SearchUser user = 10;
+        SearchGroup group = 11;
+        SearchGame game = 12;
+        Hub community = 13;
+    }
+}
+
+message Highlights {
+    string field = 1;
+    repeated string highlights = 2;
+}
+
+message IndexResponse {
+    string index = 1;
+    string type = 2;
+    string id = 3;
+    int64 version = 4;
+    bool created = 5;
+}
+
+message DeleteResponse {
+    bool found = 1;
+    string index = 2;
+    string type = 3;
+    string id = 4;
+    int64 version = 5;
+}
+
+message Suggestion {
+    enum Type {
+        UNKNOWN = 0;
+        GROUP = 1;
+        USER = 2;
+        GAME = 3;
+        COMMUNITY = 4;
+    }
+
+    string id = 1;
+    Type type = 2;
+    string title = 3;
+    string image = 4;
+    bytes DEPRECATED_proprietary = 5;
+    Any data = 6;
+}
+
+message SuggestionRequest {
+    string text = 1;
+    bool fuzzy = 2;
+    repeated string context = 3;
+}
+
+message SuggestionResponse {
+    repeated Suggestion suggestions = 1;
+}
+
+message SearchGroup {
+    string id = 1;
+    string name = 2;
+    string description = 3;
+    string title_image = 4;
+    string background_image = 5;
+    repeated SearchChannel channels = 6;
+}
+
+message SearchGame {
+    string id = 1;
+    string name = 2;
+    string short_name = 3;
+    string title_image = 4;
+    repeated string background_images = 5;
+    repeated SearchChannel channels = 6;
+}
+
+message SearchChannel {
+    string id = 1;
+    string title = 2;
+    string topic = 3;
+    repeated string tags = 4;
+}
+
+message SearchUser {
+    string id = 1;
+    string name = 2;
+    string avatar_image = 3;
+    string background_image = 4;
+}

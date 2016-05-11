@@ -1,0 +1,337 @@
+syntax = "proto3";
+
+package proto;
+
+option java_package = "maple.proto";
+option go_package = "gosuproto";
+
+import "optional.proto";
+import "profile.proto";
+import "message.proto";
+import "wrappers.proto";
+
+// API Requests
+
+message ChannelInfoResponse {
+    Channel channel = 1;
+    Group group = 2;
+    Game game = 3;
+
+    bool isJoinable = 4;
+}
+
+message EditChannelRequest {
+    OptionalString title = 1;
+    OptionalString topic = 2;
+    OptionalBool visibility = 3;
+}
+
+message ChannelReadStatusResponseEntry {
+    string channel_id = 1;
+    string timestamp = 2;
+    WebsocketMessage latest_message = 3;
+    int32 unread_count = 4;
+    int32 unread_mention_count = 5;
+}
+
+message ChannelReadStatusResponse {
+    repeated ChannelReadStatusResponseEntry channels = 1;
+}
+
+message ChannelKickBanRequest {
+    string channel_id = 1;
+    string kicked_id = 2;
+    bool ban = 3;
+    OptionalInt64 ban_duration = 4;
+}
+
+message ChannelKickBanResponse {
+}
+
+message ChannelUnBanRequest {
+    string channel_id = 1;
+    string unbanned_id = 2;
+}
+
+message ChannelUnBanResponse {
+}
+
+message ChannelJoinGameChannelRequest {
+    string game_id = 1;
+    repeated string tags = 2;
+}
+
+message ChannelJoinGameChannelResponse {
+    Channel channel = 1;
+}
+
+message ChannelCreateGroupChannelRequest {
+    string group_id = 1;
+    string title = 2;
+    Channel.ChannelType type = 3;
+}
+
+message ChannelCreateGroupChannelResponse {
+    User user = 1;
+    Channel channel = 2;
+}
+
+message ChannelInviteMemberRequest {
+    string channel_id = 1;
+    string user_id = 2;
+}
+
+message ChannelInviteMemberResponse {
+    enum ErrorType {
+        NONE = 0;
+        INVALID_INPUT = 1;
+        FORBIDDEN = 2;
+        USER_ALREADY_JOINED = 3;
+        SERVER = 4;
+        USER_NOT_ALLOWED = 5;
+    }
+    ErrorType error = 1;
+}
+
+// RPC - Channel
+
+service ChannelService {
+    rpc CreateChannel (RPCChannelCreateChannelRequest) returns (RPCChannelCreateChannelResponse);
+    rpc JoinChannel (ChannelUpdateRequest) returns (ChannelUpdateResponse);
+    rpc LeaveChannel (ChannelUpdateRequest) returns (ChannelUpdateResponse);
+    rpc AddUsersToHubChannel (RPCChannelAddUsersToHubChannelRequest) returns (RPCChannelAddUsersToHubChannelResponse);
+    rpc AddUserToHubChannels (RPCChannelAddUserToHubChannelsRequest) returns (RPCChannelAddUserToHubChannelsResponse);
+    rpc GetChannel (RPCChannelGetChannelRequest) returns (RPCChannelGetChannelResponse);
+    rpc JoinGameChannel (RPCChannelJoinGameChannelRequest) returns (RPCChannelJoinGameChannelResponse);
+    rpc CreateGroupChannel (RPCChannelCreateGroupChannelRequest) returns (RPCChannelCreateGroupChannelResponse);
+    rpc KickBan (RPCChannelKickBanRequest) returns (RPCChannelKickBanResponse);
+    rpc UnBan (RPCChannelUnBanRequest) returns (RPCChannelUnBanResponse);
+    rpc GetGame (google.protobuf.StringValue) returns (GameResponse);
+    rpc GetGames (RPCGameGetGamesRequest) returns (RPCGameGetGamesResponse);
+    rpc GetGameChannels (RPCGameGetGameChannelsRequest) returns (RPCGameGetGameChannelsResponse);
+    rpc GetChannelUsers (RPCChannelGetChannelUsersRequest) returns (RPCChannelGetChannelUsersResponse);
+    rpc UnhideChannelIfNeeded (RPCChannelUnhideChannelRequest) returns (RPCChannelUnhideChannelResponse);
+    rpc InviteMember (RPCChannelInviteMemberRequest) returns (RPCChannelInviteMemberResponse);
+    rpc EditChannel (RPCEditChannelRequest) returns (RPCEditChannelResponse);
+    rpc DeleteChannel (RPCDeleteChannelRequest) returns (RPCDeleteChannelResponse);
+    rpc CanJoinChannel (RPCJoinChannelInfoRequest) returns (RPCJoinChannelInfoResponse);
+    rpc JoinProprietaryChannels (RPCJoinProprietaryChannelsRequest) returns (RPCJoinProprietaryChannelsResponse);
+    rpc GetExtendedChannelInfo (RPCChannelGetChannelRequest) returns (RPCExtendedChannelInfoResponse);
+}
+
+message GameResponse {
+    Game game = 1;
+    repeated Channel channels = 2;
+}
+
+message RPCJoinProprietaryChannelsRequest {
+    string user_id = 1;
+    ProprietaryUserGroupRecord.Type type = 2;
+}
+
+message RPCJoinProprietaryChannelsResponse {
+    // VOID
+}
+
+message RPCJoinChannelInfoRequest {
+    string user_id = 1;
+    Channel channel = 2;
+    string invite = 3;
+}
+
+message RPCJoinChannelInfoResponse {
+    bool isJoinable = 1;
+}
+
+message RPCDeleteChannelRequest {
+    string user_id = 1;
+    string channel_id = 2;
+}
+
+message RPCDeleteChannelResponse {
+    // VOID
+}
+
+message RPCEditChannelRequest {
+    string user_id = 1;
+    string channel_id = 2;
+
+    OptionalString title = 3;
+    OptionalString topic = 4;
+    OptionalBool visibility = 5;
+}
+
+message RPCEditChannelResponse {
+    Channel channel = 1;
+    bool title_updated = 2;
+    bool topic_updated = 3;
+    bool visibility_updated = 4;
+}
+
+message RPCChannelCreateGroupChannelRequest {
+    string user_id = 1;
+    string group_id = 2;
+    string title = 3;
+    Channel.ChannelType type = 4;
+}
+
+message RPCChannelCreateGroupChannelResponse {
+    User user = 1;
+    Channel channel = 2;
+}
+
+message RPCChannelCreateChannelRequest {
+    string title = 1;
+    Channel.ChannelType type = 2;
+    string group_id = 3;
+}
+
+message RPCChannelCreateChannelResponse {
+    Channel channel = 1;
+}
+
+message RPCExtendedChannelInfoResponse {
+    Channel channel = 1;
+    Group group = 2;
+    Game game = 3;
+}
+
+message ChannelUpdateRequest {
+    string channel_id = 1;
+    string user_id = 2;
+    string invite = 3;
+    // enforce, ignoring access rights
+    bool force = 4;
+}
+
+message ChannelUpdateResponse {
+    enum ErrorType {
+        NONE = 0;
+        UNKNOWN = 1;
+        USER_BANNED = 2;
+        USER_NOT_A_MEMBER = 3;
+    }
+
+    ErrorType error = 1;
+    User user = 2;
+}
+
+message RPCChannelAddUsersToHubChannelRequest {
+    string channel_id = 1;
+    string hub_id = 2;
+    repeated string user_ids = 3;
+    bool remove = 4;
+}
+
+message RPCChannelAddUsersToHubChannelResponse {
+    enum ErrorType {
+        NONE = 0;
+        UNKNOWN_ERROR = 1;
+        BAD_REQUEST = 2;
+    }
+    ErrorType error = 1;
+}
+
+message RPCChannelAddUserToHubChannelsRequest {
+    repeated string channel_ids = 1;
+    string user_id = 2;
+    bool remove = 3;
+}
+
+message RPCChannelAddUserToHubChannelsResponse {
+    enum ErrorType {
+        NONE = 0;
+        UNKNOWN_ERROR = 1;
+        BAD_REQUEST = 2;
+    }
+    ErrorType error = 1;
+}
+
+message RPCChannelGetChannelRequest {
+    string channel_id = 1;
+}
+
+message RPCChannelGetChannelResponse {
+    Channel channel = 1;
+}
+
+message RPCChannelJoinGameChannelRequest {
+    string user_id = 1;
+    string game_id = 2;
+    repeated string tags = 3;
+}
+
+message RPCChannelJoinGameChannelResponse {
+    Channel channel = 1;
+}
+
+message RPCChannelKickBanRequest {
+    string channel_id = 1;
+    string kicker_id = 2;
+    string kicked_id = 3;
+    bool ban = 4;
+    OptionalInt64 ban_duration = 5;
+}
+
+message RPCChannelKickBanResponse {
+}
+
+message RPCChannelUnBanRequest {
+    string channel_id = 1;
+    string unbanner_id = 2;
+    string unbanned_id = 3;
+}
+
+message RPCChannelUnBanResponse {
+}
+
+message RPCChannelGetChannelUsersRequest {
+    string channel_id = 1;
+}
+
+message RPCChannelGetChannelUsersResponse {
+    repeated ChannelUser users = 1;
+}
+
+message RPCChannelUnhideChannelRequest {
+    repeated string user_ids = 1;
+    string channel_id = 2;
+}
+
+message RPCChannelUnhideChannelResponse {
+}
+
+message RPCChannelInviteMemberRequest {
+    string channel_id = 1;
+    string inviter_id = 2;
+    string invitee_id = 3;
+}
+
+message RPCChannelInviteMemberResponse {
+    ChannelInviteMemberResponse.ErrorType error = 1;
+}
+
+// RPC - Game
+
+message RPCGameGetGamesRequest {
+    string cache_id = 1;
+    int32 page_number = 2;
+    int32 page_size = 3;
+}
+
+message RPCGameGetGamesResponse {
+    GameListPage page = 1;
+    string cache_id = 2;
+}
+
+message RPCGameGetGameChannelsRequest {
+    string cache_id = 1;
+    string game_id = 2;
+    int32 page_number = 3;
+    int32 page_size = 4;
+}
+
+message RPCGameGetGameChannelsResponse {
+    GameChannelListPage page = 1;
+    string cache_id = 2;
+}

@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package proto;
+
+option java_package = "maple.proto";
+option go_package = "gosuproto";
+
+message ChatServiceControlCommand {
+    enum CommandType {
+        UNKNOWN = 0;
+        DISCONNECT_USERS = 1;
+    }
+    CommandType type = 1;
+    oneof command {
+        ChatServiceDisconnectUsersCommand disconnect_users_command = 2;
+    }
+}
+
+message ChatServiceDisconnectUsersCommand {
+    repeated string user_ids = 1;
+}

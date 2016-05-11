@@ -1,0 +1,799 @@
+syntax = "proto3";
+
+package proto;
+
+import "wrappers.proto";
+import "optional.proto";
+import "hub_base.proto";
+import "profile.proto";
+
+option java_package = "maple.proto";
+option java_outer_classname = "Community";
+option go_package = "gosuproto";
+
+// rpc
+
+service HubService {
+    rpc CreateHub (RPCHubCreateHubRequest) returns (RPCHubCreateHubResponse);
+    rpc EditHub (RPCHubEditHubRequest) returns (RPCHubEditHubResponse);
+    rpc DeleteHub (RPCHubDeleteHubRequest) returns (RPCHubDeleteHubResponse);
+    rpc GetHub (RPCHubGetHubRequest) returns (RPCHubGetHubResponse);
+    rpc GetAllHubs (RPCHubGetAllHubsRequest) returns (RPCHubGetAllHubsResponse);
+    rpc ValidateTitle (RPCHubValidateTitleRequest) returns (RPCHubValidateTitleResponse);
+
+    rpc AddMember (RPCHubAddMemberRequest) returns (RPCHubAddMemberResponse);
+    rpc EditMember (RPCHubEditMemberRequest) returns (RPCHubEditMemberResponse);
+    rpc GetMembers (RPCHubGetMembersRequest) returns (RPCHubGetMembersResponse);
+    rpc GetHubMember (RPCHubGetMemberRequest) returns (RPCHubGetMemberResponse);
+
+    rpc AddExternalMember (RPCHubAddExternalMemberRequest) returns (RPCHubAddExternalMemberResponse);
+    rpc EditExternalMember (RPCHubEditExternalMemberRequest) returns (RPCHubEditExternalMemberResponse);
+    rpc GetExternalMembers (RPCHubGetExternalMembersRequest) returns (RPCHubGetExternalMembersResponse);
+
+    rpc SendInvite (RPCHubSendInviteRequest) returns (RPCHubSendInviteResponse);
+    rpc RequestMembership (RPCHubRequestMembershipRequest) returns (RPCHubRequestMembershipResponse);
+    rpc JoinHub (RPCHubJoinHubRequest) returns (RPCHubJoinHubResponse);
+    rpc LeaveHub (RPCHubLeaveHubRequest) returns (RPCHubLeaveHubResponse);
+    rpc LinkHub (RPCHubLinkHubRequest) returns (RPCHubLinkHubResponse);
+    rpc UnlinkHub (RPCHubUnlinkHubRequest) returns (RPCHubUnlinkHubResponse);
+
+    rpc RegisterExternalUserID (RPCHubRegisterExternalUserIDRequest) returns (RPCHubRegisterExternalUserIDResponse);
+}
+
+message RPCHubCreateHubRequest {
+    repeated string parent_ids = 1;
+    repeated string translation_ids = 2;
+    string user_id = 3;
+    string group_id = 13;
+    bool closed = 4;
+    string title = 5;
+    string short_title = 6;
+    string description = 7;
+    string title_image = 8;
+    string background_image = 9;
+    string claimed_group_id = 10;
+    string language = 11;
+    bool nsfw = 12;
+}
+
+message RPCHubCreateHubResponse {
+    enum ErrorType {
+        NONE = 0;
+        SERVER_ERROR = 1;
+        TITLE_EXISTS = 2;
+        OWNER_INVALID = 3;
+        GROUP_INVALID = 4;
+        TITLE_IMAGE_INVALID = 5;
+        BACKGROUND_IMAGE_INVALID = 6;
+        PARENTS_INVALID = 7;
+        TRANSLATIONS_INVALID = 8;
+        LANGUAGE_INVALID = 9;
+        TITLE_INVALID = 10;
+        SHORT_TITLE_INVALID = 11;
+        BAD_REQUEST = 12;
+        SHORT_TITLE_EXISTS = 13;
+        FORBIDDEN = 14;
+        TITLE_TOO_SHORT = 15;
+        TITLE_TOO_LONG = 16;
+        SHORT_TITLE_TOO_SHORT = 17;
+        SHORT_TITLE_TOO_LONG = 18;
+        SHORT_TITLE_RESERVED = 19;
+
+    }
+
+    ErrorType error = 1;
+    Hub hub = 2;
+    repeated Hub children = 3;
+    repeated Hub siblings = 4;
+}
+
+message RPCHubEditHubRequest {
+    string hub_id = 1;
+    string user_id = 2;
+    string group_id = 15;
+    OptionalRepeatedString parent_ids = 3;
+    OptionalRepeatedString translation_ids = 4;
+    google.protobuf.StringValue owner_id = 5;
+    google.protobuf.BoolValue closed = 6;
+    google.protobuf.StringValue title = 7;
+    google.protobuf.StringValue short_title = 8;
+    google.protobuf.StringValue description = 9;
+    google.protobuf.StringValue title_image = 10;
+    google.protobuf.StringValue background_image = 11;
+    google.protobuf.StringValue claimed_group_id = 12;
+    google.protobuf.StringValue language = 13;
+    google.protobuf.BoolValue nsfw = 14;
+}
+
+message RPCHubEditHubResponse {
+    RPCHubCreateHubResponse.ErrorType error = 1;
+    Hub hub = 2;
+    repeated Hub children = 3;
+    repeated Hub siblings = 4;
+}
+
+message RPCHubDeleteHubRequest {
+    string hub_id = 1;
+    string user_id = 2;
+    string group_id = 3;
+}
+
+message RPCHubDeleteHubResponse {
+    enum ErrorType {
+        NONE = 0;
+        UNKNOWN = 1;
+        FORBIDDEN = 2;
+        BAD_REQUEST = 3;
+    }
+    ErrorType error = 1;
+}
+
+message RPCHubGetHubRequest {
+    string hub_id = 1;
+    string short_title = 2;
+    string hub_id_or_short_title = 3;
+    bool populate_parents = 4;
+    bool populate_children = 5;
+    bool populate_siblings = 6;
+}
+
+message RPCHubGetHubResponse {
+    enum ErrorType {
+        NONE = 0;
+        UNKNOWN = 1;
+        NOT_FOUND = 2;
+        BAD_REQUEST = 3;
+    }
+
+    ErrorType error = 1;
+    Hub hub = 2;
+    repeated Hub children = 3;
+    repeated Hub siblings = 4;
+}
+
+message RPCHubLinkHubRequest {
+    string hub_id = 1;
+    string group_id = 2;
+    string user_id = 3;
+}
+
+message RPCHubLinkHubResponse {
+    enum ErrorType {
+        NONE = 0;
+        UNKNOWN_ERROR = 1;
+        FORBIDDEN = 2;
+        BAD_REQUEST = 3;
+        ALREADY_LINKED = 4;
+    }
+    ErrorType error = 1;
+}
+
+message RPCHubUnlinkHubRequest {
+    string hub_id = 1;
+    string group_id = 2;
+    string user_id = 3;
+}
+
+message RPCHubUnlinkHubResponse {
+    enum ErrorType {
+        NONE = 0;
+        UNKNOWN_ERROR = 1;
+        FORBIDDEN = 2;
+        BAD_REQUEST = 3;
+        NOT_LINKED = 4;
+    }
+    ErrorType error = 1;
+}
+
+message RPCHubGetAllHubsRequest {
+    int32 limit = 1;
+}
+
+message RPCHubGetAllHubsResponse {
+    repeated Hub hubs = 1;
+}
+
+message RPCHubValidateTitleRequest {
+    google.protobuf.StringValue title = 1;
+    google.protobuf.StringValue short_title = 2;
+}
+
+message RPCHubValidateTitleResponse {
+    enum ErrorType {
+        NONE = 0;
+        BAD_REQUEST = 1;
+        SERVER_ERROR = 2;
+        TITLE_EXISTS = 3;
+        TITLE_INVALID = 4;
+        SHORT_TITLE_EXISTS = 5;
+        SHORT_TITLE_INVALID = 6;
+        TITLE_TOO_SHORT = 7;
+        TITLE_TOO_LONG = 8;
+        SHORT_TITLE_TOO_SHORT = 9;
+        SHORT_TITLE_TOO_LONG = 10;
+        SHORT_TITLE_RESERVED = 11;
+    }
+    ErrorType error = 1;
+}
+
+// used to add (invite) a member to a hub
+message RPCHubAddMemberRequest {
+    string hub_id = 1;
+    string inviter_id = 2;
+    oneof identifier {
+        string user_id = 3;
+        string email = 4;
+    }
+    MembershipEntry.MembershipType type = 5;
+    bool fetch_existing = 6;
+    bool fetch_pending = 7;
+    bool fetch_banned = 8;
+}
+
+message RPCHubAddMemberResponse {
+    enum ErrorType {
+        NONE = 0;
+        UNKNOWN_ERROR = 1;
+        FORBIDDEN = 2;
+        INVALID_USER_ID = 3;
+        INVALID_EMAIL = 4;
+        INVALID_MEMBERSHIP_TYPE = 5;
+        BAD_REQUEST = 6;
+        ALREADY_PENDING = 7;
+        ALREADY_MEMBER = 8;
+        ALREADY_BANNED = 9;
+    }
+
+    ErrorType error = 1;
+    repeated MembershipEntry existing_users = 2;
+    repeated MembershipEntry pending_users = 3;
+    repeated MembershipEntry banned_users = 4;
+    MembershipEntry updated_entry = 5;
+}
+
+// used to fetch all members for a hub
+message RPCHubGetMembersRequest {
+    string hub_id = 1;
+    string user_id = 2;
+    bool fetch_existing = 3;
+    bool fetch_pending = 4;
+    bool fetch_banned = 5;
+    int64 size = 6;
+    int64 from = 7;
+}
+
+message RPCHubGetMembersResponse {
+    enum ErrorType {
+        NONE = 0;
+        UNKNOWN_ERROR = 1;
+        FORBIDDEN = 2;
+        BAD_REQUEST = 3;
+    }
+
+    ErrorType error = 1;
+    repeated MembershipEntry existing_users = 2;
+    repeated MembershipEntry pending_users = 3;
+    repeated MembershipEntry banned_users = 4;
+    int64 total_users = 5;
+    int64 from = 6;
+    int64 paged_users = 7;
+}
+
+message MembershipEntry {
+    enum Status {
+        STATUS_UNKNOWN = 0;
+        STATUS_EXISTING = 1;
+        STATUS_PENDING = 2;
+        STATUS_BANNED = 3;
+    }
+    enum MembershipType {
+        UNKNOWN = 0;
+        BANNED = 5;
+        NONE = 10;
+        MEMBER = 25;
+        MODERATOR = 50;
+        OWNER = 75;
+    }
+
+    string user_id = 1;
+    string invited_email = 2;
+    Status status = 3;
+    MembershipType type = 4;
+    ChatUser user = 5;
+    ChatUser owner = 6;
+    int64 created_at = 7;
+    int64 updated_at = 8;
+    MembershipType derived_type = 9;
+    MembershipType parent_type = 10;
+}
+
+// used to resend an invitation email for an invited member that has not joined the hub yet
+message RPCHubSendInviteRequest {
+    string hub_id = 1;
+    string sender_id = 2;
+    string user_id = 3;
+    string email = 4;
+}
+
+message RPCHubSendInviteResponse {
+    enum ErrorType {
+        NONE = 0;
+        UNKNOWN_ERROR = 1;
+        FORBIDDEN = 2;
+        ALREADY_MEMBER = 3; // the user is already in the hub channel
+        NOT_INVITED = 4; // the user has not been invited/added to the hub previously
+        BAD_REQUEST = 5;
+    }
+
+    ErrorType error = 1;
+}
+
+message RPCHubRequestMembershipRequest {
+    string hub_id = 1;
+    string user_id = 2;
+}
+
+message RPCHubRequestMembershipResponse {
+    enum ErrorType {
+        NONE = 0;
+        UNKNOWN_ERROR = 1;
+        BAD_REQUEST = 2;
+        ALREADY_MEMBER = 3;
+        BANNED = 4;
+        HUB_NOT_CLOSED = 5;
+    }
+    ErrorType error = 1;
+}
+
+// used to edit an existing hub membership
+// a membership/invite can be revoked/deleted by setting type to NONE
+// either user id or email have to be supplied to identify the user to be edited
+message RPCHubEditMemberRequest {
+    string hub_id = 1;
+    string editer_id = 2;
+    string user_id = 3;
+    string email = 4;
+    MembershipEntry.MembershipType type = 5;
+    bool fetch_existing = 6;
+    bool fetch_pending = 7;
+    bool fetch_banned = 8;
+}
+
+message RPCHubEditMemberResponse {
+    enum ErrorType {
+        NONE = 0;
+        UNKNOWN_ERROR = 1;
+        FORBIDDEN = 2;
+        BAD_REQUEST = 3;
+    }
+
+    ErrorType error = 1;
+    repeated MembershipEntry existing_users = 2;
+    repeated MembershipEntry pending_users = 3;
+    repeated MembershipEntry banned_users = 4;
+    MembershipEntry updated_entry = 5;
+}
+
+// used to join a hub channel
+// code is optional (can be used to redeem an invite via email)
+message RPCHubJoinHubRequest {
+    string hub_id = 1;
+    string user_id = 2;
+    string code = 3;
+}
+
+message RPCHubJoinHubResponse {
+    enum ErrorType {
+        NONE = 0;
+        UNKNOWN_ERROR = 1;
+        BAD_REQUEST = 2;
+        FORBIDDEN = 3;
+        BANNED = 4;
+        INVALID_CODE = 5;
+    }
+
+    ErrorType error = 1;
+}
+
+// used to leave a hub channel
+message RPCHubLeaveHubRequest {
+    string hub_id = 1;
+    string user_id = 2;
+}
+
+message RPCHubLeaveHubResponse {
+    enum ErrorType {
+        NONE = 0;
+        UNKNOWN_ERROR = 1;
+        BAD_REQUEST = 2;
+    }
+
+    ErrorType error = 1;
+}
+
+// external membership management
+
+// used to add an external member to a hub
+message RPCHubAddExternalMemberRequest {
+    string hub_id = 1;
+    string acting_user_id = 2;
+    string acting_group_id = 3;
+    string external_user_id = 4;
+    MembershipEntry.MembershipType type = 5;
+}
+
+message RPCHubAddExternalMemberResponse {
+    enum ErrorType {
+        NONE = 0;
+        UNKNOWN_ERROR = 1;
+        BAD_REQUEST = 2;
+        FORBIDDEN = 3;
+        INVALID_MEMBERSHIP_TYPE = 4;
+        ALREADY_MEMBER = 5;
+    }
+
+    ErrorType error = 1;
+    repeated ExternalMembershipEntry users = 2;
+}
+
+// used to fetch all external members for a hub
+message RPCHubGetExternalMembersRequest {
+    string hub_id = 1;
+    string acting_user_id = 2;
+    string acting_group_id = 3;
+}
+
+message RPCHubGetExternalMembersResponse {
+    enum ErrorType {
+        NONE = 0;
+        UNKNOWN_ERROR = 1;
+        FORBIDDEN = 2;
+        BAD_REQUEST = 3;
+    }
+
+    ErrorType error = 1;
+    repeated ExternalMembershipEntry users = 2;
+}
+
+message ExternalMembershipEntry {
+    enum Status {
+        STATUS_UNKNOWN = 0;
+        STATUS_EXISTING = 1;
+    }
+    enum MembershipType {
+        UNKNOWN = 0;
+        BANNED = 5;
+        NONE = 10;
+        MEMBER = 25;
+        MODERATOR = 50;
+        OWNER = 75;
+    }
+
+    string external_user_id = 1;
+    MembershipType type = 2;
+    int64 created_at = 3;
+    int64 updated_at = 4;
+}
+
+// used to edit an existing hub membership
+// a membership/invite can be revoked/deleted by setting type to NONE
+message RPCHubEditExternalMemberRequest {
+    string hub_id = 1;
+    string acting_user_id = 2;
+    string acting_group_id = 3;
+    string external_user_id = 4;
+    MembershipEntry.MembershipType type = 5;
+}
+
+message RPCHubEditExternalMemberResponse {
+    enum ErrorType {
+        NONE = 0;
+        UNKNOWN_ERROR = 1;
+        FORBIDDEN = 2;
+        BAD_REQUEST = 3;
+    }
+
+    ErrorType error = 1;
+    repeated ExternalMembershipEntry users = 2;
+}
+
+message RPCHubGetMemberRequest {
+    string hub_id = 1;
+    string user_id = 2;
+}
+
+message RPCHubGetMemberResponse {
+    enum ErrorType {
+        NONE = 0;
+        UNKNOWN_ERROR = 1;
+        FORBIDDEN = 2;
+        BAD_REQUEST = 3;
+    }
+    ErrorType error = 1;
+    HubMembershipRecord.MembershipType type = 2;
+}
+
+message RPCHubRegisterExternalUserIDRequest {
+    string user_id = 1;
+    string group_id = 2;
+    string external_user_id = 3;
+}
+
+message RPCHubRegisterExternalUserIDResponse {
+    enum ErrorType {
+        NONE = 0;
+        UNKNOWN_ERROR = 1;
+        FORBIDDEN = 2;
+        BAD_REQUEST = 3;
+    }
+    ErrorType error = 1;
+}
+
+// storage
+
+message HubInvite {
+    string id = 1;
+    int64 created_at = 2;
+    int64 updated_at = 3;
+    string hub_id = 4;
+    string inviter_id = 5;
+    string user_id = 6;
+    string email = 7;
+    string code = 8;
+    HubMembershipRecord.MembershipType type = 9;
+}
+
+message HubMembershipRequest {
+    string id = 1;
+    int64 created_at = 2;
+    int64 updated_at = 3;
+    string hub_id = 4;
+    string user_id = 5;
+}
+
+message HubMembership {
+    string hub_id = 1;
+    string user_id = 2;
+    HubMembershipRecord.MembershipType type = 3;
+    Hub hub = 4;
+    HubPermissions permissions = 5;
+}
+
+message HubMembershipRecord {
+    enum MembershipType {
+        UNKNOWN = 0;
+        BANNED = 5;
+        NONE = 10;
+        MEMBER = 25;
+        MODERATOR = 50;
+        MODERATOR_GROUP = 60;
+        OWNER = 75;
+    }
+
+    string id = 1;
+    int64 created_at = 2;
+    int64 updated_at = 3;
+    string hub_id = 4;
+    string user_id = 5;
+    MembershipType type = 6;
+    Hub hub = 7;
+    User user = 8;
+    HubPermissions permissions = 9;
+}
+
+message HubPermissions {
+    bool edit_hub = 1;
+    bool delete_hub = 2;
+}
+
+message HubExternalMembershipRecord {
+    string id = 1;
+    int64 created_at = 2;
+    int64 updated_at = 3;
+    string hub_id = 4;
+    string external_user_id = 5;
+    HubMembershipRecord.MembershipType type = 7;
+}
+
+// api
+
+message HubCreateHubRequest {
+    repeated string parent_ids = 1;
+    repeated string translation_ids = 2;
+    bool closed = 4;
+    string title = 5;
+    string short_title = 6;
+    string description = 7;
+    string title_image = 8;
+    string background_image = 9;
+    string claimed_group_id = 10;
+    string language = 11;
+    bool nsfw = 12;
+}
+
+message HubCreateHubResponse {
+    RPCHubCreateHubResponse.ErrorType error = 1;
+    Hub hub = 2;
+    repeated Hub children = 3;
+    repeated Hub siblings = 4;
+}
+
+message HubGetHubResponse {
+    Hub hub = 1;
+    repeated Hub children = 2;
+    repeated Hub siblings = 3;
+}
+
+message HubGetAllHubsResponse {
+    repeated Hub hubs = 1;
+}
+
+message HubEditHubRequest {
+    OptionalRepeatedString parent_ids = 1;
+    OptionalRepeatedString translation_ids = 2;
+    google.protobuf.BoolValue closed = 3;
+    google.protobuf.StringValue title = 4;
+    google.protobuf.StringValue short_title = 5;
+    google.protobuf.StringValue description = 6;
+    google.protobuf.StringValue title_image = 7;
+    google.protobuf.StringValue background_image = 8;
+    google.protobuf.StringValue claimed_group_id = 9;
+    google.protobuf.StringValue language = 10;
+    google.protobuf.BoolValue nsfw = 11;
+}
+
+message HubEditHubResponse {
+    RPCHubCreateHubResponse.ErrorType error = 1;
+    Hub hub = 2;
+    repeated Hub children = 3;
+    repeated Hub siblings = 4;
+}
+
+message HubDeleteHubResponse {
+    RPCHubDeleteHubResponse.ErrorType error = 1;
+}
+
+message HubValidateTitleRequest {
+    google.protobuf.StringValue title = 1;
+    google.protobuf.StringValue short_title = 2;
+}
+
+message HubValidateTitleResponse {
+    RPCHubValidateTitleResponse.ErrorType error = 1;
+}
+
+// used to add (invite) a member to a hub or group
+message AddMemberRequest {
+    oneof identifier {
+        string user_id = 1;
+        string email = 2;
+    }
+    MembershipEntry.MembershipType type = 3;
+    bool fetch_existing = 4; // if this is set to yes, the response will contain all members with status existing
+    bool fetch_pending = 5; // if this is set to yes, the response will contain all members with status pending
+    bool fetch_banned = 6; // if this is set to yes, the response will contain all members with status banned
+}
+
+message AddMemberResponse {
+    RPCHubAddMemberResponse.ErrorType error = 1;
+    repeated MembershipEntry existing_users = 2;
+    repeated MembershipEntry pending_users = 3;
+    repeated MembershipEntry banned_users = 4;
+    MembershipEntry updated_entry = 5;
+}
+
+// used to fetch all members for a hub or group
+message GetMembersResponse {
+    RPCHubGetMembersResponse.ErrorType error = 1;
+    repeated MembershipEntry existing_users = 2;
+    repeated MembershipEntry pending_users = 3;
+    repeated MembershipEntry banned_users = 4;
+    int64 total_users = 5;
+    int64 from = 6;
+    int64 paged_users = 7;
+}
+
+message SearchMembersResponse {
+    enum ErrorType {
+        NONE = 0;
+        UNKNOWN_ERROR = 1;
+        BAD_REQUEST = 2;
+        FORBIDDEN = 3;
+    }
+    ErrorType error = 1;
+    int64 from = 2;
+    repeated MembershipEntry users = 3;
+    int64 paged_users = 4;
+}
+
+// used to resend an invitation email for an invited member that has not joined the hub or group yet
+// either user id or email has to be supplied
+message SendInviteRequest {
+    string user_id = 1;
+    string email = 2;
+}
+
+message SendInviteResponse {
+    RPCHubSendInviteResponse.ErrorType error = 1;
+}
+
+// used to edit an existing hub or group membership
+// a membership/invite can be revoked/deleted by setting type to NONE
+// either user id or email have to be supplied to identify the user to be edited
+message EditMemberRequest {
+    string user_id = 1;
+    string email = 2;
+    MembershipEntry.MembershipType type = 3;
+    bool fetch_existing = 4;
+    bool fetch_pending = 5;
+    bool fetch_banned = 6;
+}
+
+message EditMemberResponse {
+    RPCHubEditMemberResponse.ErrorType error = 1;
+    repeated MembershipEntry existing_users = 2;
+    repeated MembershipEntry pending_users = 3;
+    repeated MembershipEntry banned_users = 4;
+    MembershipEntry updated_entry = 5;
+}
+
+message HubAddExternalMemberRequest {
+    string external_user_id = 1;
+    MembershipEntry.MembershipType type = 2;
+}
+
+message HubAddExternalMemberResponse {
+    RPCHubAddExternalMemberResponse.ErrorType error = 1;
+    repeated ExternalMembershipEntry users = 2;
+}
+
+message HubEditExternalMemberRequest {
+    string external_user_id = 1;
+    MembershipEntry.MembershipType type = 2;
+}
+
+message HubEditExternalMemberResponse {
+    RPCHubEditExternalMemberResponse.ErrorType error = 1;
+    repeated ExternalMembershipEntry users = 2;
+}
+
+message HubGetExternalMembersResponse {
+    RPCHubGetExternalMembersResponse.ErrorType error = 1;
+    repeated ExternalMembershipEntry users = 2;
+}
+
+// used to join a hub channel
+// code is optional (can be used to redeem an invite via email)
+message HubJoinHubRequest {
+    string code = 1;
+}
+
+message HubJoinHubResponse {
+    RPCHubJoinHubResponse.ErrorType error = 1;
+}
+
+message HubLeaveHubResponse {
+    RPCHubLeaveHubResponse.ErrorType error = 1;
+}
+
+message HubLinkHubResponse {
+    RPCHubLinkHubResponse.ErrorType error = 1;
+}
+
+message HubUnlinkHubResponse {
+    RPCHubUnlinkHubResponse.ErrorType error = 1;
+}
+
+message RegisterExternalUserIDRequest {
+    string group_id = 1;
+    string external_user_id = 2;
+}
+
+message RegisterExternalUserIDResponse {
+    RPCHubRegisterExternalUserIDResponse.ErrorType error = 1;
+}
+
+message HubGetMemberResponse {
+    RPCHubGetMemberResponse.ErrorType error = 1;
+    HubMembershipRecord.MembershipType type = 2;
+}

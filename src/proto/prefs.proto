@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package proto;
+option java_package = "maple.proto";
+option go_package = "gosuproto";
+
+message PrefValue {
+    oneof kind {
+        // Represents a null value.
+        PrefNullValue null_value = 1;
+
+        // Represents a double value.
+        double number_value = 2;
+
+        // Represents a string value.
+        string string_value = 3;
+
+        // Represents a boolean value.
+        bool bool_value = 4;
+    }
+}
+
+enum PrefNullValue {
+    // Null value.
+    NULL_VALUE = 0;
+}
+
+message Pref {
+    string domain = 1;
+    string keypath = 2;
+    PrefValue value = 3;
+}
+
+// used for database
+message PrefRecord {
+    string id = 1;
+    string user_id = 2;
+    string domain = 3;
+    string keypath = 4;
+    PrefValue value = 5;
+}

@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package proto;
+import "profile.proto";
+option java_package = "maple.proto";
+option go_package = "gosuproto";
+
+message SipGetDeviceResponse {
+    string private_id = 1;
+    string public_id = 2;
+    string realm = 3;
+    string password = 4;
+}
+
+message SipGetConferenceResponse {
+    string address = 1;
+}
+
+message SipSetConferenceStatusRequest {
+    ChannelMembershipRecord.VoiceStatus voice_status = 1;
+}

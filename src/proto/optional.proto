@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package proto;
+
+option java_package = "maple.proto";
+option go_package = "gosuproto";
+
+message OptionalString {
+    string value = 1;
+}
+
+message OptionalBool {
+    bool value = 1;
+}
+
+message OptionalInt64 {
+    int64 value = 1;
+}
+
+message OptionalRepeatedString {
+    repeated string values = 1;
+}

@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package proto;
+
+import "wrappers.proto";
+import "optional.proto";
+
+option java_package = "maple.proto";
+option java_outer_classname = "CommunityBase";
+option go_package = "gosuproto";
+
+// storage
+
+message Hub {
+    string id = 1;
+    repeated string parent_ids = 2;
+    repeated Hub parents = 3;
+    repeated string translation_ids = 4;
+    repeated Hub translations = 5;
+
+    string owner_id = 6;
+    bool closed = 7;
+    string title = 8;
+    string short_title = 9;
+    string slug = 10;
+    string description = 11;
+    string title_image = 12;
+    string background_image = 13;
+    string claimed_group_id = 14;
+    string language = 15;
+    bool nsfw = 16;
+    string channel_id = 17;
+    int64 created_at = 18;
+    int64 updated_at = 19;
+    string normalized_title = 20;
+    string normalized_short_title = 21;
+    int64 online_user_count = 22;
+}

@@ -1,0 +1,122 @@
+syntax = "proto3";
+
+package proto;
+
+option java_package = "maple.proto";
+option go_package = "gosuproto";
+
+import "profile.proto";
+import "any.proto";
+import "message.proto";
+import "hub_base.proto";
+import "hub.proto";
+
+message GroupUpdateWrapper {
+    enum Action {
+        UNKNOWN = 0;
+        CREATE = 1;
+        UPDATE = 2;
+        DELETE = 3;
+    }
+
+    Group group = 1;
+    Action action = 2;
+}
+
+message ContentUpdateWrapper {
+    enum Operation {
+        UNKNOWN = 0;
+        CREATE = 1;
+        UPDATE = 2;
+        DELETE = 3;
+    }
+
+    Any data = 1;
+    Operation operation = 2;
+    int64 timestamp = 3;
+    string entry_id = 4;
+}
+
+message MessageDeletedEvent {
+	string message_id = 1;
+	string channel_id = 2;
+	MessageBatch message_batch = 3;
+	Any message_payload = 4;
+}
+
+message UserUpdateWrapper {
+    enum Action {
+        UNKNOWN = 0;
+        CREATE = 1;
+        UPDATE = 2;
+        DELETE = 3;
+    }
+
+    int64 timestamp = 1;
+    Action action = 2;
+    string user_id = 3;
+    User user = 4;
+}
+
+message HubMembershipUpdateWrapper {
+    enum Action {
+        UNKNOWN = 0;
+        CREATE = 1;
+        UPDATE = 2;
+        DELETE = 3;
+    }
+
+    int64 timestamp = 1;
+    Action action = 2;
+    string user_id = 3;
+    string hub_id = 4;
+
+    User user = 5;
+    HubMembershipRecord hub_membership = 6;
+    GroupMembershipRecord hub_group_membership = 7;
+}
+
+message ChannelMembershipUpdateWrapper {
+    enum Action {
+        UNKNOWN = 0;
+        CREATE = 1;
+        UPDATE = 2;
+        DELETE = 3;
+    }
+
+    int64 timestamp = 1;
+    Action action = 2;
+    string user_id = 3;
+    string channel_id = 4;
+
+    ChannelMembershipRecord channel_membership = 5;
+}
+
+message GroupMembershipUpdateWrapper {
+    enum Action {
+        UNKNOWN = 0;
+        CREATE = 1;
+        UPDATE = 2;
+        DELETE = 3;
+    }
+
+    int64 timestamp = 1;
+    Action action = 2;
+    string user_id = 3;
+    string group_id = 4;
+    GroupMembershipRecord group_membership = 5;
+    repeated string linked_hub_ids = 6;
+}
+
+message HubLinkUpdateWrapper {
+    enum Action {
+        UNKNOWN = 0;
+        LINK = 1;
+        UNLINK = 2;
+    }
+
+    int64 timestamp = 1;
+    Action action = 2;
+    string hub_id = 3;
+    string group_id = 4;
+}

@@ -2,9 +2,9 @@
 
 let Constants = require('./constants');
 
-let request = require('./helper');
+let request = require('request');
 
-let Api = require('proto');
+let Api = require('./proto').Api;
 
 let Class = function(methods) {
     let classconstructor = function() {
@@ -23,20 +23,26 @@ let Class = function(methods) {
 let Client = Class({
 
     chatHandshake: function(token) {
-        const ChatHandshake = Api.ChatHandshakeResponse;
-        const url = Constants.Endpoint + '/chat/handshake';
+        let ChatHandshake = Api.ChatHandshakeResponse;
+        let url = Constants.Endpoint + '/chat/handshake';
 
-        request.get(url)
-            .set('X-Token', token)
-            .end(function(err, res) {
-                if (err) {
-                    Client.chatHandshakeResult(err);
-                } else {
-                    const msg = ChatHandshake.decode(res.body)
-                        .toRaw();
-                    Client.chatHandshakeResult(null, msg);
-                }
-            });
+        request({
+            headers: {
+              'Content-Type': 'application/x-protobuf',
+              'X-Token': token
+            },
+            uri: Constants.Endpoint + '/chat/handshake',
+            method: 'GET'
+          }, function (err, res, body) {
+              console.log(res)
+              console.log(body)
+              if (err) {
+                  chatHandshakeResult(err);
+              } else {
+                  let msg = ChatHandshake.decode(res.body).toRaw();
+                  chatHandshakeResult(null, msg);
+              }
+          });
     },
 
     chatHandshakeResult: function(err, msg) {

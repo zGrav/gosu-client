@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package proto;
+
+import "profile.proto";
+
+option java_package = "maple.proto";
+option go_package = "gosuproto";
+
+message AnalyticsEvent {
+    string user_id = 1;
+    string agent_id = 2;
+    // ip address of agent
+    string ip = 3;
+    // The actual action (Signup/ ...)
+    string action = 4;
+    // Acquisition / Activation / Retention / Referral
+    string category = 5;
+    // Chat / Own Profile / User Profile / ...
+    string screen = 6;
+    map<string, string> properties = 7;
+	UserAgent.UserAgentType agent_type = 8;
+    // locally generated agent id
+    string local_agent_id = 9;
+
+}

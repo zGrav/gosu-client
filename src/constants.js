@@ -1,6 +1,6 @@
 'use strict';
 
-let Endpoint = 'https://kapi.go.su/api/v1';
+let Endpoint = 'https://sapi.go.su/api/v1';
 let EndpointV2 = Endpoint.replace('v1', 'v2');
 let EndpointV3 = Endpoint.replace('v1', 'v3');
 

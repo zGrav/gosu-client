@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package proto;
+import "optional.proto";
+import "hub_base.proto";
+import "hub.proto";
+import "profile.proto";
+option java_package = "maple.proto";
+option go_package = "gosuproto";
+
+message UserInfo {
+    User user = 1;
+    repeated ChatUser friends = 2;
+    repeated FriendRequest sent_friend_requests = 3;
+    repeated FriendRequest received_friend_requests = 4;
+    repeated GroupMembership group_memberships = 5;
+    repeated Game games = 6;
+    repeated HubMembership hub_memberships = 7;
+}

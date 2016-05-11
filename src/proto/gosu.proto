@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+import "analytics.proto";
+import "api.proto";
+import "channel.proto";
+import "hub.proto";
+import "message.proto";
+import "optional.proto";
+import "prefs.proto";
+import "profile.proto";
+import "push.proto";
+import "search.proto";
+import "sip.proto";
