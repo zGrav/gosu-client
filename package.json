@@ -1,6 +1,6 @@
 {
   "name": "gosu-client",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "GOSU's client package for HUBOT",
   "main": "index.js",
   "scripts": {
@@ -14,5 +14,9 @@
   "bugs": {
     "url": "https://github.com/zGrav/gosu-client/issues"
   },
-  "homepage": "https://github.com/zGrav/gosu-client#readme"
+  "homepage": "https://github.com/zGrav/gosu-client#readme",
+  "engines": {
+    "node": ">= 0.12.x",
+    "npm": ">= 1.1.x"
+  }
 }
