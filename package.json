@@ -15,9 +15,6 @@
     "url": "https://github.com/zGrav/gosu-client/issues"
   },
   "homepage": "https://github.com/zGrav/gosu-client#readme",
-  "dependencies": {
-    "parent-require": "^1.0.0"
-  },
   "peerDependencies": {
     "hubot": "^2.18.0"
   },
