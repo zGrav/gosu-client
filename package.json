@@ -1,6 +1,6 @@
 {
   "name": "gosu-client",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "GOSU's client package for HUBOT",
   "main": "index.js",
   "scripts": {
@@ -15,6 +15,9 @@
     "url": "https://github.com/zGrav/gosu-client/issues"
   },
   "homepage": "https://github.com/zGrav/gosu-client#readme",
+  "dependencies": {
+      "superagent": "1.2.0"
+  },
   "peerDependencies": {
     "hubot": "^2.18.0"
   },
