@@ -4,7 +4,12 @@ let Constants = require('./constants');
 
 let request = require('request');
 
+let WebSocket = require('websocket').w3cwebsocket;
+
 let Api = require('./proto').Api;
+
+const PING_TIMEOUT = 1000 * 10;
+const PING_INTERVAL = (PING_TIMEOUT * 9) / 10;
 
 let Class = function(methods) {
     let classconstructor = function() {
@@ -24,6 +29,7 @@ let Client = Class({
 
     chatHandshake: function(token) {
         let ChatHandshake = Api.ChatHandshakeResponse;
+        let chatHandshakeResult = this.chatHandshakeResult;
         let url = Constants.Endpoint + '/chat/handshake';
 
         request({
@@ -34,22 +40,45 @@ let Client = Class({
             uri: Constants.Endpoint + '/chat/handshake',
             method: 'GET'
           }, function (err, res, body) {
-              console.log(res)
-              console.log(body)
               if (err) {
                   chatHandshakeResult(err);
               } else {
-                  let msg = ChatHandshake.decode(res.body).toRaw();
-                  chatHandshakeResult(null, msg);
+                  //let msg = ChatHandshake.decode(res.body).toRaw();
+                  let msg = res.body;
+                  msg = msg.replace("\n", '');
+                  msg = msg.replace("!", '');
+                  if (msg.startsWith('wss') === false) {
+                      if (msg.startsWith('ss')) {
+                          msg = msg.replace('ss', 'wss');
+                      }
+                  }
+                  chatHandshakeResult(null, msg, token);
               }
           });
     },
 
-    chatHandshakeResult: function(err, msg) {
+    chatHandshakeResult: function(err, msg, token) {
         if (err) {
-            console.log('fail ' + err)
+            global.robot.logger.error("Handshake error: " + err);
+            return false;
         } else {
-            console.log('success ' + msg)
+            global.robot.logger.info("Handshake okay! Opening WS!");
+            let conn = new WebSocket(msg, token);
+            conn.binaryType = 'arraybuffer';
+
+            conn.onopen = function() {
+                global.robot.logger.info('WS established!');
+                //TODO
+            };
+
+            conn.onerror = function() {
+                global.robot.logger.error('WS error!');
+                //TODO
+            };
+
+            conn.onmessage = function(evt) {
+                //TODO
+            };
         }
     }
 });
