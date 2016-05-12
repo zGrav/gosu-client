@@ -3,7 +3,6 @@
 let Immutable = require('immutable');
 let MessageType = require('./proto').Message.WebsocketMessage.MessageType;
 let isValidMessage = require('./isValidMessage');
-let isValidAction = require('./isValidAction');
 
 function getMessageBody(wrapper) {
 	if (wrapper.type === MessageType.CHAT_MESSAGE) {
