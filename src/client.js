@@ -8,9 +8,6 @@ let WebSocket = require('websocket').w3cwebsocket;
 
 let Api = require('./proto').Api;
 
-const PING_TIMEOUT = 1000 * 10;
-const PING_INTERVAL = (PING_TIMEOUT * 9) / 10;
-
 let Class = function(methods) {
     let classconstructor = function() {
         this.initialize.apply(this, arguments);
@@ -29,7 +26,6 @@ let Client = Class({
 
     chatHandshake: function(token) {
         let ChatHandshake = Api.ChatHandshakeResponse;
-        let chatHandshakeResult = this.chatHandshakeResult;
         let url = Constants.Endpoint + '/chat/handshake';
 
         request({
@@ -55,32 +51,34 @@ let Client = Class({
                   chatHandshakeResult(null, msg, token);
               }
           });
-    },
-
-    chatHandshakeResult: function(err, msg, token) {
-        if (err) {
-            global.robot.logger.error("Handshake error: " + err);
-            return false;
-        } else {
-            global.robot.logger.info("Handshake okay! Opening WS!");
-            let conn = new WebSocket(msg, token);
-            conn.binaryType = 'arraybuffer';
-
-            conn.onopen = function() {
-                global.robot.logger.info('WS established!');
-                //TODO
-            };
-
-            conn.onerror = function() {
-                global.robot.logger.error('WS error!');
-                //TODO
-            };
-
-            conn.onmessage = function(evt) {
-                //TODO
-            };
-        }
     }
 });
+
+function chatHandshakeResult(err, msg, token) {
+    if (err) {
+        global.robot.logger.error("Handshake error: " + err);
+        return false;
+    } else {
+        global.robot.logger.info("Handshake okay! Opening WS!");
+        let conn = new WebSocket(msg, token);
+        conn.binaryType = 'arraybuffer';
+
+        conn.onopen = function() {
+            global.robot.logger.info('WS established!');
+            //TODO
+        };
+
+        conn.onerror = function() {
+            global.robot.logger.error('WS error!');
+            //TODO
+        };
+
+        conn.onmessage = function(evt) {
+            global.robot.logger.info('New WS message!')
+            //TODO
+        };
+    }
+}
+
 
 module.exports = Client;
