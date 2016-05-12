@@ -43,9 +43,9 @@ let Client = Class({
                   let msg = res.body;
                   msg = msg.replace("\n", '');
                   msg = msg.replace("!", '');
-                  if (msg.startsWith('wss') === false) {
+                  if (!msg.startsWith('wss')) {
                       if (msg.startsWith('ss')) {
-                          msg = msg.replace('ss', 'wss');
+                         msg = "w" + msg;
                       }
                   }
                   chatHandshakeResult(null, msg, token);
@@ -75,8 +75,30 @@ function chatHandshakeResult(err, msg, token) {
 
         conn.onmessage = function(evt) {
             global.robot.logger.info('New WS message!')
+            if (evt.type === 'message') {
+                let str = ArrayBufferToString(evt.data)
+            }
             //TODO
         };
+    }
+}
+
+function ArrayBufferToString(buffer) {
+    return BinaryToString(String.fromCharCode.apply(null, Array.prototype.slice.apply(new Uint8Array(buffer))));
+}
+
+function BinaryToString(binary) {
+    var error;
+
+    try {
+        return decodeURIComponent(escape(binary));
+    } catch (_error) {
+        error = _error;
+        if (error instanceof URIError) {
+            return binary;
+        } else {
+            throw error;
+        }
     }
 }
 
