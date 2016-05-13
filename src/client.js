@@ -12,6 +12,7 @@ let _ = require('lodash');
 let Api = require('./proto').Api;
 let MessageWrapper = require('./proto').Message.WebsocketMessage;
 let MessageType = require('./proto').Message.WebsocketMessage.MessageType;
+let ChannelType = require('./proto').Profile.Channel.ChannelType;
 
 let flattenMessageWrapper = require('./flattenMessageWrapper');
 
@@ -181,7 +182,18 @@ function emitToHubot(message) {
         bodyidx = obj.body.indexOf(searchstr);
     }
 
-    let hardcodedcmds = ['hi', 'hello'];
+    let hardcodedcmds = ['hi', 'hello', 'join community '];
+
+    let getChannelIndex = findKeyIndex(global.channels_by_index, 'id', channelId);
+    let getChannelType = global.channels_by_index[getChannelIndex].type;
+
+    if (getChannelType === ChannelType.DIRECT) {
+        global.robot.logger.info('New WS chat message!');
+        obj.body = obj.body.toLowerCase();
+        obj.body = global.robot.name + " " + obj.body;
+        global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
+        return;
+    }
 
     if (hardcodedcmds.indexOf(obj.body) !== -1 && bodyidx === -1) {
         global.robot.logger.info('New WS chat message!');
@@ -202,6 +214,17 @@ function emitToHubot(message) {
     }
 
     }
+
+function findKeyIndex(arr, key, val) {
+    let i = 0;
+    while (i < arr.length) {
+      if (arr[i][key] === val) {
+        return i;
+      }
+      i++;
+    }
+    return null;
+}
 
 function onReceiveChatMessage(wrapper) {
     const msg = flattenMessageWrapper(wrapper);
@@ -269,10 +292,17 @@ function onPingFailed(id) {
 }
 
 function clearPingTimer() {
-    _.forIn(pingTimer, function(value, key) {
-        clearTimeout(value);
-        pingTimer[key] = null;
-    }.bind(this));
+    if (!pingTimer) {
+        return;
+    }
+
+    Object.keys(pingTimer).forEach(key => {
+        if (pingTimer.hasOwnProperty(key)) {
+            clearTimeout(pingTimer[key]);
+        }
+    });
+
+    pingTimer = {};
 }
 
 function scheduleConnectionRetry() {
