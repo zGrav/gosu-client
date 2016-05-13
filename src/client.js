@@ -182,12 +182,18 @@ function emitToHubot(message) {
         bodyidx = obj.body.indexOf(searchstr);
     }
 
-    let hardcodedcmds = ['hi', 'hello', 'join community '];
+    let hardcodedcmds = ['hi', 'hello', 'join community'];
 
     let getChannelIndex = findKeyIndex(global.channels_by_index, 'id', channelId);
     let getChannelType = global.channels_by_index[getChannelIndex].type;
 
-    if (getChannelType === ChannelType.DIRECT) {
+    if (hardcodedcmds.indexOf(obj.body) !== -1 && getChannelType === ChannelType.DIRECT) {
+        global.robot.logger.info('New WS chat message!');
+        obj.body = obj.body.toLowerCase();
+        obj.body = global.robot.name + " " + obj.body;
+        global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
+        return;
+    } else if (getChannelType === ChannelType.DIRECT)) {
         global.robot.logger.info('New WS chat message!');
         obj.body = obj.body.toLowerCase();
         obj.body = global.robot.name + " " + obj.body;
