@@ -165,15 +165,45 @@ function handleMessageEvent(evt) {
 
 function emitToHubot(message) {
     let channelId = message.channel;
-    let account = {name: message.user.display_name, account_id: message.user.id}
-    let obj = {message_id: message.id, account: account, body: message.body, send_time: message.timestamp, update_time: message.timestamp}
+    let account = {name: message.user.display_name, account_id: message.user.id};
+    let obj = {message_id: message.id, account: account, body: message.body, send_time: message.timestamp, update_time: message.timestamp};
 
-    global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time)
+    let searchstr = "@" + global.display_name + ":";
+    let bodyidx = obj.body.indexOf(searchstr);
+    let searchstrlength = global.display_name.length + 3;
+
+    if (bodyidx === -1) {
+        searchstr = "@" + global.display_name;
+        bodyidx = obj.body.indexOf(searchstr);
+        searchstrlength = global.display_name.length + 2;
+    } else if (bodyidx === -1) {
+        searchstr = " @" + global.display_name;
+        bodyidx = obj.body.indexOf(searchstr);
+    }
+
+    let hardcodedcmds = ['hi', 'hello'];
+
+    if (hardcodedcmds.indexOf(obj.body) !== -1 && bodyidx === -1) {
+        global.robot.logger.info('New WS chat message!');
+        obj.body = obj.body.toLowerCase();
+        obj.body = global.robot.name + " " + obj.body;
+        global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
+    } else if (bodyidx === 0) {
+        global.robot.logger.info('New WS chat message!');
+        obj.body = obj.body.replace(searchstr, searchstr + " " + global.robot.name);
+        obj.body = obj.body.substring(obj.body.length, searchstrlength);
+        global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
+    } else if (bodyidx > 0) {
+        global.robot.logger.info('New WS chat message!');
+        obj.body = global.robot.name + " " + body;
+        obj.body = obj.body.replace(", " + searchstr, "");
+        obj.body = obj.body.replace(searchstr, "");
+        global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
+    }
+
     }
 
 function onReceiveChatMessage(wrapper) {
-    global.robot.logger.info('New WS chat message!');
-
     const msg = flattenMessageWrapper(wrapper);
 
     if (!msg) {
