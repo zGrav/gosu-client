@@ -13,7 +13,7 @@ let Api = require('./proto').Api;
 let MessageWrapper = require('./proto').Message.WebsocketMessage;
 let MessageType = require('./proto').Message.WebsocketMessage.MessageType;
 
-let flattenMessageWrapper = require('./flattenMessageWrapper')
+let flattenMessageWrapper = require('./flattenMessageWrapper');
 
 const PING_TIMEOUT = 1000 * 10;
 const PING_INTERVAL = (PING_TIMEOUT * 9) / 10;
@@ -64,6 +64,7 @@ let Client = Class({
           }, function (err, res, body) {
               if (err) {
                   chatHandshakeResult(err);
+                  return false;
               } else {
                   //let uri = ChatHandshake.decode(res.body)
                   //.toRaw();
@@ -81,7 +82,6 @@ let Client = Class({
 function chatHandshakeResult(err, uri, token) {
     if (err) {
         global.robot.logger.error("Handshake error: " + err);
-        return false;
     } else {
         global.robot.logger.info("Handshake okay! Opening WS!");
 
@@ -158,10 +158,18 @@ function handleMessageEvent(evt) {
             message.error = false;
             message.preview = false;
             clearMessageTimer(message.id);
-            //this.enqueueMessage(message);
+            emitToHubot(message);
         }
     }
 }
+
+function emitToHubot(message) {
+    let channelId = message.channel;
+    let account = {name: message.user.display_name, account_id: message.user.id}
+    let obj = {message_id: message.id, account: account, body: message.body, send_time: message.timestamp, update_time: message.timestamp}
+
+    global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time)
+    }
 
 function onReceiveChatMessage(wrapper) {
     global.robot.logger.info('New WS chat message!');

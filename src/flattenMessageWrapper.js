@@ -35,6 +35,10 @@ function flattenMessageWrapper(wrapper) {
 	msg.msg_type = wrapper.type;
 	msg.deleted = wrapper.deleted;
 
+	if (msg.user_id === global.user_id) { //ignore self messages
+		return null;
+	}
+
 	if (!validateMessage(msg) && !wrapper.forceValidMessage) {
 		global.robot.logger.warning('Discard invalid chat message', msg);
 		return null;
