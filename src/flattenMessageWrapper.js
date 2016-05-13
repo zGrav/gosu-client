@@ -1,6 +1,5 @@
 'use strict';
 
-let Immutable = require('immutable');
 let MessageType = require('./proto').Message.WebsocketMessage.MessageType;
 let isValidMessage = require('./isValidMessage');
 

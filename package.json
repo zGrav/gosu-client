@@ -26,7 +26,6 @@
     "npm": ">= 1.1.x"
   },
   "dependencies": {
-    "immutable": "^3.8.1",
     "lodash": "^4.12.0",
     "node-uuid": "^1.4.7",
     "protobufjs": "^5.0.1",
