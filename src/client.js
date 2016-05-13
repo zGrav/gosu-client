@@ -188,13 +188,13 @@ function emitToHubot(message) {
     let getChannelType = global.channels_by_index[getChannelIndex].type;
 
     if (hardcodedcmds.indexOf(obj.body) !== -1 && getChannelType === ChannelType.DIRECT) {
-        global.robot.logger.info('New WS chat message!');
+        global.robot.logger.info('New WS chat message! (in direct channel with id: ' + channelId + ')');
         obj.body = obj.body.toLowerCase();
         obj.body = global.robot.name + " " + obj.body;
         global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
         return;
     } else if (getChannelType === ChannelType.DIRECT)) {
-        global.robot.logger.info('New WS chat message!');
+        global.robot.logger.info('New WS chat message! (in direct channel with id: ' + channelId + ')');
         obj.body = obj.body.toLowerCase();
         obj.body = global.robot.name + " " + obj.body;
         global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
