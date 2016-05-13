@@ -193,7 +193,7 @@ function emitToHubot(message) {
         obj.body = global.robot.name + " " + obj.body;
         global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
         return;
-    } else if (getChannelType === ChannelType.DIRECT)) {
+    } else if (getChannelType === ChannelType.DIRECT) {
         global.robot.logger.info('New WS chat message! (in direct channel with id: ' + channelId + ')');
         obj.body = obj.body.toLowerCase();
         obj.body = global.robot.name + " " + obj.body;
