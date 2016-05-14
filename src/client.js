@@ -206,7 +206,7 @@ function emitToHubot(message) {
         global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
     } else if (bodyidx > 0) {
         global.robot.logger.info('New WS chat message!');
-        obj.body = global.robot.name + " " + body;
+        obj.body = global.robot.name + " " + obj.body;
         obj.body = obj.body.replace(", " + searchstr, "");
         obj.body = obj.body.replace(searchstr, "");
         global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
