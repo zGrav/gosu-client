@@ -32,7 +32,6 @@ let pingInterval = null;
 let curRetries = 0;
 let conn = null;
 
-
 let Class = function(methods) {
     let classconstructor = function() {
         this.initialize.apply(this, arguments);
@@ -185,13 +184,31 @@ function emitToHubot(message) {
     let hardcodedcmds = ['hi', 'hello', 'join community'];
 
     let getChannelIndex = findKeyIndex(global.channels_by_index, 'id', channelId);
-    let getChannelType = global.channels_by_index[getChannelIndex].type;
+    let getChannelType = null;
 
-    if (hardcodedcmds.indexOf(obj.body) !== -1 && getChannelType === ChannelType.DIRECT || getChannelType === ChannelType.DIRECT) {
-        global.robot.logger.info('New WS chat message! (in direct channel with id: ' + channelId + ')');
-        obj.body = obj.body.toLowerCase();
-        obj.body = global.robot.name + " " + obj.body;
-        global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
+    if (getChannelType !== null) {
+        getChannelType = global.channels_by_index[getChannelIndex].type;
+    } else {
+        global.robot.http(global.api + ("/channel/" + channelId + "/")).headers({
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'X-Token': global.user_token
+        }).get()(function(err, res, body) {
+          try {
+            let result = JSON.parse(body);
+
+            getChannelType = result.channel.type;
+
+            if (hardcodedcmds.indexOf(obj.body) !== -1 && getChannelType === ChannelType.DIRECT || getChannelType === ChannelType.DIRECT) {
+                global.robot.logger.info('New WS chat message! (in direct channel with id: ' + channelId + ')');
+                obj.body = obj.body.toLowerCase();
+                obj.body = global.robot.name + " " + obj.body;
+                global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
+            }
+          } catch (err) {
+            return global.robot.logger.error("Oh no! We errored :( - " + err + " - API Response Code: " + res.statusCode);
+          }
+        });
     }
 
     if (hardcodedcmds.indexOf(obj.body) !== -1 && bodyidx === -1 && getChannelType !== ChannelType.DIRECT) {
