@@ -56,7 +56,7 @@ let Client = Class({
 
         request({
             headers: {
-              'Content-Type': 'application/x-protobuf',
+              'Content-Type': 'application/json',
               'X-Token': token
             },
             uri: Constants.Endpoint + '/chat/handshake',
@@ -66,8 +66,6 @@ let Client = Class({
                   chatHandshakeResult(err);
                   return false;
               } else {
-                  //let uri = ChatHandshake.decode(res.body)
-                  //.toRaw();
                   let uri = res.body.replace('\n', '');
                   uri = uri.replace('!', '');
                   uri = uri.substr(uri.indexOf(":") + 1);
@@ -108,11 +106,11 @@ function onConnectionOpened() {
 }
 
 function onConnectionClosed() {
-    if (conn.readyState === WebSocket.OPEN) {
+    if (conn && conn.readyState === WebSocket.OPEN) {
         global.robot.logger.info('WS closed!');
 
         conn.close();
-    } else if (conn.readyState === WebSocket.CLOSED) {
+    } else if (conn && conn.readyState === WebSocket.CLOSED) {
         global.robot.logger.warning('WS was already closed!')
     }
 
