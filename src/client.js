@@ -90,7 +90,7 @@ function chatHandshakeResult(err, uri, token) {
         conn.binaryType = 'arraybuffer';
 
         conn.onopen = function() { onConnectionOpened(); };
-        conn.onclosed = function() { onConnectionClosed(); };
+        conn.onclose = function() { onConnectionClosed(); };
         conn.onerror = function() { onConnectionError(); };
         conn.onmessage = function(evt) { handleMessageEvent(evt); };
     }
@@ -330,6 +330,7 @@ function onPingFailed(id) {
         clearPingTimer();
 
         global.robot.logger.error('closing connection because of too many failed pings');
+
         conn.close();
         onConnectionClosed();
     }
