@@ -112,6 +112,8 @@ function onConnectionClosed() {
         global.robot.logger.info('WS closed!');
 
         conn.close();
+    } else if (conn.readyState === WebSocket.CLOSED) {
+        global.robot.logger.warning('WS was already closed!')
     }
 
     clearPingTimer();
