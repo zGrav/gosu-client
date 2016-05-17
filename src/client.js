@@ -214,6 +214,8 @@ function emitToHubot(message) {
                 obj.body = global.robot.name + " " + obj.body;
                 global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
             }
+            
+            return;
           } catch (err) {
             return global.robot.logger.error("Oh no! We errored :( - " + err + " - API Response Code: " + res.statusCode);
           }
