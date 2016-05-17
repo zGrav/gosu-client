@@ -182,11 +182,20 @@ function emitToHubot(message) {
     }
 
     let hardcodedcmds = ['hi', 'hello', 'join community'];
+    let searchresult = null;
+
+    for (let i = 0; i < hardcodedcmds.length; i++) {
+        let arrstr = hardcodedcmds[i];
+        let searchstr = obj.body.search(arrstr);
+        if (searchstr !== -1) {
+            searchresult = i;
+        }
+    }
 
     let getChannelIndex = findKeyIndex(global.channels_by_index, 'id', channelId);
     let getChannelType = null;
 
-    if (getChannelType !== null) {
+    if (getChannelIndex !== null) {
         getChannelType = global.channels_by_index[getChannelIndex].type;
     } else {
         global.robot.http(global.api + ("/channel/" + channelId + "/")).headers({
@@ -199,8 +208,8 @@ function emitToHubot(message) {
 
             getChannelType = result.channel.type;
 
-            if (hardcodedcmds.indexOf(obj.body) !== -1 && getChannelType === ChannelType.DIRECT || getChannelType === ChannelType.DIRECT) {
-                global.robot.logger.info('New WS chat message! (in direct channel with id: ' + channelId + ')');
+            if (hardcodedcmds.indexOf(obj.body) !== -1 && getChannelType === ChannelType.DIRECT || searchresult !== null && getChannelType === ChannelType.DIRECT || getChannelType === ChannelType.DIRECT) {
+                global.robot.logger.info('New WS chat message! (in direct channel (not in global.channels_by_index) with id: ' + channelId + ')');
                 obj.body = obj.body.toLowerCase();
                 obj.body = global.robot.name + " " + obj.body;
                 global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
@@ -211,17 +220,22 @@ function emitToHubot(message) {
         });
     }
 
-    if (hardcodedcmds.indexOf(obj.body) !== -1 && bodyidx === -1 && getChannelType !== ChannelType.DIRECT) {
+    if (hardcodedcmds.indexOf(obj.body) !== -1 && getChannelType === ChannelType.DIRECT || searchresult !== null && getChannelType === ChannelType.DIRECT || getChannelType === ChannelType.DIRECT) {
+        global.robot.logger.info('New WS chat message! (in direct channel with id: ' + channelId + ')');
+        obj.body = obj.body.toLowerCase();
+        obj.body = global.robot.name + " " + obj.body;
+        global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
+    } else if (hardcodedcmds.indexOf(obj.body) !== -1 && bodyidx === -1 && getChannelType !== ChannelType.DIRECT) {
         global.robot.logger.info('New WS chat message!');
         obj.body = obj.body.toLowerCase();
         obj.body = global.robot.name + " " + obj.body;
         global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
-    } else if (bodyidx === 0) {
+    } else if (bodyidx === 0 && getChannelType !== ChannelType.DIRECT) {
         global.robot.logger.info('New WS chat message!');
         obj.body = obj.body.replace(searchstr, searchstr + " " + global.robot.name);
         obj.body = obj.body.substring(obj.body.length, searchstrlength);
         global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
-    } else if (bodyidx > 0) {
+    } else if (bodyidx > 0 && getChannelType !== ChannelType.DIRECT) {
         global.robot.logger.info('New WS chat message!');
         obj.body = global.robot.name + " " + obj.body;
         obj.body = obj.body.replace(", " + searchstr, "");
