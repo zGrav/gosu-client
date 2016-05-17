@@ -1,7 +1,5 @@
 'use strict';
 
-let Constants = require('./constants');
-
 let request = require('request');
 
 let WebSocket = require('websocket').w3cwebsocket;
@@ -52,14 +50,14 @@ let Client = Class({
         savedToken = token;
 
         let ChatHandshake = Api.ChatHandshakeResponse;
-        let url = Constants.Endpoint + '/chat/handshake';
+        let url = global.api + '/chat/handshake';
 
         request({
             headers: {
               'Content-Type': 'application/json',
               'X-Token': token
             },
-            uri: Constants.Endpoint + '/chat/handshake',
+            uri: global.api + '/chat/handshake',
             method: 'GET'
           }, function (err, res, body) {
               if (err) {
