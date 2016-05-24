@@ -13,6 +13,7 @@ let MessageType = require('./proto').Message.WebsocketMessage.MessageType;
 let ChannelType = require('./proto').Profile.Channel.ChannelType;
 
 let flattenMessageWrapper = require('./flattenMessageWrapper');
+let flattenSystemMessage = require('./flattenSystemMessage');
 
 const PING_TIMEOUT = 1000 * 10;
 const PING_INTERVAL = (PING_TIMEOUT * 9) / 10;
@@ -145,6 +146,10 @@ function handleMessageEvent(evt) {
                 wrapper.type = MessageType.CHAT_MESSAGE;
                 message = onReceiveChatMessage(wrapper);
                 break;
+            case 'SYSTEM_MESSAGE':
+                wrapper.type = MessageType.SYSTEM_MESSAGE;
+                message = onReceiveSystemMessage(wrapper);
+                break;
             case 'PING':
                 wrapper.type = MessageType.PING;
                 onReceivePingResponse(wrapper);
@@ -156,104 +161,110 @@ function handleMessageEvent(evt) {
             message.error = false;
             message.preview = false;
             clearMessageTimer(message.id);
-            if (message.body_annotations.length > 0) {
-                let result = message.body_annotations.map(function(keys) {
-                    if (keys.type === 'WEB_LINK') {
-                        return; //because bot isn't really supposed to reply to these... as of now.
-                    } else {
-                        emitToHubot(message);
-                    }
-                });
-            } else {
-                emitToHubot(message);
-            }
+            emitToHubot(message, wrapper);
         }
     }
 }
 
-function emitToHubot(message) {
-    let channelId = message.channel;
-    let account = {name: message.user.display_name, account_id: message.user.id};
-    let obj = {message_id: message.id, account: account, body: message.body, send_time: message.timestamp, update_time: message.timestamp};
+function emitToHubot(message, wrapper) {
+    if (wrapper.type === MessageType.SYSTEM_MESSAGE) {
+        let channelId = message.channel;
+        let account = {name: message.user.display_name, account_id: message.user.id};
+        let obj = {message_id: message.id, account: account, body: message.body, send_time: message.timestamp, update_time: message.timestamp};
 
-    let searchstr = "@" + global.display_name + ":";
-    let bodyidx = obj.body.indexOf(searchstr);
-    let searchstrlength = global.display_name.length + 3;
-
-    if (bodyidx === -1) {
-        searchstr = "@" + global.display_name;
-        bodyidx = obj.body.indexOf(searchstr);
-        searchstrlength = global.display_name.length + 2;
-    } else if (bodyidx === -1) {
-        searchstr = " @" + global.display_name;
-        bodyidx = obj.body.indexOf(searchstr);
-    }
-
-    let hardcodedcmds = ['hi', 'hello', 'join community'];
-    let searchresult = null;
-
-    for (let i = 0; i < hardcodedcmds.length; i++) {
-        let arrstr = hardcodedcmds[i];
-        let searchstr = obj.body.search(arrstr);
-        if (searchstr !== -1) {
-            searchresult = i;
+        if (message.type === 'USER_LEFT') {
+            global.robot.logger.info('New WS system message/USER_LEFT!');
+            obj.body = global.robot.name + ' user_left';
+            global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
+        } else if (message.type === 'USER_JOINED') {
+            global.robot.logger.info('New WS system message/USER_JOINED!');
+            obj.body = global.robot.name + ' user_joined';
+            global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
         }
     }
+    if (wrapper.type === MessageType.CHAT_MESSAGE) {
+        let channelId = message.channel;
+        let account = {name: message.user.display_name, account_id: message.user.id};
+        let obj = {message_id: message.id, account: account, body: message.body, send_time: message.timestamp, update_time: message.timestamp};
 
-    let getChannelIndex = findKeyIndex(global.channels_by_index, 'id', channelId);
-    let getChannelType = null;
+        let searchstr = "@" + global.display_name + ":";
+        let bodyidx = obj.body.indexOf(searchstr);
+        let searchstrlength = global.display_name.length + 3;
 
-    if (getChannelIndex !== null) {
-        getChannelType = global.channels_by_index[getChannelIndex].type;
-    } else {
-        global.robot.http(global.api + ("/channel/" + channelId + "/")).headers({
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'X-Token': global.user_token
-        }).get()(function(err, res, body) {
-          try {
-            let result = JSON.parse(body);
+        if (bodyidx === -1) {
+            searchstr = "@" + global.display_name;
+            bodyidx = obj.body.indexOf(searchstr);
+            searchstrlength = global.display_name.length + 2;
+        } else if (bodyidx === -1) {
+            searchstr = " @" + global.display_name;
+            bodyidx = obj.body.indexOf(searchstr);
+        }
 
-            getChannelType = result.channel.type;
+        let hardcodedcmds = ['join community'];
+        let searchresult = null;
 
-            if (hardcodedcmds.indexOf(obj.body) !== -1 && getChannelType === ChannelType.DIRECT || searchresult !== null && getChannelType === ChannelType.DIRECT || getChannelType === ChannelType.DIRECT) {
-                global.robot.logger.info('New WS chat message! (in direct channel (not in global.channels_by_index) with id: ' + channelId + ')');
-                obj.body = obj.body.toLowerCase();
-                obj.body = global.robot.name + " " + obj.body;
-                global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
+        for (let i = 0; i < hardcodedcmds.length; i++) {
+            let arrstr = hardcodedcmds[i];
+            let searchstr = obj.body.search(arrstr);
+            if (searchstr !== -1) {
+                searchresult = i;
             }
+        }
 
-            return;
-          } catch (err) {
-            return global.robot.logger.error("Oh no! We errored :( - " + err + " - API Response Code: " + res.statusCode);
-          }
-        });
-    }
+        let getChannelIndex = findKeyIndex(global.channels_by_index, 'id', channelId);
+        let getChannelType = null;
 
-    if (hardcodedcmds.indexOf(obj.body) !== -1 && getChannelType === ChannelType.DIRECT || searchresult !== null && getChannelType === ChannelType.DIRECT || getChannelType === ChannelType.DIRECT) {
-        global.robot.logger.info('New WS chat message! (in direct channel with id: ' + channelId + ')');
-        obj.body = obj.body.toLowerCase();
-        obj.body = global.robot.name + " " + obj.body;
-        global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
-    } else if (hardcodedcmds.indexOf(obj.body) !== -1 && bodyidx === -1 && getChannelType !== ChannelType.DIRECT) {
-        global.robot.logger.info('New WS chat message!');
-        obj.body = obj.body.toLowerCase();
-        obj.body = global.robot.name + " " + obj.body;
-        global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
-    } else if (bodyidx === 0 && getChannelType !== ChannelType.DIRECT) {
-        global.robot.logger.info('New WS chat message!');
-        obj.body = obj.body.replace(searchstr, searchstr + " " + global.robot.name);
-        obj.body = obj.body.substring(obj.body.length, searchstrlength);
-        global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
-    } else if (bodyidx > 0 && getChannelType !== ChannelType.DIRECT) {
-        global.robot.logger.info('New WS chat message!');
-        obj.body = global.robot.name + " " + obj.body;
-        obj.body = obj.body.replace(", " + searchstr, "");
-        obj.body = obj.body.replace(searchstr, "");
-        global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
-    }
+        if (getChannelIndex !== null) {
+            getChannelType = global.channels_by_index[getChannelIndex].type;
+        } else {
+            global.robot.http(global.api + ("/channel/" + channelId + "/")).headers({
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'X-Token': global.user_token
+            }).get()(function(err, res, body) {
+              try {
+                let result = JSON.parse(body);
 
+                getChannelType = result.channel.type;
+
+                if (searchresult !== null && getChannelType === ChannelType.DIRECT || getChannelType === ChannelType.DIRECT) {
+                    global.robot.logger.info('New WS chat message! (in direct channel (not in global.channels_by_index) with id: ' + channelId + ')');
+                    obj.body = obj.body.toLowerCase();
+                    obj.body = global.robot.name + " " + obj.body;
+                    global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
+                }
+
+                return;
+              } catch (err) {
+                return global.robot.logger.error("Oh no! We errored :( - " + err + " - API Response Code: " + res.statusCode);
+              }
+            });
+        }
+
+        if (searchresult !== null && getChannelType === ChannelType.DIRECT || getChannelType === ChannelType.DIRECT) {
+            global.robot.logger.info('New WS chat message! (in direct channel with id: ' + channelId + ')');
+            obj.body = obj.body.toLowerCase();
+            obj.body = global.robot.name + " " + obj.body;
+            global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
+        } else if (bodyidx === -1 && getChannelType !== ChannelType.DIRECT) {
+            global.robot.logger.info('New WS chat message!');
+            obj.body = obj.body.toLowerCase();
+            obj.body = global.robot.name + " " + obj.body;
+            global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
+        } else if (bodyidx === 0 && getChannelType !== ChannelType.DIRECT) {
+            global.robot.logger.info('New WS chat message!');
+            obj.body = obj.body.replace(searchstr, searchstr + " " + global.robot.name);
+            obj.body = obj.body.substring(obj.body.length, searchstrlength);
+            global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
+        } else if (bodyidx > 0 && getChannelType !== ChannelType.DIRECT) {
+            global.robot.logger.info('New WS chat message!');
+            obj.body = global.robot.name + " " + obj.body;
+            obj.body = obj.body.replace(", " + searchstr, "");
+            obj.body = obj.body.replace(searchstr, "");
+            global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
+        }
     }
+}
 
 function findKeyIndex(arr, key, val) {
     let i = 0;
@@ -273,7 +284,29 @@ function onReceiveChatMessage(wrapper) {
         return null;
     }
 
+    if (msg.body_annotations.length > 0) {
+        let result = msg.body_annotations.map(function(keys) {
+            if (keys.type !== 'USER_MENTION') {
+                return null; //because bot isn't really supposed to reply to anything else except these... as of now.
+            }
+        });
+    }
+
     return msg;
+}
+
+function onReceiveSystemMessage(wrapper) {
+    const msg = flattenSystemMessage(wrapper);
+
+    if (!msg) {
+        return null;
+    }
+
+    if (msg.type === 'USER_LEFT' || msg.type === 'USER_JOINED') {
+        return msg;
+    } else {
+        return null; //because bot isn't really supposed to reply to anything else except these... as of now.
+    }
 }
 
 function onReceivePingResponse(wrapper) {

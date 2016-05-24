@@ -6,6 +6,8 @@ let isValidMessage = require('./isValidMessage');
 function getMessageBody(wrapper) {
 	if (wrapper.type === MessageType.CHAT_MESSAGE) {
 		return wrapper.user_message;
+	} else if (wrapper.type === MessageType.SYSTEM_MESSAGE) {
+		return wrapper.system_message;
 	}
 
 	return null;
