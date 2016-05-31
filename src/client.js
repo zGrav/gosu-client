@@ -161,9 +161,62 @@ function handleMessageEvent(evt) {
             message.error = false;
             message.preview = false;
             clearMessageTimer(message.id);
-            emitToHubot(message, wrapper);
+            let checkForSpamResult = checkForSpam(message, wrapper);
+            if (!checkForSpamResult) {
+                emitToHubot(message, wrapper);
+            } else {
+                global.robot.logger.warning("Spammy message caught of type: " + checkForSpamResult + ", sending timeout to user: " + message.user.display_name + " ! - Content: " + message.body)
+
+                let channelId = message.channel;
+                let account = {name: message.user.display_name, account_id: message.user.id};
+                let obj = {message_id: message.id, account: account, body: checkForSpamResult, send_time: message.timestamp, update_time: message.timestamp};
+                global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
+            }
         }
     }
+}
+
+function checkForSpam(message, wrapper) {
+    //todo: proper/better random text detection
+
+    if (wrapper.type === MessageType.CHAT_MESSAGE) {
+        let numUpper = message.body.length - message.body.replace(/[A-Z]/g, '').length;
+        let numLower = message.body.length - message.body.replace(/[a-z]/g, '').length;
+
+        if ((/^[A-Z]*$/).test(message.body) && message.body.length >= 3) {
+            return 'capslock';
+        }
+
+        if (numUpper > numLower && message.body.length >= 3) {
+            return 'uppercase > lowercase';
+        }
+
+        if ((/\b(\w+)\b(?:.*\b\1\b)/i).test(message.body)) {
+            return 'word repetition';
+        }
+
+        if ((/(.+)(?=\1+)/i).test(message.body)) {
+            return 'word repetition';
+        }
+
+        if ((/^([a-z])\1+$/i).test(message.body)) {
+            return 'letter repetition';
+        }
+
+        if ((/([a-z])\1/i).test(message.body)) {
+            return 'letter repetition';
+        }
+
+        if ((/^([a-zA-Z])\1+$/).test(message.body)) {
+            return 'letter repetition';
+        }
+
+        if ((/\b[A-Za-z]{18,}\b/).test(message.body)) {
+            return 'random text';
+        }
+    }
+
+    return false;
 }
 
 function emitToHubot(message, wrapper) {
