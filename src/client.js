@@ -165,7 +165,7 @@ function handleMessageEvent(evt) {
             if (!checkForSpamResult) {
                 emitToHubot(message, wrapper);
             } else {
-                global.robot.logger.warning("Spammy message caught of type: " + checkForSpamResult + ", sending timeout in channel " + message.channel: + "to user: " + message.user.display_name + " ! - Content: " + message.body)
+                global.robot.logger.warning("Spammy message caught of type: " + checkForSpamResult + ", sending timeout in channel " + message.channel + "to user: " + message.user.display_name + " ! - Content: " + message.body)
 
                 let channelId = message.channel;
                 let account = {name: message.user.display_name, account_id: message.user.id};
