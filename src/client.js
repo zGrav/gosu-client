@@ -184,35 +184,35 @@ function checkForSpam(message, wrapper) {
         let numLower = message.body.length - message.body.replace(/[a-z]/g, '').length;
 
         if ((/^[A-Z]*$/).test(message.body) && message.body.length >= 3) {
-            return 'capslock';
+            return 'spamscript: capslock';
         }
 
         if (numUpper > numLower && message.body.length >= 3) {
-            return 'uppercase > lowercase';
+            return 'spamscript: uppercase > lowercase';
         }
 
         if ((/\b(\w+)\b(?:.*\b\1\b)/i).test(message.body)) {
-            return 'word repetition';
+            return 'spamscript: word repetition';
         }
 
         if ((/(.+)(?=\1+)/i).test(message.body)) {
-            return 'word repetition';
+            return 'spamscript: word repetition';
         }
 
         if ((/^([a-z])\1+$/i).test(message.body)) {
-            return 'letter repetition';
+            return 'spamscript: letter repetition';
         }
 
         if ((/([a-z])\1/i).test(message.body)) {
-            return 'letter repetition';
+            return 'spamscript: letter repetition';
         }
 
         if ((/^([a-zA-Z])\1+$/).test(message.body)) {
-            return 'letter repetition';
+            return 'spamscript: letter repetition';
         }
 
         if ((/\b[A-Za-z]{18,}\b/).test(message.body)) {
-            return 'random text';
+            return 'spamscript: random text';
         }
     }
 
