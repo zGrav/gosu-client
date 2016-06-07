@@ -191,6 +191,18 @@ function checkForSpam(message, wrapper) {
             return 'spamscript: uppercase > lowercase';
         }
 
+        if ((/(.+){5,}(?=\1+)/i).test(message.body)) {
+            return 'spamscript: emoji repetition';
+        }
+
+        if ((/(^|\s+)(\S+)(($|\s+)\2)+/ig).test(message.body)) {
+            return 'spamscript: word repetition';
+        }
+
+        if ((/^(.{3}).*\1$/i).test(message.body)) {
+            return 'spamscript: word repetition';
+        }
+
         if ((/^([a-z])\1+$/i).test(message.body)) {
             return 'spamscript: letter repetition';
         }
