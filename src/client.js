@@ -191,7 +191,7 @@ function checkForSpam(message, wrapper) {
             return 'spamscript: uppercase > lowercase';
         }
 
-        if ((/(.+){5,}(?=\1+)/i).test(message.body)) {
+        if ((/(.+){5,}(?=\1+)[^A-Za-z0-9]/i).test(message.body)) {
             return 'spamscript: emoji repetition';
         }
 
