@@ -1,6 +1,6 @@
 'use strict';
 
-let request = require('request');
+let requestCall = require('request');
 
 let WebSocket = require('websocket').w3cwebsocket;
 
@@ -53,7 +53,7 @@ let Client = Class({
         let ChatHandshake = Api.ChatHandshakeResponse;
         let url = global.api + '/chat/handshake';
 
-        request({
+        requestCall({
             headers: {
               'Content-Type': 'application/json',
               'X-Token': token
