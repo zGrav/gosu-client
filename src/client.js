@@ -140,7 +140,6 @@ function handleMessageEvent(evt) {
             .toRaw();
 
         let message;
-
         switch (wrapper.type) {
             case 'CHAT_MESSAGE':
                 wrapper.type = MessageType.CHAT_MESSAGE;
@@ -165,12 +164,28 @@ function handleMessageEvent(evt) {
             if (!checkForSpamResult) {
                 emitToHubot(message, wrapper);
             } else {
-                global.robot.logger.warning("Spammy message caught of type: " + checkForSpamResult + ", sending timeout in channel " + message.channel + "to user: " + message.user.display_name + " ! - Content: " + message.body)
+                let isLoaded = false;
 
-                let channelId = message.channel;
-                let account = {name: message.user.display_name, account_id: message.user.id};
-                let obj = {message_id: message.id, account: account, body: checkForSpamResult, send_time: message.timestamp, update_time: message.timestamp};
-                global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
+                for (let i = 0; i < global.robot.listeners.length; i++) {
+                    let str = global.robot.listeners[i].regex.toString();
+                    if (str.startsWith('/spamscript')) {
+                        isLoaded = true;
+                        break;
+                    }
+                }
+
+                if (isLoaded) {
+                    global.robot.logger.warning("Spammy message caught of type: " + checkForSpamResult + ", sending timeout in channel " + message.channel + "to user: " + message.user.display_name + " ! - Content: " + message.body)
+
+                    let channelId = message.channel;
+                    let account = {name: message.user.display_name, account_id: message.user.id};
+                    let obj = {message_id: message.id, account: account, body: checkForSpamResult, send_time: message.timestamp, update_time: message.timestamp};
+                    global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
+                } else {
+                    global.robot.logger.warning("Module not loaded but a Spammy message caught of type: " + checkForSpamResult + ", in channel " + message.channel + "from user: " + message.user.display_name + " ! - Content: " + message.body)
+
+                    emitToHubot(message, wrapper);
+                }
             }
         }
     }
