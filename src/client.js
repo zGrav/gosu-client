@@ -31,6 +31,8 @@ let pingInterval = null;
 let curRetries = 0;
 let conn = null;
 
+let messageIDs = [];
+
 let Class = function(methods) {
     let classconstructor = function() {
         this.initialize.apply(this, arguments);
@@ -160,6 +162,15 @@ function handleMessageEvent(evt) {
             message.error = false;
             message.preview = false;
             clearMessageTimer(message.id);
+
+            if (messageIDs.indexOf(message.id) > -1) {
+                messageIDs = [] //flush when it happens?
+                return; //should fix double message issue in prod
+            }
+            else {
+                messageIDs.push(message.id);
+            }
+
             let checkForSpamResult = checkForSpam(message, wrapper);
             if (!checkForSpamResult) {
                 emitToHubot(message, wrapper);
