@@ -165,7 +165,7 @@ function handleMessageEvent(evt) {
 
             if (messageIDs.indexOf(message.id) > -1) {
                 messageIDs = [] //flush when it happens?
-                return; //should fix double message issue in prod
+                return true; //should fix double message issue in prod
             }
             else {
                 messageIDs.push(message.id);
