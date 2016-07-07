@@ -31,6 +31,8 @@ let pingInterval = null;
 let curRetries = 0;
 let conn = null;
 
+let oldmessage = null;
+
 let messageIDs = [];
 
 let Class = function(methods) {
@@ -208,6 +210,12 @@ function checkForSpam(message, wrapper) {
     if (wrapper.type === MessageType.CHAT_MESSAGE) {
         let numUpper = message.body.length - message.body.replace(/[A-Z]/g, '').length;
         let numLower = message.body.length - message.body.replace(/[a-z]/g, '').length;
+
+        if (oldmessage === message.body) {
+            return 'spamscript: message repetition';
+        }
+
+        oldmessage = message.body;
 
         if ((/^[A-Z]*$/).test(message.body) && message.body.length >= 3) {
             return 'spamscript: capslock';
