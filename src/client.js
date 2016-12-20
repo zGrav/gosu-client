@@ -41,500 +41,606 @@ let oldmessage = null;
 let messageIDs = [];
 
 let Class = function(methods) {
-    let classconstructor = function() {
-        this.initialize.apply(this, arguments);
-    };
+	try {
+		let classconstructor = function() {
+			this.initialize.apply(this, arguments);
+		};
 
-    for (let property in methods) {
-       classconstructor.prototype[property] = methods[property];
-    }
+		for (let property in methods) {
+		   classconstructor.prototype[property] = methods[property];
+		}
 
-    if (!classconstructor.prototype.initialize) classconstructor.prototype.initialize = function(){};
+		if (!classconstructor.prototype.initialize) classconstructor.prototype.initialize = function(){};
 
-    return classconstructor;
+		return classconstructor;
+	} catch (e) {
+		console.log('classconstructor exception')
+		console.log(e)
+	}
 };
 
 let Client = Class({
 
     chatHandshake: function(token) {
-        savedToken = token;
+		try {
+			savedToken = token;
 
-        let ChatHandshake = Api.ChatHandshakeResponse;
-        let url = global.api + '/chat/handshake';
+			let ChatHandshake = Api.ChatHandshakeResponse;
+			let url = global.api + '/chat/handshake';
 
-        request({
-            headers: {
-              'Content-Type': 'application/json',
-              'X-Token': token
-            },
-            uri: global.api + '/chat/handshake',
-            method: 'GET'
-          }, function (err, res, body) {
-              if (err) {
-                  chatHandshakeResult(err);
-                  return false;
-              } else {
-                  let uri = res.body.replace('\n', '');
-                  uri = uri.replace('!', '');
-                  uri = uri.substr(uri.indexOf(":") + 1);
-                  uri = "wss:" + uri;
+			request({
+				headers: {
+				  'Content-Type': 'application/json',
+				  'X-Token': token
+				},
+				uri: global.api + '/chat/handshake',
+				method: 'GET'
+			  }, function (err, res, body) {
+				  if (err) {
+					  chatHandshakeResult(err);
+					  return false;
+				  } else {
+					  let uri = res.body.replace('\n', '');
+					  uri = uri.replace('!', '');
+					  uri = uri.substr(uri.indexOf(":") + 1);
+					  uri = "wss:" + uri;
 
-                  chatHandshakeResult(null, uri, token);
-              }
-          });
-    }
+					  chatHandshakeResult(null, uri, token);
+				  }
+			  });
+		} catch (e) {
+			console.log('chatHandshake exception')
+			console.log(e)
+		}
+	}
 });
 
 function chatHandshakeResult(err, uri, token) {
-    if (err) {
-        global.robot.logger.error("Handshake error: " + err);
-    } else {
-        global.robot.logger.info("Handshake okay! Opening WS!");
+	try {
+		if (err) {
+			global.robot.logger.error("Handshake error: " + err);
+		} else {
+			global.robot.logger.info("Handshake okay! Opening WS!");
 
-        conn = new WebSocket(uri, token);
+			conn = new WebSocket(uri, token);
 
-        conn.binaryType = 'arraybuffer';
+			conn.binaryType = 'arraybuffer';
 
-        conn.onopen = function() { onConnectionOpened(); };
-        conn.onclose = function() { onConnectionClosed(); };
-        conn.onerror = function() { onConnectionError(); };
-        conn.onmessage = function(evt) { handleMessageEvent(evt); };
-    }
+			conn.onopen = function() { onConnectionOpened(); };
+			conn.onclose = function() { onConnectionClosed(); };
+			conn.onerror = function() { onConnectionError(); };
+			conn.onmessage = function(evt) { handleMessageEvent(evt); };
+		}
+	} catch (e) {
+		console.log('chatHandshakeResult exception')
+		console.log(e)
+	}
 }
 
 function onConnectionOpened() {
-    global.robot.logger.info('WS established!');
+	try {
+		global.robot.logger.info('WS established!');
 
-    if (pingInterval !== null) {
-        clearInterval(pingInterval);
-    }
+		if (pingInterval !== null) {
+			clearInterval(pingInterval);
+		}
 
-    pingInterval = setInterval(sendPingMessage, PING_INTERVAL);
+		pingInterval = setInterval(sendPingMessage, PING_INTERVAL);
 
-	triviaTimer = setInterval(startTrivia, TRIVIA_INTERVAL);
-
+		triviaTimer = setInterval(startTrivia, TRIVIA_INTERVAL);
+	} catch (e) {
+		console.log('onConnectionOpened exception')
+		console.log(e)
+	}
 }
 
 function onConnectionClosed() {
-    if (conn && conn.readyState === WebSocket.OPEN) {
-        global.robot.logger.info('WS closed!');
+	try {
+		if (conn && conn.readyState === WebSocket.OPEN) {
+			global.robot.logger.info('WS closed!');
 
-        conn.close();
-    } else if (conn && conn.readyState === WebSocket.CLOSED) {
-        global.robot.logger.warning('WS was already closed!')
-    }
+			conn.close();
+		} else if (conn && conn.readyState === WebSocket.CLOSED) {
+			global.robot.logger.warning('WS was already closed!')
+		}
 
-    clearPingTimer();
+		clearPingTimer();
 
-    if (pingInterval !== null) {
-        clearInterval(pingInterval);
-    }
+		if (pingInterval !== null) {
+			clearInterval(pingInterval);
+		}
 
-    conn = null;
+		conn = null;
 
-    scheduleConnectionRetry();
+		scheduleConnectionRetry();
+	} catch (e) {
+		console.log('onConnectionClosed exception')
+		console.log(e)
+	}
 }
 
 function onConnectionError() {
-    if (conn.readyState === WebSocket.OPEN) {
-        global.robot.logger.error('WS error, closing and retrying!');
-    } else {
-        global.robot.logger.error('WS error, just retrying since WS is already closed!');
-    }
+	try {
+		if (conn.readyState === WebSocket.OPEN) {
+			global.robot.logger.error('WS error, closing and retrying!');
+		} else {
+			global.robot.logger.error('WS error, just retrying since WS is already closed!');
+		}
 
-    onConnectionClosed();
+		onConnectionClosed();
+	} catch (e) {
+		console.log('onConnectionError exception')
+		console.log(e)
+	}
 }
 
 function handleMessageEvent(evt) {
-    if (evt.type === 'message') {
-        const wrapper = MessageWrapper.decode(evt.data)
-            .toRaw();
+	try {
+		if (evt) {
+			if (evt.type === 'message') {
+				const wrapper = MessageWrapper.decode(evt.data)
+					.toRaw();
 
-        let message;
-        switch (wrapper.type) {
-            case 'CHAT_MESSAGE':
-                wrapper.type = MessageType.CHAT_MESSAGE;
-                message = onReceiveChatMessage(wrapper);
+				let message;
+				if (wrapper) {
+					switch (wrapper.type) {
+						case 'CHAT_MESSAGE':
+							wrapper.type = MessageType.CHAT_MESSAGE;
+							message = onReceiveChatMessage(wrapper);
+							if (message) {
+								let idx = findKeyIndex(triviaWatcher, 'chid', message.channel);
+								let getTitle = findKeyIndex(global.channels_by_index, 'id', message.channel);
+								if (global.channels_by_index[getTitle].type !== ChannelType.DIRECT) {
+									if (idx !== null) {
+										global.robot.logger.info('Updating ts to triviaWatcher from channel with ID: ' + message.channel + ' and title: ' + global.channels_by_index[getTitle].title);
+										triviaWatcher[idx].ts = message.timestamp;
+									} else {
+										global.robot.logger.info('Pushing chid/ts to triviaWatcher from channel with ID: ' + message.channel + ' and title: ' + global.channels_by_index[getTitle].title);
+										triviaWatcher.push({chid: message.channel, ts: message.timestamp});
+									}
+								}
+							}
+							break;
+						case 'SYSTEM_MESSAGE':
+							wrapper.type = MessageType.SYSTEM_MESSAGE;
+							message = onReceiveSystemMessage(wrapper);
+							break;
+						case 'PING':
+							wrapper.type = MessageType.PING;
+							onReceivePingResponse(wrapper);
+							return;
+						default:
+					}
+				}
+
 				if (message) {
-					let idx = findKeyIndex(triviaWatcher, 'chid', message.channel);
-					let getTitle = findKeyIndex(global.channels_by_index, 'id', message.channel);
-					if (global.channels_by_index[getTitle].type !== ChannelType.DIRECT) {
-						if (idx !== null) {
-							global.robot.logger.info('Updating ts to triviaWatcher from channel with ID: ' + message.channel + ' and title: ' + global.channels_by_index[getTitle].title);
-							triviaWatcher[idx].ts = message.timestamp;
+					message.error = false;
+					message.preview = false;
+					clearMessageTimer(message.id);
+
+					if (messageIDs.indexOf(message.id) > -1) {
+						messageIDs = [] //flush when it happens?
+						return true; //should fix double message issue in prod
+					}
+					else {
+						messageIDs.push(message.id);
+					}
+
+					let checkForSpamResult = false;//checkForSpam(message, wrapper);
+					if (!checkForSpamResult) {
+						emitToHubot(message, wrapper);
+					} else {
+						let isLoaded = false;
+
+						for (let i = 0; i < global.robot.listeners.length; i++) {
+							let str = global.robot.listeners[i].regex.toString();
+							if (str.startsWith('/spamscript')) {
+								isLoaded = true;
+								break;
+							}
+						}
+
+						if (isLoaded) {
+							let getTitle = findKeyIndex(global.channels_by_index, 'id', message.channel);
+
+							global.robot.logger.warning("Spammy message caught of type: " + checkForSpamResult + " , sending timeout in channel ID: " + message.channel + " and title " + global.channels_by_index[getTitle].title + " to user: " + message.user.display_name + " ! - Content: " + message.body)
+
+							let channelId = message.channel;
+							let account = {name: message.user.display_name, account_id: message.user.id};
+							let obj = {message_id: message.id, account: account, body: checkForSpamResult, send_time: message.timestamp, update_time: message.timestamp};
+							global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
 						} else {
-							global.robot.logger.info('Pushing chid/ts to triviaWatcher from channel with ID: ' + message.channel + ' and title: ' + global.channels_by_index[getTitle].title);
-							triviaWatcher.push({chid: message.channel, ts: message.timestamp});
+							let getTitle = findKeyIndex(global.channels_by_index, 'id', message.channel);
+
+							global.robot.logger.warning("Module not loaded but a Spammy message caught of type: " + checkForSpamResult + " , in channel ID: " + message.channel + " and title " + global.channels_by_index[getTitle].title + " from user: " + message.user.display_name + " ! - Content: " + message.body)
+
+							emitToHubot(message, wrapper);
 						}
 					}
 				}
-                break;
-            case 'SYSTEM_MESSAGE':
-                wrapper.type = MessageType.SYSTEM_MESSAGE;
-                message = onReceiveSystemMessage(wrapper);
-                break;
-            case 'PING':
-                wrapper.type = MessageType.PING;
-                onReceivePingResponse(wrapper);
-                return;
-            default:
-        }
-
-        if (message) {
-            message.error = false;
-            message.preview = false;
-            clearMessageTimer(message.id);
-
-            if (messageIDs.indexOf(message.id) > -1) {
-                messageIDs = [] //flush when it happens?
-                return true; //should fix double message issue in prod
-            }
-            else {
-                messageIDs.push(message.id);
-            }
-
-            let checkForSpamResult = false;//checkForSpam(message, wrapper);
-            if (!checkForSpamResult) {
-                emitToHubot(message, wrapper);
-            } else {
-                let isLoaded = false;
-
-                for (let i = 0; i < global.robot.listeners.length; i++) {
-                    let str = global.robot.listeners[i].regex.toString();
-                    if (str.startsWith('/spamscript')) {
-                        isLoaded = true;
-                        break;
-                    }
-                }
-
-                if (isLoaded) {
-					let getTitle = findKeyIndex(global.channels_by_index, 'id', message.channel);
-
-                    global.robot.logger.warning("Spammy message caught of type: " + checkForSpamResult + " , sending timeout in channel ID: " + message.channel + " and title " + global.channels_by_index[getTitle].title + " to user: " + message.user.display_name + " ! - Content: " + message.body)
-
-                    let channelId = message.channel;
-                    let account = {name: message.user.display_name, account_id: message.user.id};
-                    let obj = {message_id: message.id, account: account, body: checkForSpamResult, send_time: message.timestamp, update_time: message.timestamp};
-                    global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
-                } else {
-					let getTitle = findKeyIndex(global.channels_by_index, 'id', message.channel);
-
-                    global.robot.logger.warning("Module not loaded but a Spammy message caught of type: " + checkForSpamResult + " , in channel ID: " + message.channel + " and title " + global.channels_by_index[getTitle].title + " from user: " + message.user.display_name + " ! - Content: " + message.body)
-
-                    emitToHubot(message, wrapper);
-                }
-            }
-        }
-    }
+			}
+		}
+	} catch (e) {
+		console.log('handleMessageEvent exception')
+		console.log(e)
+	}
 }
 
 function checkForSpam(message, wrapper) {
-    //todo: proper/better random text detection
+	try {
+		//todo: proper/better random text detection
 
-    if (wrapper.type === MessageType.CHAT_MESSAGE) {
-        let numUpper = message.body.length - message.body.replace(/[A-Z]/g, '').length;
-        let numLower = message.body.length - message.body.replace(/[a-z]/g, '').length;
+		if (wrapper.type === MessageType.CHAT_MESSAGE) {
+			let numUpper = message.body.length - message.body.replace(/[A-Z]/g, '').length;
+			let numLower = message.body.length - message.body.replace(/[a-z]/g, '').length;
 
-        if (oldmessage === message.body) {
-            return 'spamscript: message repetition';
-        }
+			if (oldmessage === message.body) {
+				return 'spamscript: message repetition';
+			}
 
-        oldmessage = message.body;
+			oldmessage = message.body;
 
-        if ((/^[A-Z]*$/).test(message.body) && message.body.length >= 3) {
-            return 'spamscript: capslock';
-        }
+			if ((/^[A-Z]*$/).test(message.body) && message.body.length >= 3) {
+				return 'spamscript: capslock';
+			}
 
-        if (numUpper > numLower && message.body.length >= 3) {
-            return 'spamscript: uppercase > lowercase';
-        }
+			if (numUpper > numLower && message.body.length >= 3) {
+				return 'spamscript: uppercase > lowercase';
+			}
 
-        if ((/(.+){5,}(?=\1+)[^A-Za-z0-9]/i).test(message.body)) {
-            return 'spamscript: emoji repetition';
-        }
+			if ((/(.+){5,}(?=\1+)[^A-Za-z0-9]/i).test(message.body)) {
+				return 'spamscript: emoji repetition';
+			}
 
-        if ((/(^|\s+)(\S+)(($|\s+)\2)+/ig).test(message.body)) {
-            return 'spamscript: word repetition';
-        }
+			if ((/(^|\s+)(\S+)(($|\s+)\2)+/ig).test(message.body)) {
+				return 'spamscript: word repetition';
+			}
 
-        if ((/^(.{3}).*\1$/i).test(message.body)) {
-            return 'spamscript: word repetition';
-        }
+			if ((/^(.{3}).*\1$/i).test(message.body)) {
+				return 'spamscript: word repetition';
+			}
 
-        if ((/^([a-z])\1+$/i).test(message.body)) {
-            return 'spamscript: letter repetition';
-        }
+			if ((/^([a-z])\1+$/i).test(message.body)) {
+				return 'spamscript: letter repetition';
+			}
 
-        if ((/^([a-zA-Z])\1+$/).test(message.body)) {
-            return 'spamscript: letter repetition';
-        }
+			if ((/^([a-zA-Z])\1+$/).test(message.body)) {
+				return 'spamscript: letter repetition';
+			}
 
-        if ((/\b[A-Za-z]{18,}\b/).test(message.body)) {
-            return 'spamscript: random text';
-        }
-    }
+			if ((/\b[A-Za-z]{18,}\b/).test(message.body)) {
+				return 'spamscript: random text';
+			}
+		}
 
-    return false;
+		return false;
+	} catch (e) {
+		console.log('checkForSpam exception')
+		console.log(e)
+	}
 }
 
 function emitToHubot(message, wrapper) {
-    if (wrapper.type === MessageType.SYSTEM_MESSAGE) {
-        let channelId = message.channel;
-		let getChannelIndex = findKeyIndex(global.channels_by_index, 'id', channelId);
-        let account = {name: message.user.display_name, account_id: message.user.id};
-        let obj = {message_id: message.id, account: account, body: message.body, send_time: message.timestamp, update_time: message.timestamp};
+	try {
+		if (wrapper.type === MessageType.SYSTEM_MESSAGE) {
+			let channelId = message.channel;
+			let getChannelIndex = findKeyIndex(global.channels_by_index, 'id', channelId);
+			let account = {name: message.user.display_name, account_id: message.user.id};
+			let obj = {message_id: message.id, account: account, body: message.body, send_time: message.timestamp, update_time: message.timestamp};
 
-        if (message.type === 'USER_LEFT') {
-			global.robot.logger.info('New WS system message/USER_LEFT! (in channel with id: ' + channelId + ' & title ' + global.channels_by_index[getChannelIndex].title +')');
-            obj.body = global.robot.name + ' user_left';
-            global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
-        } else if (message.type === 'USER_JOINED') {
-			global.robot.logger.info('New WS system message/USER_JOINED! (in channel with id: ' + channelId + ' & title ' + global.channels_by_index[getChannelIndex].title +')');
-            obj.body = global.robot.name + ' user_joined';
-            global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
-        }
-    }
-    if (wrapper.type === MessageType.CHAT_MESSAGE) {
-        let channelId = message.channel;
-        let account = {name: message.user.display_name, account_id: message.user.id};
-        let obj = {message_id: message.id, account: account, body: message.body, send_time: message.timestamp, update_time: message.timestamp};
+			if (message.type === 'USER_LEFT') {
+				global.robot.logger.info('New WS system message/USER_LEFT! (in channel with id: ' + channelId + ' & title ' + global.channels_by_index[getChannelIndex].title +')');
+				obj.body = global.robot.name + ' user_left';
+				global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
+			} else if (message.type === 'USER_JOINED') {
+				global.robot.logger.info('New WS system message/USER_JOINED! (in channel with id: ' + channelId + ' & title ' + global.channels_by_index[getChannelIndex].title +')');
+				obj.body = global.robot.name + ' user_joined';
+				global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
+			}
+		}
+		if (wrapper.type === MessageType.CHAT_MESSAGE) {
+			let channelId = message.channel;
+			let account = {name: message.user.display_name, account_id: message.user.id};
+			let obj = {message_id: message.id, account: account, body: message.body, send_time: message.timestamp, update_time: message.timestamp};
 
-        let searchstr = "@" + global.display_name + ":";
-        let bodyidx = obj.body.indexOf(searchstr);
-        let searchstrlength = global.display_name.length + 3;
+			let searchstr = "@" + global.display_name + ":";
+			let bodyidx = obj.body.indexOf(searchstr);
+			let searchstrlength = global.display_name.length + 3;
 
-        if (bodyidx === -1) {
-            searchstr = "@" + global.display_name;
-            bodyidx = obj.body.indexOf(searchstr);
-            searchstrlength = global.display_name.length + 2;
-        } else if (bodyidx === -1) {
-            searchstr = " @" + global.display_name;
-            bodyidx = obj.body.indexOf(searchstr);
-        }
+			if (bodyidx === -1) {
+				searchstr = "@" + global.display_name;
+				bodyidx = obj.body.indexOf(searchstr);
+				searchstrlength = global.display_name.length + 2;
+			} else if (bodyidx === -1) {
+				searchstr = " @" + global.display_name;
+				bodyidx = obj.body.indexOf(searchstr);
+			}
 
-        let hardcodedcmds = ['join community'];
-        let searchresult = null;
+			let hardcodedcmds = ['join community'];
+			let searchresult = null;
 
-        for (let i = 0; i < hardcodedcmds.length; i++) {
-            let arrstr = hardcodedcmds[i];
-            let searchstr = obj.body.search(arrstr);
-            if (searchstr !== -1) {
-                searchresult = i;
-            }
-        }
+			for (let i = 0; i < hardcodedcmds.length; i++) {
+				let arrstr = hardcodedcmds[i];
+				let searchstr = obj.body.search(arrstr);
+				if (searchstr !== -1) {
+					searchresult = i;
+				}
+			}
 
-        let getChannelIndex = findKeyIndex(global.channels_by_index, 'id', channelId);
-        let getChannelType = null;
+			let getChannelIndex = findKeyIndex(global.channels_by_index, 'id', channelId);
+			let getChannelType = null;
 
-        if (getChannelIndex !== null) {
-            getChannelType = global.channels_by_index[getChannelIndex].type;
-        } else {
-            global.robot.http(global.api + ("/channel/" + channelId + "/")).headers({
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
-              'X-Token': global.user_token
-            }).get()(function(err, res, body) {
-              try {
-                let result = JSON.parse(body);
+			if (getChannelIndex !== null) {
+				getChannelType = global.channels_by_index[getChannelIndex].type;
+			} else {
+				global.robot.http(global.api + ("/channel/" + channelId + "/")).headers({
+				  'Accept': 'application/json',
+				  'Content-Type': 'application/json',
+				  'X-Token': global.user_token
+				}).get()(function(err, res, body) {
+				  try {
+					let result = JSON.parse(body);
 
-                getChannelType = result.channel.type;
+					getChannelType = result.channel.type;
 
-                if (searchresult !== null && getChannelType === ChannelType.DIRECT || getChannelType === ChannelType.DIRECT) {
-                    global.robot.logger.info('New WS chat message! (in direct channel (not in global.channels_by_index) with id: ' + channelId + ')');
-                    obj.body = obj.body.toLowerCase();
-                    obj.body = global.robot.name + " " + obj.body;
-                    global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
-                }
+					if (searchresult !== null && getChannelType === ChannelType.DIRECT || getChannelType === ChannelType.DIRECT) {
+						global.robot.logger.info('New WS chat message! (in direct channel (not in global.channels_by_index) with id: ' + channelId + ')');
+						obj.body = obj.body.toLowerCase();
+						obj.body = global.robot.name + " " + obj.body;
+						global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
+					}
 
-                return;
-              } catch (err) {
-                return global.robot.logger.error("Oh no! We errored :( - " + err + " - API Response Code: " + res.statusCode);
-              }
-            });
-        }
+					return;
+				  } catch (err) {
+					return global.robot.logger.error("Oh no! We errored :( - " + err + " - API Response Code: " + res.statusCode);
+				  }
+				});
+			}
 
-        if (searchresult !== null && getChannelType === ChannelType.DIRECT || getChannelType === ChannelType.DIRECT) {
-            global.robot.logger.info('New WS chat message! (in direct channel with id: ' + channelId + ' & title ' + global.channels_by_index[getChannelIndex].title + ')');
-            obj.body = obj.body.toLowerCase();
-            obj.body = global.robot.name + " " + obj.body;
-            global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
-        } else if (bodyidx === 0 && getChannelType !== ChannelType.DIRECT) {
-            global.robot.logger.info('New WS chat message! (in channel with id: ' + channelId + ' & title ' + global.channels_by_index[getChannelIndex].title +')');
-            obj.body = obj.body.replace(searchstr, searchstr + " " + global.robot.name);
-            obj.body = obj.body.substring(obj.body.length, searchstrlength);
-            global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
-        } else if (bodyidx > 0 && getChannelType !== ChannelType.DIRECT) {
-			global.robot.logger.info('New WS chat message! (in channel with id: ' + channelId + ' & title ' + global.channels_by_index[getChannelIndex].title +')');
-            obj.body = global.robot.name + " " + obj.body;
-            obj.body = obj.body.replace(", " + searchstr, "");
-            obj.body = obj.body.replace(searchstr, "");
-            global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
-        }
-    }
+			if (searchresult !== null && getChannelType === ChannelType.DIRECT || getChannelType === ChannelType.DIRECT) {
+				global.robot.logger.info('New WS chat message! (in direct channel with id: ' + channelId + ' & title ' + global.channels_by_index[getChannelIndex].title + ')');
+				obj.body = obj.body.toLowerCase();
+				obj.body = global.robot.name + " " + obj.body;
+				global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
+			} else if (bodyidx === 0 && getChannelType !== ChannelType.DIRECT) {
+				global.robot.logger.info('New WS chat message! (in channel with id: ' + channelId + ' & title ' + global.channels_by_index[getChannelIndex].title +')');
+				obj.body = obj.body.replace(searchstr, searchstr + " " + global.robot.name);
+				obj.body = obj.body.substring(obj.body.length, searchstrlength);
+				global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
+			} else if (bodyidx > 0 && getChannelType !== ChannelType.DIRECT) {
+				global.robot.logger.info('New WS chat message! (in channel with id: ' + channelId + ' & title ' + global.channels_by_index[getChannelIndex].title +')');
+				obj.body = global.robot.name + " " + obj.body;
+				obj.body = obj.body.replace(", " + searchstr, "");
+				obj.body = obj.body.replace(searchstr, "");
+				global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
+			}
+		}
+	} catch (e) {
+		console.log('emitToHubot exception')
+		console.log(e)
+	}
 }
 
 function findKeyIndex(arr, key, val) {
-    let i = 0;
-    while (i < arr.length) {
-      if (arr[i][key] === val) {
-        return i;
-      }
-      i++;
-    }
-    return null;
+	try {
+		let i = 0;
+		while (i < arr.length) {
+		  if (arr[i][key] === val) {
+			return i;
+		  }
+		  i++;
+		}
+		return null;
+	} catch (e) {
+		console.log('findKeyIndex exception')
+		console.log(e)
+	}
 }
 
 function onReceiveChatMessage(wrapper) {
-    const msg = flattenMessageWrapper(wrapper);
+	try {
+		const msg = flattenMessageWrapper(wrapper);
 
-    if (!msg) {
-        return null;
-    }
+		if (!msg) {
+			return null;
+		}
 
-    if (msg.body_annotations.length > 0) {
-        let result = msg.body_annotations.map(function(keys) {
-            if (keys.type !== 'USER_MENTION') {
-                return null; //because bot isn't really supposed to reply to anything else except these... as of now.
-            }
-        });
-    }
+		if (msg.body_annotations.length > 0) {
+			let result = msg.body_annotations.map(function(keys) {
+				if (keys.type !== 'USER_MENTION') {
+					return null; //because bot isn't really supposed to reply to anything else except these... as of now.
+				}
+			});
+		}
 
-    return msg;
+		return msg;
+	} catch (e) {
+		console.log('onReceiveChatMessage exception')
+	}
 }
 
 function onReceiveSystemMessage(wrapper) {
-    const msg = flattenSystemMessage(wrapper);
+	try {
+		const msg = flattenSystemMessage(wrapper);
 
-    if (!msg) {
-        return null;
-    }
+		if (!msg) {
+			return null;
+		}
 
-    if (msg.type === 'USER_LEFT' || msg.type === 'USER_JOINED') {
-        return msg;
-    } else {
-        return null; //because bot isn't really supposed to reply to anything else except these... as of now.
-    }
+		if (msg.type === 'USER_LEFT' || msg.type === 'USER_JOINED') {
+			return msg;
+		} else {
+			return null; //because bot isn't really supposed to reply to anything else except these... as of now.
+		}
+	} catch (e) {
+		console.log('onReceiveSystemMessage exception')
+		console.log(e)
+	}
 }
 
 function onReceivePingResponse(wrapper) {
-    global.robot.logger.info('Received ping response: ' + wrapper.id);
+	try {
+		global.robot.logger.info('Received ping response: ' + wrapper.id);
 
-    if (pingTimer[wrapper.id]) {
-        failedPings = 0;
-        clearTimeout(pingTimer[wrapper.id]);
-        pingTimer[wrapper.id] = null;
-    }
+		if (pingTimer[wrapper.id]) {
+			failedPings = 0;
+			clearTimeout(pingTimer[wrapper.id]);
+			pingTimer[wrapper.id] = null;
+		}
+	} catch (e) {
+		console.log('onReceivePingResponse exception')
+		console.log(e)
+	}
 }
 
 function clearMessageTimer(id) {
-    if (messageTimer[id]) {
-        clearTimeout(messageTimer[id]);
-        messageTimer[id] = undefined;
-    }
+	try {
+		if (messageTimer[id]) {
+			clearTimeout(messageTimer[id]);
+			messageTimer[id] = undefined;
+		}
+	} catch (e) {
+		console.log('clearMessageTimer exception')
+		console.log(e)
+	}
 }
 
 function startTrivia() {
-	if (conn.readyState !== WebSocket.OPEN) {
-		global.robot.logger.warning('Trying to start trivia on closed websocket');
-		return;
-	}
-
-	for (let i = 0; i < triviaWatcher.length; i++) {
-		const lastts = new Date(triviaWatcher[i].ts * 1000);
-		const twominutes = new Date(Date.now() - IDLE_TRIVIA_INTERVAL);
-
-		if ((Math.floor(lastts.getTime() / 1000) > Math.floor(twominutes.getTime() / 1000) === false)) {
-			sendTriviaMessage(triviaWatcher[i].chid);
-			triviaWatcher.splice(triviaWatcher[i], 1);
+	try {
+		if (conn.readyState !== WebSocket.OPEN) {
+			global.robot.logger.warning('Trying to start trivia on closed websocket');
+			return;
 		}
+
+		for (let i = 0; i < triviaWatcher.length; i++) {
+			const lastts = new Date(triviaWatcher[i].ts * 1000);
+			const twominutes = new Date(Date.now() - IDLE_TRIVIA_INTERVAL);
+
+			if ((Math.floor(lastts.getTime() / 1000) > Math.floor(twominutes.getTime() / 1000) === false)) {
+				sendTriviaMessage(triviaWatcher[i].chid);
+				triviaWatcher.splice(triviaWatcher[i], 1);
+			}
+		}
+	} catch (e) {
+		console.log('startTrivia exception')
+		console.log(e)
 	}
 }
 
 function sendTriviaMessage(channelId) {
-	if (conn.readyState !== WebSocket.OPEN) {
-		global.robot.logger.warning('Trying to send trivia message on closed websocket');
-		return;
+	try {
+		if (conn.readyState !== WebSocket.OPEN) {
+			global.robot.logger.warning('Trying to send trivia message on closed websocket');
+			return;
+		}
+
+		let account = {name: global.username, account_id: global.user_id};
+		let obj = {message_id: uuid.v4(), account: account, body: global.robot.name + ' trivia', send_time: Math.floor(Date.now() / 1000), update_time: Math.floor(Date.now() / 1000)};
+		global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
+	} catch (e) {
+		console.log('sendTriviaMessage exception')
+		console.log(e)
 	}
-
-	let account = {name: global.username, account_id: global.user_id};
-	let obj = {message_id: uuid.v4(), account: account, body: global.robot.name + ' trivia', send_time: Math.floor(Date.now() / 1000), update_time: Math.floor(Date.now() / 1000)};
-	global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
-
 }
 
 function sendPingMessage() {
-    if (conn.readyState !== WebSocket.OPEN) {
-        global.robot.logger.warning('Trying to send ping on closed websocket');
-        onPingFailed();
-        return;
-    }
+	try {
+		if (conn.readyState !== WebSocket.OPEN) {
+			global.robot.logger.warning('Trying to send ping on closed websocket');
+			onPingFailed();
+			return;
+		}
 
-    const wrapper = new MessageWrapper();
+		const wrapper = new MessageWrapper();
 
-    wrapper.id = uuid.v4();
-    wrapper.type = MessageType.PING;
+		wrapper.id = uuid.v4();
+		wrapper.type = MessageType.PING;
 
-    global.robot.logger.info('Trying to send ping on open websocket');
+		global.robot.logger.info('Trying to send ping on open websocket');
 
-    conn.send(wrapper.toArrayBuffer());
+		conn.send(wrapper.toArrayBuffer());
 
-    pingTimer[wrapper.id] = setTimeout(onPingFailed, PING_TIMEOUT,wrapper.id);
+		pingTimer[wrapper.id] = setTimeout(onPingFailed, PING_TIMEOUT,wrapper.id);
+	} catch (e) {
+		console.log('sendPingMessage exception')
+		console.log(e)
+	}
 }
 
 function onPingFailed(id) {
-    if (id) {
-        clearTimeout(pingTimer[id]);
-        pingTimer[id] = null;
-    }
+	try {
+		if (id) {
+			clearTimeout(pingTimer[id]);
+			pingTimer[id] = null;
+		}
 
-    global.robot.logger.warning('Ping timeout');
+		global.robot.logger.warning('Ping timeout');
 
-    failedPings++;
+		failedPings++;
 
-    if (failedPings >= MAX_FAILED_PINGS && conn) {
-        clearPingTimer();
+		if (failedPings >= MAX_FAILED_PINGS && conn) {
+			clearPingTimer();
 
-        global.robot.logger.error('closing connection because of too many failed pings');
+			global.robot.logger.error('closing connection because of too many failed pings');
 
-        conn.close();
-        onConnectionClosed();
-    }
+			conn.close();
+			onConnectionClosed();
+		}
+	} catch (e) {
+		console.log('onPingFailed exception')
+		console.log(e)
+	}
 }
 
 function clearPingTimer() {
-    if (!pingTimer) {
-        return;
-    }
+	try {
+		if (!pingTimer) {
+			return;
+		}
 
-    Object.keys(pingTimer).forEach(key => {
-        if (pingTimer.hasOwnProperty(key)) {
-            clearTimeout(pingTimer[key]);
-        }
-    });
+		Object.keys(pingTimer).forEach(key => {
+			if (pingTimer.hasOwnProperty(key)) {
+				clearTimeout(pingTimer[key]);
+			}
+		});
 
-    pingTimer = {};
+		pingTimer = {};
+	} catch (e) {
+		console.log('clearPingTimer exception')
+		console.log(e)
+	}
 }
 
 function scheduleConnectionRetry() {
-    const timer = exponentialBackoff(curRetries);
+	try {
+		const timer = exponentialBackoff(curRetries);
 
-    if (!retryTimer) {
-        retryTimer = setTimeout(() => {
-            retryTimer = false;
-            global.robot.logger.info("Retrying handshake and connection!");
-            let C = new Client;
-            C.chatHandshake(savedToken);
-        }, timer);
+		if (!retryTimer) {
+			retryTimer = setTimeout(() => {
+				retryTimer = false;
+				global.robot.logger.info("Retrying handshake and connection!");
+				let C = new Client;
+				C.chatHandshake(savedToken);
+			}, timer);
 
-        curRetries++;
-    }
+			curRetries++;
+		}
+	} catch (e) {
+		console.log('scheduleConnectionRetry exception')
+		console.log(e)
+	}
 }
 
 function exponentialBackoff(c) {
-	const max = Math.pow(2, c) - 1;
-	const backoff = BACKOFF_INTERVAL * _.random(max);
+	try {
+		const max = Math.pow(2, c) - 1;
+		const backoff = BACKOFF_INTERVAL * _.random(max);
 
-	return Math.min(backoff, MAX_BACKOFF_INTERVAL);
+		return Math.min(backoff, MAX_BACKOFF_INTERVAL);
+	} catch (e) {
+		console.log('exponentialBackoff exception')
+		console.log(e)
+	}
 }
 
 module.exports = Client;
