@@ -21,7 +21,8 @@ const MAX_FAILED_PINGS = 1;
 const MAX_BACKOFF_INTERVAL = 1000 * 60 * 2;
 const BACKOFF_INTERVAL = 1000;
 
-const IDLE_TRIVIA_INTERVAL = 1000;
+const TRIVIA_INTERVAL = 1000;
+const IDLE_TRIVIA_INTERVAL = 120000;
 let triviaTimer = {};
 let triviaWatcher = [];
 
@@ -110,7 +111,7 @@ function onConnectionOpened() {
 
     pingInterval = setInterval(sendPingMessage, PING_INTERVAL);
 
-	triviaTimer = setInterval(startTrivia, IDLE_TRIVIA_INTERVAL);
+	triviaTimer = setInterval(startTrivia, TRIVIA_INTERVAL);
 
 }
 
@@ -440,7 +441,7 @@ function startTrivia() {
 
 	for (let i = 0; i < triviaWatcher.length; i++) {
 		const lastts = new Date(triviaWatcher[i].ts * 1000);
-		const twominutes = new Date(Date.now() - 120000);
+		const twominutes = new Date(Date.now() - IDLE_TRIVIA_INTERVAL);
 
 		if ((Math.floor(lastts.getTime() / 1000) > Math.floor(twominutes.getTime() / 1000) === false)) {
 			sendTriviaMessage(triviaWatcher[i].chid);
