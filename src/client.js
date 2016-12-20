@@ -21,6 +21,10 @@ const MAX_FAILED_PINGS = 1;
 const MAX_BACKOFF_INTERVAL = 1000 * 60 * 2;
 const BACKOFF_INTERVAL = 1000;
 
+const IDLE_TRIVIA_INTERVAL = 1000;
+let triviaTimer = {};
+let triviaWatcher = [];
+
 let savedToken = null;
 
 let failedPings = 0;
@@ -106,6 +110,8 @@ function onConnectionOpened() {
 
     pingInterval = setInterval(sendPingMessage, PING_INTERVAL);
 
+	triviaTimer = setInterval(startTrivia, IDLE_TRIVIA_INTERVAL);
+
 }
 
 function onConnectionClosed() {
@@ -148,6 +154,19 @@ function handleMessageEvent(evt) {
             case 'CHAT_MESSAGE':
                 wrapper.type = MessageType.CHAT_MESSAGE;
                 message = onReceiveChatMessage(wrapper);
+				if (message) {
+					let idx = findKeyIndex(triviaWatcher, 'chid', message.channel);
+					let getTitle = findKeyIndex(global.channels_by_index, 'id', message.channel);
+					if (global.channels_by_index[getTitle].type !== ChannelType.DIRECT) {
+						if (idx !== null) {
+							global.robot.logger.info('Updating ts to triviaWatcher from channel with ID: ' + message.channel + ' and title: ' + global.channels_by_index[getTitle].title);
+							triviaWatcher[idx].ts = message.timestamp;
+						} else {
+							global.robot.logger.info('Pushing chid/ts to triviaWatcher from channel with ID: ' + message.channel + ' and title: ' + global.channels_by_index[getTitle].title);
+							triviaWatcher.push({chid: message.channel, ts: message.timestamp});
+						}
+					}
+				}
                 break;
             case 'SYSTEM_MESSAGE':
                 wrapper.type = MessageType.SYSTEM_MESSAGE;
@@ -173,7 +192,7 @@ function handleMessageEvent(evt) {
                 messageIDs.push(message.id);
             }
 
-            let checkForSpamResult = checkForSpam(message, wrapper);
+            let checkForSpamResult = false;//checkForSpam(message, wrapper);
             if (!checkForSpamResult) {
                 emitToHubot(message, wrapper);
             } else {
@@ -188,14 +207,18 @@ function handleMessageEvent(evt) {
                 }
 
                 if (isLoaded) {
-                    global.robot.logger.warning("Spammy message caught of type: " + checkForSpamResult + " , sending timeout in channel " + message.channel + " to user: " + message.user.display_name + " ! - Content: " + message.body)
+					let getTitle = findKeyIndex(global.channels_by_index, 'id', message.channel);
+
+                    global.robot.logger.warning("Spammy message caught of type: " + checkForSpamResult + " , sending timeout in channel ID: " + message.channel + " and title " + global.channels_by_index[getTitle].title + " to user: " + message.user.display_name + " ! - Content: " + message.body)
 
                     let channelId = message.channel;
                     let account = {name: message.user.display_name, account_id: message.user.id};
                     let obj = {message_id: message.id, account: account, body: checkForSpamResult, send_time: message.timestamp, update_time: message.timestamp};
                     global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
                 } else {
-                    global.robot.logger.warning("Module not loaded but a Spammy message caught of type: " + checkForSpamResult + " , in channel " + message.channel + " from user: " + message.user.display_name + " ! - Content: " + message.body)
+					let getTitle = findKeyIndex(global.channels_by_index, 'id', message.channel);
+
+                    global.robot.logger.warning("Module not loaded but a Spammy message caught of type: " + checkForSpamResult + " , in channel ID: " + message.channel + " and title " + global.channels_by_index[getTitle].title + " from user: " + message.user.display_name + " ! - Content: " + message.body)
 
                     emitToHubot(message, wrapper);
                 }
@@ -256,15 +279,16 @@ function checkForSpam(message, wrapper) {
 function emitToHubot(message, wrapper) {
     if (wrapper.type === MessageType.SYSTEM_MESSAGE) {
         let channelId = message.channel;
+		let getChannelIndex = findKeyIndex(global.channels_by_index, 'id', channelId);
         let account = {name: message.user.display_name, account_id: message.user.id};
         let obj = {message_id: message.id, account: account, body: message.body, send_time: message.timestamp, update_time: message.timestamp};
 
         if (message.type === 'USER_LEFT') {
-            global.robot.logger.info('New WS system message/USER_LEFT!');
+			global.robot.logger.info('New WS system message/USER_LEFT! (in channel with id: ' + channelId + ' & title ' + global.channels_by_index[getChannelIndex].title +')');
             obj.body = global.robot.name + ' user_left';
             global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
         } else if (message.type === 'USER_JOINED') {
-            global.robot.logger.info('New WS system message/USER_JOINED!');
+			global.robot.logger.info('New WS system message/USER_JOINED! (in channel with id: ' + channelId + ' & title ' + global.channels_by_index[getChannelIndex].title +')');
             obj.body = global.robot.name + ' user_joined';
             global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
         }
@@ -329,17 +353,17 @@ function emitToHubot(message, wrapper) {
         }
 
         if (searchresult !== null && getChannelType === ChannelType.DIRECT || getChannelType === ChannelType.DIRECT) {
-            global.robot.logger.info('New WS chat message! (in direct channel with id: ' + channelId + ')');
+            global.robot.logger.info('New WS chat message! (in direct channel with id: ' + channelId + ' & title ' + global.channels_by_index[getChannelIndex].title + ')');
             obj.body = obj.body.toLowerCase();
             obj.body = global.robot.name + " " + obj.body;
             global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
         } else if (bodyidx === 0 && getChannelType !== ChannelType.DIRECT) {
-            global.robot.logger.info('New WS chat message!');
+            global.robot.logger.info('New WS chat message! (in channel with id: ' + channelId + ' & title ' + global.channels_by_index[getChannelIndex].title +')');
             obj.body = obj.body.replace(searchstr, searchstr + " " + global.robot.name);
             obj.body = obj.body.substring(obj.body.length, searchstrlength);
             global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
         } else if (bodyidx > 0 && getChannelType !== ChannelType.DIRECT) {
-            global.robot.logger.info('New WS chat message!');
+			global.robot.logger.info('New WS chat message! (in channel with id: ' + channelId + ' & title ' + global.channels_by_index[getChannelIndex].title +')');
             obj.body = global.robot.name + " " + obj.body;
             obj.body = obj.body.replace(", " + searchstr, "");
             obj.body = obj.body.replace(searchstr, "");
@@ -406,6 +430,35 @@ function clearMessageTimer(id) {
         clearTimeout(messageTimer[id]);
         messageTimer[id] = undefined;
     }
+}
+
+function startTrivia() {
+	if (conn.readyState !== WebSocket.OPEN) {
+		global.robot.logger.warning('Trying to start trivia on closed websocket');
+		return;
+	}
+
+	for (let i = 0; i < triviaWatcher.length; i++) {
+		const lastts = new Date(triviaWatcher[i].ts * 1000);
+		const twominutes = new Date(Date.now() - 120000);
+
+		if ((Math.floor(lastts.getTime() / 1000) > Math.floor(twominutes.getTime() / 1000) === false)) {
+			sendTriviaMessage(triviaWatcher[i].chid);
+			triviaWatcher.splice(triviaWatcher[i], 1);
+		}
+	}
+}
+
+function sendTriviaMessage(channelId) {
+	if (conn.readyState !== WebSocket.OPEN) {
+		global.robot.logger.warning('Trying to send trivia message on closed websocket');
+		return;
+	}
+
+	let account = {name: global.username, account_id: global.user_id};
+	let obj = {message_id: uuid.v4(), account: account, body: global.robot.name + ' trivia', send_time: Math.floor(Date.now() / 1000), update_time: Math.floor(Date.now() / 1000)};
+	global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
+
 }
 
 function sendPingMessage() {
