@@ -476,7 +476,22 @@ function startTrivia() {
 			const twominutes = new Date(Date.now() - IDLE_TRIVIA_INTERVAL);
 
 			if ((Math.floor(lastts.getTime() / 1000) > Math.floor(twominutes.getTime() / 1000) === false)) {
-				sendTriviaMessage(triviaWatcher[i].chid);
+				let isLoaded = false;
+
+				for (let i = 0; i < global.robot.listeners.length; i++) {
+					let str = global.robot.listeners[i].regex.toString();
+					if (str.startsWith('/trivia')) {
+						isLoaded = true;
+						break;
+					}
+				}
+
+				if (isLoaded) {
+					sendTriviaMessage(triviaWatcher[i].chid);
+				} else {
+					global.robot.logger.warning('Trivia module not loaded, splicing anyway.')
+				}
+
 				triviaWatcher.splice(triviaWatcher[i], 1);
 			}
 		}
