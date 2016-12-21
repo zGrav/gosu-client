@@ -186,7 +186,7 @@ function handleMessageEvent(evt) {
 								let idx = findKeyIndex(triviaWatcher, 'chid', message.channel);
 								let getTitle = findKeyIndex(global.channels_by_index, 'id', message.channel);
 
-								if (global.channels_by_index[getTitle].type !== ChannelType.DIRECT) {
+								if (global.channels_by_index[getTitle].type !== ChannelType.DIRECT && getTitle !== null) {
 									if (idx !== null) {
 										global.robot.logger.info('Updating ts to triviaWatcher from channel with ID: ' + message.channel + ' and title: ' + global.channels_by_index[getTitle].title);
 										triviaWatcher[idx].ts = message.timestamp;
