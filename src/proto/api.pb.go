@@ -41,6 +41,90 @@ func (x CreateGroupErrorType) String() string {
 	return proto.EnumName(CreateGroupErrorType_name, int32(x))
 }
 
+type ApiErrorCodes int32
+
+const (
+	ApiErrorCodes_UNKNOWN_ERROR            ApiErrorCodes = 0
+	ApiErrorCodes_AUTH_MISSING_USER_ID     ApiErrorCodes = 10
+	ApiErrorCodes_PARAM_MISSING_CHANNEL_ID ApiErrorCodes = 100
+	ApiErrorCodes_PARAM_MISSING_USER_ID    ApiErrorCodes = 101
+	ApiErrorCodes_TIMEOUT_INVALID_DURATION ApiErrorCodes = 1000
+	ApiErrorCodes_TIMEOUT_INVALID_REASON   ApiErrorCodes = 1001
+)
+
+var ApiErrorCodes_name = map[int32]string{
+	0:    "UNKNOWN_ERROR",
+	10:   "AUTH_MISSING_USER_ID",
+	100:  "PARAM_MISSING_CHANNEL_ID",
+	101:  "PARAM_MISSING_USER_ID",
+	1000: "TIMEOUT_INVALID_DURATION",
+	1001: "TIMEOUT_INVALID_REASON",
+}
+var ApiErrorCodes_value = map[string]int32{
+	"UNKNOWN_ERROR":            0,
+	"AUTH_MISSING_USER_ID":     10,
+	"PARAM_MISSING_CHANNEL_ID": 100,
+	"PARAM_MISSING_USER_ID":    101,
+	"TIMEOUT_INVALID_DURATION": 1000,
+	"TIMEOUT_INVALID_REASON":   1001,
+}
+
+func (x ApiErrorCodes) String() string {
+	return proto.EnumName(ApiErrorCodes_name, int32(x))
+}
+
+type AuthLoginOAuthRequest_OAuthProvider int32
+
+const (
+	AuthLoginOAuthRequest_UNKNOWN  AuthLoginOAuthRequest_OAuthProvider = 0
+	AuthLoginOAuthRequest_FACEBOOK AuthLoginOAuthRequest_OAuthProvider = 1
+	AuthLoginOAuthRequest_GOOGLE   AuthLoginOAuthRequest_OAuthProvider = 2
+)
+
+var AuthLoginOAuthRequest_OAuthProvider_name = map[int32]string{
+	0: "UNKNOWN",
+	1: "FACEBOOK",
+	2: "GOOGLE",
+}
+var AuthLoginOAuthRequest_OAuthProvider_value = map[string]int32{
+	"UNKNOWN":  0,
+	"FACEBOOK": 1,
+	"GOOGLE":   2,
+}
+
+func (x AuthLoginOAuthRequest_OAuthProvider) String() string {
+	return proto.EnumName(AuthLoginOAuthRequest_OAuthProvider_name, int32(x))
+}
+
+type AuthLoginResponse_ErrorType int32
+
+const (
+	AuthLoginResponse_NONE                 AuthLoginResponse_ErrorType = 0
+	AuthLoginResponse_UNKNOWN_ERROR        AuthLoginResponse_ErrorType = 1
+	AuthLoginResponse_BAD_REQUEST          AuthLoginResponse_ErrorType = 2
+	AuthLoginResponse_NEW_PASSWORD_INVALID AuthLoginResponse_ErrorType = 3
+	AuthLoginResponse_IP_BANNED            AuthLoginResponse_ErrorType = 4
+)
+
+var AuthLoginResponse_ErrorType_name = map[int32]string{
+	0: "NONE",
+	1: "UNKNOWN_ERROR",
+	2: "BAD_REQUEST",
+	3: "NEW_PASSWORD_INVALID",
+	4: "IP_BANNED",
+}
+var AuthLoginResponse_ErrorType_value = map[string]int32{
+	"NONE":                 0,
+	"UNKNOWN_ERROR":        1,
+	"BAD_REQUEST":          2,
+	"NEW_PASSWORD_INVALID": 3,
+	"IP_BANNED":            4,
+}
+
+func (x AuthLoginResponse_ErrorType) String() string {
+	return proto.EnumName(AuthLoginResponse_ErrorType_name, int32(x))
+}
+
 type AuthRegisterResponse_ErrorType int32
 
 const (
@@ -60,6 +144,7 @@ const (
 	AuthRegisterResponse_INVITE_CODE_MISSING       AuthRegisterResponse_ErrorType = 13
 	AuthRegisterResponse_BACKGROUND_IMAGE_INVALID  AuthRegisterResponse_ErrorType = 14
 	AuthRegisterResponse_TITLE_IMAGE_INVALID       AuthRegisterResponse_ErrorType = 15
+	AuthRegisterResponse_IP_BANNED                 AuthRegisterResponse_ErrorType = 16
 )
 
 var AuthRegisterResponse_ErrorType_name = map[int32]string{
@@ -79,6 +164,7 @@ var AuthRegisterResponse_ErrorType_name = map[int32]string{
 	13: "INVITE_CODE_MISSING",
 	14: "BACKGROUND_IMAGE_INVALID",
 	15: "TITLE_IMAGE_INVALID",
+	16: "IP_BANNED",
 }
 var AuthRegisterResponse_ErrorType_value = map[string]int32{
 	"NONE":                      0,
@@ -97,10 +183,66 @@ var AuthRegisterResponse_ErrorType_value = map[string]int32{
 	"INVITE_CODE_MISSING":       13,
 	"BACKGROUND_IMAGE_INVALID":  14,
 	"TITLE_IMAGE_INVALID":       15,
+	"IP_BANNED":                 16,
 }
 
 func (x AuthRegisterResponse_ErrorType) String() string {
 	return proto.EnumName(AuthRegisterResponse_ErrorType_name, int32(x))
+}
+
+type AuthGetPasswordResetInfoResponse_ErrorType int32
+
+const (
+	AuthGetPasswordResetInfoResponse_NONE          AuthGetPasswordResetInfoResponse_ErrorType = 0
+	AuthGetPasswordResetInfoResponse_UNKNOWN_ERROR AuthGetPasswordResetInfoResponse_ErrorType = 1
+	AuthGetPasswordResetInfoResponse_INVALID       AuthGetPasswordResetInfoResponse_ErrorType = 2
+)
+
+var AuthGetPasswordResetInfoResponse_ErrorType_name = map[int32]string{
+	0: "NONE",
+	1: "UNKNOWN_ERROR",
+	2: "INVALID",
+}
+var AuthGetPasswordResetInfoResponse_ErrorType_value = map[string]int32{
+	"NONE":          0,
+	"UNKNOWN_ERROR": 1,
+	"INVALID":       2,
+}
+
+func (x AuthGetPasswordResetInfoResponse_ErrorType) String() string {
+	return proto.EnumName(AuthGetPasswordResetInfoResponse_ErrorType_name, int32(x))
+}
+
+type ProfileUpdatePasswordResponse_ErrorType int32
+
+const (
+	ProfileUpdatePasswordResponse_NONE           ProfileUpdatePasswordResponse_ErrorType = 0
+	ProfileUpdatePasswordResponse_UNKNOWN_ERROR  ProfileUpdatePasswordResponse_ErrorType = 1
+	ProfileUpdatePasswordResponse_BAD_REQUEST    ProfileUpdatePasswordResponse_ErrorType = 2
+	ProfileUpdatePasswordResponse_PW_TOO_SHORT   ProfileUpdatePasswordResponse_ErrorType = 3
+	ProfileUpdatePasswordResponse_PW_BAD         ProfileUpdatePasswordResponse_ErrorType = 4
+	ProfileUpdatePasswordResponse_OLD_PW_INVALID ProfileUpdatePasswordResponse_ErrorType = 5
+)
+
+var ProfileUpdatePasswordResponse_ErrorType_name = map[int32]string{
+	0: "NONE",
+	1: "UNKNOWN_ERROR",
+	2: "BAD_REQUEST",
+	3: "PW_TOO_SHORT",
+	4: "PW_BAD",
+	5: "OLD_PW_INVALID",
+}
+var ProfileUpdatePasswordResponse_ErrorType_value = map[string]int32{
+	"NONE":           0,
+	"UNKNOWN_ERROR":  1,
+	"BAD_REQUEST":    2,
+	"PW_TOO_SHORT":   3,
+	"PW_BAD":         4,
+	"OLD_PW_INVALID": 5,
+}
+
+func (x ProfileUpdatePasswordResponse_ErrorType) String() string {
+	return proto.EnumName(ProfileUpdatePasswordResponse_ErrorType_name, int32(x))
 }
 
 type ProfileRequestFriendshipResponse_FriendshipStatus int32
@@ -184,6 +326,35 @@ func (x UserSetGroupRoleResponse_ErrorType) String() string {
 	return proto.EnumName(UserSetGroupRoleResponse_ErrorType_name, int32(x))
 }
 
+type UserValidateEmailAddressResponse_ErrorType int32
+
+const (
+	UserValidateEmailAddressResponse_NONE                      UserValidateEmailAddressResponse_ErrorType = 0
+	UserValidateEmailAddressResponse_UNKNOWN_ERROR             UserValidateEmailAddressResponse_ErrorType = 1
+	UserValidateEmailAddressResponse_BAD_REQUEST               UserValidateEmailAddressResponse_ErrorType = 2
+	UserValidateEmailAddressResponse_EMAIL_ADDRESS_INVALID     UserValidateEmailAddressResponse_ErrorType = 3
+	UserValidateEmailAddressResponse_EMAIL_ADDRESS_UNAVAILABLE UserValidateEmailAddressResponse_ErrorType = 4
+)
+
+var UserValidateEmailAddressResponse_ErrorType_name = map[int32]string{
+	0: "NONE",
+	1: "UNKNOWN_ERROR",
+	2: "BAD_REQUEST",
+	3: "EMAIL_ADDRESS_INVALID",
+	4: "EMAIL_ADDRESS_UNAVAILABLE",
+}
+var UserValidateEmailAddressResponse_ErrorType_value = map[string]int32{
+	"NONE":                      0,
+	"UNKNOWN_ERROR":             1,
+	"BAD_REQUEST":               2,
+	"EMAIL_ADDRESS_INVALID":     3,
+	"EMAIL_ADDRESS_UNAVAILABLE": 4,
+}
+
+func (x UserValidateEmailAddressResponse_ErrorType) String() string {
+	return proto.EnumName(UserValidateEmailAddressResponse_ErrorType_name, int32(x))
+}
+
 type UserConvertEphemeralUserResponse_ErrorType int32
 
 const (
@@ -226,6 +397,52 @@ var UserConvertEphemeralUserResponse_ErrorType_value = map[string]int32{
 
 func (x UserConvertEphemeralUserResponse_ErrorType) String() string {
 	return proto.EnumName(UserConvertEphemeralUserResponse_ErrorType_name, int32(x))
+}
+
+type UserTransferOwnershipResponse_ErrorType int32
+
+const (
+	UserTransferOwnershipResponse_NONE          UserTransferOwnershipResponse_ErrorType = 0
+	UserTransferOwnershipResponse_BAD_REQUEST   UserTransferOwnershipResponse_ErrorType = 1
+	UserTransferOwnershipResponse_FORBIDDEN     UserTransferOwnershipResponse_ErrorType = 2
+	UserTransferOwnershipResponse_UNKNOWN_ERROR UserTransferOwnershipResponse_ErrorType = 3
+)
+
+var UserTransferOwnershipResponse_ErrorType_name = map[int32]string{
+	0: "NONE",
+	1: "BAD_REQUEST",
+	2: "FORBIDDEN",
+	3: "UNKNOWN_ERROR",
+}
+var UserTransferOwnershipResponse_ErrorType_value = map[string]int32{
+	"NONE":          0,
+	"BAD_REQUEST":   1,
+	"FORBIDDEN":     2,
+	"UNKNOWN_ERROR": 3,
+}
+
+func (x UserTransferOwnershipResponse_ErrorType) String() string {
+	return proto.EnumName(UserTransferOwnershipResponse_ErrorType_name, int32(x))
+}
+
+type UserCheckBanStatusResponse_ErrorType int32
+
+const (
+	UserCheckBanStatusResponse_NONE          UserCheckBanStatusResponse_ErrorType = 0
+	UserCheckBanStatusResponse_UNKNOWN_ERROR UserCheckBanStatusResponse_ErrorType = 1
+)
+
+var UserCheckBanStatusResponse_ErrorType_name = map[int32]string{
+	0: "NONE",
+	1: "UNKNOWN_ERROR",
+}
+var UserCheckBanStatusResponse_ErrorType_value = map[string]int32{
+	"NONE":          0,
+	"UNKNOWN_ERROR": 1,
+}
+
+func (x UserCheckBanStatusResponse_ErrorType) String() string {
+	return proto.EnumName(UserCheckBanStatusResponse_ErrorType_name, int32(x))
 }
 
 type GroupJoinResponse_ErrorType int32
@@ -344,6 +561,49 @@ func (x ReportRequest_Reason) String() string {
 	return proto.EnumName(ReportRequest_Reason_name, int32(x))
 }
 
+type UserEditBlockedUserResponse_ErrorType int32
+
+const (
+	UserEditBlockedUserResponse_NONE          UserEditBlockedUserResponse_ErrorType = 0
+	UserEditBlockedUserResponse_BAD_REQUEST   UserEditBlockedUserResponse_ErrorType = 1
+	UserEditBlockedUserResponse_UNKNOWN_ERROR UserEditBlockedUserResponse_ErrorType = 2
+)
+
+var UserEditBlockedUserResponse_ErrorType_name = map[int32]string{
+	0: "NONE",
+	1: "BAD_REQUEST",
+	2: "UNKNOWN_ERROR",
+}
+var UserEditBlockedUserResponse_ErrorType_value = map[string]int32{
+	"NONE":          0,
+	"BAD_REQUEST":   1,
+	"UNKNOWN_ERROR": 2,
+}
+
+func (x UserEditBlockedUserResponse_ErrorType) String() string {
+	return proto.EnumName(UserEditBlockedUserResponse_ErrorType_name, int32(x))
+}
+
+type UserGetBlockedUsersResponse_ErrorType int32
+
+const (
+	UserGetBlockedUsersResponse_NONE          UserGetBlockedUsersResponse_ErrorType = 0
+	UserGetBlockedUsersResponse_UNKNOWN_ERROR UserGetBlockedUsersResponse_ErrorType = 1
+)
+
+var UserGetBlockedUsersResponse_ErrorType_name = map[int32]string{
+	0: "NONE",
+	1: "UNKNOWN_ERROR",
+}
+var UserGetBlockedUsersResponse_ErrorType_value = map[string]int32{
+	"NONE":          0,
+	"UNKNOWN_ERROR": 1,
+}
+
+func (x UserGetBlockedUsersResponse_ErrorType) String() string {
+	return proto.EnumName(UserGetBlockedUsersResponse_ErrorType_name, int32(x))
+}
+
 type AuthLoginRequest struct {
 	Username  string                  `protobuf:"bytes,1,opt,name=username" json:"username,omitempty"`
 	Password  string                  `protobuf:"bytes,2,opt,name=password" json:"password,omitempty"`
@@ -356,10 +616,44 @@ func (m *AuthLoginRequest) Reset()         { *m = AuthLoginRequest{} }
 func (m *AuthLoginRequest) String() string { return proto.CompactTextString(m) }
 func (*AuthLoginRequest) ProtoMessage()    {}
 
+type AuthLoginOAuthRequest struct {
+	OauthToken        string                              `protobuf:"bytes,1,opt,name=oauth_token" json:"oauth_token,omitempty"`
+	OauthProvider     AuthLoginOAuthRequest_OAuthProvider `protobuf:"varint,2,opt,name=oauth_provider,enum=proto.AuthLoginOAuthRequest_OAuthProvider" json:"oauth_provider,omitempty"`
+	RequestedUsername string                              `protobuf:"bytes,3,opt,name=requested_username" json:"requested_username,omitempty"`
+	EmailAddress      string                              `protobuf:"bytes,4,opt,name=email_address" json:"email_address,omitempty"`
+	AgentId           string                              `protobuf:"bytes,5,opt,name=agent_id" json:"agent_id,omitempty"`
+	AgentName         string                              `protobuf:"bytes,6,opt,name=agent_name" json:"agent_name,omitempty"`
+	AgentType         UserAgent_UserAgentType             `protobuf:"varint,7,opt,name=agent_type,enum=proto.UserAgent_UserAgentType" json:"agent_type,omitempty"`
+	OauthCode         string                              `protobuf:"bytes,8,opt,name=oauth_code" json:"oauth_code,omitempty"`
+	OauthRedirectUri  string                              `protobuf:"bytes,9,opt,name=oauth_redirect_uri" json:"oauth_redirect_uri,omitempty"`
+}
+
+func (m *AuthLoginOAuthRequest) Reset()         { *m = AuthLoginOAuthRequest{} }
+func (m *AuthLoginOAuthRequest) String() string { return proto.CompactTextString(m) }
+func (*AuthLoginOAuthRequest) ProtoMessage()    {}
+
+type AuthLoginEmailRequest struct {
+	Email             string                  `protobuf:"bytes,1,opt,name=email" json:"email,omitempty"`
+	SourceUrl         string                  `protobuf:"bytes,2,opt,name=source_url" json:"source_url,omitempty"`
+	Code              string                  `protobuf:"bytes,3,opt,name=code" json:"code,omitempty"`
+	RequestedUsername string                  `protobuf:"bytes,4,opt,name=requested_username" json:"requested_username,omitempty"`
+	AgentId           string                  `protobuf:"bytes,5,opt,name=agent_id" json:"agent_id,omitempty"`
+	AgentName         string                  `protobuf:"bytes,6,opt,name=agent_name" json:"agent_name,omitempty"`
+	AgentType         UserAgent_UserAgentType `protobuf:"varint,7,opt,name=agent_type,enum=proto.UserAgent_UserAgentType" json:"agent_type,omitempty"`
+	ResetPassword     bool                    `protobuf:"varint,8,opt,name=reset_password" json:"reset_password,omitempty"`
+	NewPassword       string                  `protobuf:"bytes,9,opt,name=new_password" json:"new_password,omitempty"`
+}
+
+func (m *AuthLoginEmailRequest) Reset()         { *m = AuthLoginEmailRequest{} }
+func (m *AuthLoginEmailRequest) String() string { return proto.CompactTextString(m) }
+func (*AuthLoginEmailRequest) ProtoMessage()    {}
+
 type AuthLoginResponse struct {
-	Success bool   `protobuf:"varint,1,opt,name=success" json:"success,omitempty"`
-	Token   string `protobuf:"bytes,2,opt,name=token" json:"token,omitempty"`
-	User    *User  `protobuf:"bytes,3,opt,name=user" json:"user,omitempty"`
+	Success bool                        `protobuf:"varint,1,opt,name=success" json:"success,omitempty"`
+	Token   string                      `protobuf:"bytes,2,opt,name=token" json:"token,omitempty"`
+	User    *User                       `protobuf:"bytes,3,opt,name=user" json:"user,omitempty"`
+	Error   AuthLoginResponse_ErrorType `protobuf:"varint,4,opt,name=error,enum=proto.AuthLoginResponse_ErrorType" json:"error,omitempty"`
+	NewUser bool                        `protobuf:"varint,5,opt,name=new_user" json:"new_user,omitempty"`
 }
 
 func (m *AuthLoginResponse) Reset()         { *m = AuthLoginResponse{} }
@@ -404,6 +698,7 @@ type AuthRegisterRequest struct {
 	Ephemeral              bool                    `protobuf:"varint,11,opt,name=ephemeral" json:"ephemeral,omitempty"`
 	JoinCommunities        []string                `protobuf:"bytes,12,rep,name=join_communities" json:"join_communities,omitempty"`
 	AutoGenerateNameSuffix bool                    `protobuf:"varint,13,opt,name=auto_generate_name_suffix" json:"auto_generate_name_suffix,omitempty"`
+	AvatarImage            string                  `protobuf:"bytes,14,opt,name=avatar_image" json:"avatar_image,omitempty"`
 }
 
 func (m *AuthRegisterRequest) Reset()         { *m = AuthRegisterRequest{} }
@@ -438,7 +733,8 @@ func (m *AuthActivateResponse) String() string { return proto.CompactTextString(
 func (*AuthActivateResponse) ProtoMessage()    {}
 
 type AuthPasswordResetRequest struct {
-	Email string `protobuf:"bytes,1,opt,name=email" json:"email,omitempty"`
+	Email     string `protobuf:"bytes,1,opt,name=email" json:"email,omitempty"`
+	SourceUrl string `protobuf:"bytes,2,opt,name=source_url" json:"source_url,omitempty"`
 }
 
 func (m *AuthPasswordResetRequest) Reset()         { *m = AuthPasswordResetRequest{} }
@@ -453,6 +749,23 @@ func (m *AuthPasswordResetResponse) Reset()         { *m = AuthPasswordResetResp
 func (m *AuthPasswordResetResponse) String() string { return proto.CompactTextString(m) }
 func (*AuthPasswordResetResponse) ProtoMessage()    {}
 
+type AuthGetPasswordResetInfoResponse struct {
+	Error     AuthGetPasswordResetInfoResponse_ErrorType `protobuf:"varint,1,opt,name=error,enum=proto.AuthGetPasswordResetInfoResponse_ErrorType" json:"error,omitempty"`
+	User      *ChatUser                                  `protobuf:"bytes,2,opt,name=user" json:"user,omitempty"`
+	SourceUrl string                                     `protobuf:"bytes,3,opt,name=source_url" json:"source_url,omitempty"`
+}
+
+func (m *AuthGetPasswordResetInfoResponse) Reset()         { *m = AuthGetPasswordResetInfoResponse{} }
+func (m *AuthGetPasswordResetInfoResponse) String() string { return proto.CompactTextString(m) }
+func (*AuthGetPasswordResetInfoResponse) ProtoMessage()    {}
+
+func (m *AuthGetPasswordResetInfoResponse) GetUser() *ChatUser {
+	if m != nil {
+		return m.User
+	}
+	return nil
+}
+
 type AuthExecutePasswordResetRequest struct {
 	Secret      string `protobuf:"bytes,2,opt,name=secret" json:"secret,omitempty"`
 	NewPassword string `protobuf:"bytes,3,opt,name=new_password" json:"new_password,omitempty"`
@@ -463,7 +776,8 @@ func (m *AuthExecutePasswordResetRequest) String() string { return proto.Compact
 func (*AuthExecutePasswordResetRequest) ProtoMessage()    {}
 
 type AuthExecutePasswordResetResponse struct {
-	Success bool `protobuf:"varint,1,opt,name=success" json:"success,omitempty"`
+	Success bool   `protobuf:"varint,1,opt,name=success" json:"success,omitempty"`
+	Token   string `protobuf:"bytes,2,opt,name=token" json:"token,omitempty"`
 }
 
 func (m *AuthExecutePasswordResetResponse) Reset()         { *m = AuthExecutePasswordResetResponse{} }
@@ -598,7 +912,8 @@ func (m *ProfileUpdatePasswordRequest) String() string { return proto.CompactTex
 func (*ProfileUpdatePasswordRequest) ProtoMessage()    {}
 
 type ProfileUpdatePasswordResponse struct {
-	Success bool `protobuf:"varint,1,opt,name=success" json:"success,omitempty"`
+	Success bool                                    `protobuf:"varint,1,opt,name=success" json:"success,omitempty"`
+	Error   ProfileUpdatePasswordResponse_ErrorType `protobuf:"varint,2,opt,name=error,enum=proto.ProfileUpdatePasswordResponse_ErrorType" json:"error,omitempty"`
 }
 
 func (m *ProfileUpdatePasswordResponse) Reset()         { *m = ProfileUpdatePasswordResponse{} }
@@ -710,12 +1025,29 @@ func (m *UserValidateUsernameResponse) Reset()         { *m = UserValidateUserna
 func (m *UserValidateUsernameResponse) String() string { return proto.CompactTextString(m) }
 func (*UserValidateUsernameResponse) ProtoMessage()    {}
 
+type UserValidateEmailAddressRequest struct {
+	EmailAddress string `protobuf:"bytes,1,opt,name=email_address" json:"email_address,omitempty"`
+}
+
+func (m *UserValidateEmailAddressRequest) Reset()         { *m = UserValidateEmailAddressRequest{} }
+func (m *UserValidateEmailAddressRequest) String() string { return proto.CompactTextString(m) }
+func (*UserValidateEmailAddressRequest) ProtoMessage()    {}
+
+type UserValidateEmailAddressResponse struct {
+	Error UserValidateEmailAddressResponse_ErrorType `protobuf:"varint,1,opt,name=error,enum=proto.UserValidateEmailAddressResponse_ErrorType" json:"error,omitempty"`
+}
+
+func (m *UserValidateEmailAddressResponse) Reset()         { *m = UserValidateEmailAddressResponse{} }
+func (m *UserValidateEmailAddressResponse) String() string { return proto.CompactTextString(m) }
+func (*UserValidateEmailAddressResponse) ProtoMessage()    {}
+
 type UserConvertEphemeralUserRequest struct {
 	Username       string `protobuf:"bytes,1,opt,name=username" json:"username,omitempty"`
 	EmailAddress   string `protobuf:"bytes,2,opt,name=email_address" json:"email_address,omitempty"`
 	Password       string `protobuf:"bytes,3,opt,name=password" json:"password,omitempty"`
 	Newsletter     bool   `protobuf:"varint,4,opt,name=newsletter" json:"newsletter,omitempty"`
 	TermsOfService bool   `protobuf:"varint,5,opt,name=terms_of_service" json:"terms_of_service,omitempty"`
+	AvatarImage    string `protobuf:"bytes,6,opt,name=avatar_image" json:"avatar_image,omitempty"`
 }
 
 func (m *UserConvertEphemeralUserRequest) Reset()         { *m = UserConvertEphemeralUserRequest{} }
@@ -738,6 +1070,31 @@ func (m *UserConvertEphemeralUserResponse) GetUser() *User {
 	}
 	return nil
 }
+
+type UserTransferOwnershipRequest struct {
+	TargetUserAuthToken string `protobuf:"bytes,1,opt,name=target_user_auth_token" json:"target_user_auth_token,omitempty"`
+}
+
+func (m *UserTransferOwnershipRequest) Reset()         { *m = UserTransferOwnershipRequest{} }
+func (m *UserTransferOwnershipRequest) String() string { return proto.CompactTextString(m) }
+func (*UserTransferOwnershipRequest) ProtoMessage()    {}
+
+type UserTransferOwnershipResponse struct {
+	Error UserTransferOwnershipResponse_ErrorType `protobuf:"varint,1,opt,name=error,enum=proto.UserTransferOwnershipResponse_ErrorType" json:"error,omitempty"`
+}
+
+func (m *UserTransferOwnershipResponse) Reset()         { *m = UserTransferOwnershipResponse{} }
+func (m *UserTransferOwnershipResponse) String() string { return proto.CompactTextString(m) }
+func (*UserTransferOwnershipResponse) ProtoMessage()    {}
+
+type UserCheckBanStatusResponse struct {
+	Error    UserCheckBanStatusResponse_ErrorType `protobuf:"varint,1,opt,name=error,enum=proto.UserCheckBanStatusResponse_ErrorType" json:"error,omitempty"`
+	IsBanned bool                                 `protobuf:"varint,2,opt,name=is_banned" json:"is_banned,omitempty"`
+}
+
+func (m *UserCheckBanStatusResponse) Reset()         { *m = UserCheckBanStatusResponse{} }
+func (m *UserCheckBanStatusResponse) String() string { return proto.CompactTextString(m) }
+func (*UserCheckBanStatusResponse) ProtoMessage()    {}
 
 type ChatHandshakeResponse struct {
 	SocketAddress string `protobuf:"bytes,1,opt,name=socket_address" json:"socket_address,omitempty"`
@@ -1270,15 +1627,113 @@ func (m *ReportRequest) Reset()         { *m = ReportRequest{} }
 func (m *ReportRequest) String() string { return proto.CompactTextString(m) }
 func (*ReportRequest) ProtoMessage()    {}
 
+type APIError struct {
+	// uuid for this error object (for logging and persistence)
+	Id string `protobuf:"bytes,1,opt,name=id" json:"id,omitempty"`
+	// links object with an about property
+	Links *Struct `protobuf:"bytes,2,opt,name=links" json:"links,omitempty"`
+	// HTTP status code
+	Status int64 `protobuf:"varint,3,opt,name=status" json:"status,omitempty"`
+	// Application error code
+	Code int64 `protobuf:"varint,4,opt,name=code" json:"code,omitempty"`
+	// a short, human-readable summary of the problem that SHOULD NOT change from occurrence to occurrence of the problem, except for purposes of localization.
+	Title string `protobuf:"bytes,5,opt,name=title" json:"title,omitempty"`
+	// a human-readable explanation specific to this occurrence of the problem. Like title, this field’s value can be localized.
+	Detail string `protobuf:"bytes,6,opt,name=detail" json:"detail,omitempty"`
+	// a JSON Pointer [RFC6901] to the associated entity in the request document [e.g. "/data" for a primary data object, or "/data/attributes/title" for a specific attribute].
+	Pointer string `protobuf:"bytes,7,opt,name=pointer" json:"pointer,omitempty"`
+	// a string indicating which URI query parameter caused the error.
+	Parameter string `protobuf:"bytes,8,opt,name=parameter" json:"parameter,omitempty"`
+	// a meta object containing non-standard meta-information about the error.
+	Meta *Struct `protobuf:"bytes,9,opt,name=meta" json:"meta,omitempty"`
+}
+
+func (m *APIError) Reset()         { *m = APIError{} }
+func (m *APIError) String() string { return proto.CompactTextString(m) }
+func (*APIError) ProtoMessage()    {}
+
+func (m *APIError) GetLinks() *Struct {
+	if m != nil {
+		return m.Links
+	}
+	return nil
+}
+
+func (m *APIError) GetMeta() *Struct {
+	if m != nil {
+		return m.Meta
+	}
+	return nil
+}
+
+type CreateTimeoutRequest struct {
+	Duration int64  `protobuf:"varint,1,opt,name=duration" json:"duration,omitempty"`
+	Reason   string `protobuf:"bytes,2,opt,name=reason" json:"reason,omitempty"`
+}
+
+func (m *CreateTimeoutRequest) Reset()         { *m = CreateTimeoutRequest{} }
+func (m *CreateTimeoutRequest) String() string { return proto.CompactTextString(m) }
+func (*CreateTimeoutRequest) ProtoMessage()    {}
+
+type CreateTimeoutResponse struct {
+	Success bool        `protobuf:"varint,1,opt,name=success" json:"success,omitempty"`
+	Errors  []*APIError `protobuf:"bytes,2,rep,name=errors" json:"errors,omitempty"`
+}
+
+func (m *CreateTimeoutResponse) Reset()         { *m = CreateTimeoutResponse{} }
+func (m *CreateTimeoutResponse) String() string { return proto.CompactTextString(m) }
+func (*CreateTimeoutResponse) ProtoMessage()    {}
+
+func (m *CreateTimeoutResponse) GetErrors() []*APIError {
+	if m != nil {
+		return m.Errors
+	}
+	return nil
+}
+
+type UserEditBlockedUserResponse struct {
+	Error UserEditBlockedUserResponse_ErrorType `protobuf:"varint,1,opt,name=error,enum=proto.UserEditBlockedUserResponse_ErrorType" json:"error,omitempty"`
+}
+
+func (m *UserEditBlockedUserResponse) Reset()         { *m = UserEditBlockedUserResponse{} }
+func (m *UserEditBlockedUserResponse) String() string { return proto.CompactTextString(m) }
+func (*UserEditBlockedUserResponse) ProtoMessage()    {}
+
+type UserGetBlockedUsersResponse struct {
+	Error UserGetBlockedUsersResponse_ErrorType `protobuf:"varint,1,opt,name=error,enum=proto.UserGetBlockedUsersResponse_ErrorType" json:"error,omitempty"`
+	Users []*ChatUser                           `protobuf:"bytes,2,rep,name=users" json:"users,omitempty"`
+}
+
+func (m *UserGetBlockedUsersResponse) Reset()         { *m = UserGetBlockedUsersResponse{} }
+func (m *UserGetBlockedUsersResponse) String() string { return proto.CompactTextString(m) }
+func (*UserGetBlockedUsersResponse) ProtoMessage()    {}
+
+func (m *UserGetBlockedUsersResponse) GetUsers() []*ChatUser {
+	if m != nil {
+		return m.Users
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterEnum("proto.CreateGroupErrorType", CreateGroupErrorType_name, CreateGroupErrorType_value)
+	proto.RegisterEnum("proto.ApiErrorCodes", ApiErrorCodes_name, ApiErrorCodes_value)
+	proto.RegisterEnum("proto.AuthLoginOAuthRequest_OAuthProvider", AuthLoginOAuthRequest_OAuthProvider_name, AuthLoginOAuthRequest_OAuthProvider_value)
+	proto.RegisterEnum("proto.AuthLoginResponse_ErrorType", AuthLoginResponse_ErrorType_name, AuthLoginResponse_ErrorType_value)
 	proto.RegisterEnum("proto.AuthRegisterResponse_ErrorType", AuthRegisterResponse_ErrorType_name, AuthRegisterResponse_ErrorType_value)
+	proto.RegisterEnum("proto.AuthGetPasswordResetInfoResponse_ErrorType", AuthGetPasswordResetInfoResponse_ErrorType_name, AuthGetPasswordResetInfoResponse_ErrorType_value)
+	proto.RegisterEnum("proto.ProfileUpdatePasswordResponse_ErrorType", ProfileUpdatePasswordResponse_ErrorType_name, ProfileUpdatePasswordResponse_ErrorType_value)
 	proto.RegisterEnum("proto.ProfileRequestFriendshipResponse_FriendshipStatus", ProfileRequestFriendshipResponse_FriendshipStatus_name, ProfileRequestFriendshipResponse_FriendshipStatus_value)
 	proto.RegisterEnum("proto.UserSetChannelRoleResponse_ErrorType", UserSetChannelRoleResponse_ErrorType_name, UserSetChannelRoleResponse_ErrorType_value)
 	proto.RegisterEnum("proto.UserSetGroupRoleResponse_ErrorType", UserSetGroupRoleResponse_ErrorType_name, UserSetGroupRoleResponse_ErrorType_value)
+	proto.RegisterEnum("proto.UserValidateEmailAddressResponse_ErrorType", UserValidateEmailAddressResponse_ErrorType_name, UserValidateEmailAddressResponse_ErrorType_value)
 	proto.RegisterEnum("proto.UserConvertEphemeralUserResponse_ErrorType", UserConvertEphemeralUserResponse_ErrorType_name, UserConvertEphemeralUserResponse_ErrorType_value)
+	proto.RegisterEnum("proto.UserTransferOwnershipResponse_ErrorType", UserTransferOwnershipResponse_ErrorType_name, UserTransferOwnershipResponse_ErrorType_value)
+	proto.RegisterEnum("proto.UserCheckBanStatusResponse_ErrorType", UserCheckBanStatusResponse_ErrorType_name, UserCheckBanStatusResponse_ErrorType_value)
 	proto.RegisterEnum("proto.GroupJoinResponse_ErrorType", GroupJoinResponse_ErrorType_name, GroupJoinResponse_ErrorType_value)
 	proto.RegisterEnum("proto.GroupLeaveResponse_ErrorType", GroupLeaveResponse_ErrorType_name, GroupLeaveResponse_ErrorType_value)
 	proto.RegisterEnum("proto.GroupGetGroupTokenResponse_ErrorType", GroupGetGroupTokenResponse_ErrorType_name, GroupGetGroupTokenResponse_ErrorType_value)
 	proto.RegisterEnum("proto.ReportRequest_Reason", ReportRequest_Reason_name, ReportRequest_Reason_value)
+	proto.RegisterEnum("proto.UserEditBlockedUserResponse_ErrorType", UserEditBlockedUserResponse_ErrorType_name, UserEditBlockedUserResponse_ErrorType_value)
+	proto.RegisterEnum("proto.UserGetBlockedUsersResponse_ErrorType", UserGetBlockedUsersResponse_ErrorType_name, UserGetBlockedUsersResponse_ErrorType_value)
 }

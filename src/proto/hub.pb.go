@@ -17,26 +17,34 @@ var _ = proto.Marshal
 type RPCHubCreateHubResponse_ErrorType int32
 
 const (
-	RPCHubCreateHubResponse_NONE                     RPCHubCreateHubResponse_ErrorType = 0
-	RPCHubCreateHubResponse_SERVER_ERROR             RPCHubCreateHubResponse_ErrorType = 1
-	RPCHubCreateHubResponse_TITLE_EXISTS             RPCHubCreateHubResponse_ErrorType = 2
-	RPCHubCreateHubResponse_OWNER_INVALID            RPCHubCreateHubResponse_ErrorType = 3
-	RPCHubCreateHubResponse_GROUP_INVALID            RPCHubCreateHubResponse_ErrorType = 4
-	RPCHubCreateHubResponse_TITLE_IMAGE_INVALID      RPCHubCreateHubResponse_ErrorType = 5
-	RPCHubCreateHubResponse_BACKGROUND_IMAGE_INVALID RPCHubCreateHubResponse_ErrorType = 6
-	RPCHubCreateHubResponse_PARENTS_INVALID          RPCHubCreateHubResponse_ErrorType = 7
-	RPCHubCreateHubResponse_TRANSLATIONS_INVALID     RPCHubCreateHubResponse_ErrorType = 8
-	RPCHubCreateHubResponse_LANGUAGE_INVALID         RPCHubCreateHubResponse_ErrorType = 9
-	RPCHubCreateHubResponse_TITLE_INVALID            RPCHubCreateHubResponse_ErrorType = 10
-	RPCHubCreateHubResponse_SHORT_TITLE_INVALID      RPCHubCreateHubResponse_ErrorType = 11
-	RPCHubCreateHubResponse_BAD_REQUEST              RPCHubCreateHubResponse_ErrorType = 12
-	RPCHubCreateHubResponse_SHORT_TITLE_EXISTS       RPCHubCreateHubResponse_ErrorType = 13
-	RPCHubCreateHubResponse_FORBIDDEN                RPCHubCreateHubResponse_ErrorType = 14
-	RPCHubCreateHubResponse_TITLE_TOO_SHORT          RPCHubCreateHubResponse_ErrorType = 15
-	RPCHubCreateHubResponse_TITLE_TOO_LONG           RPCHubCreateHubResponse_ErrorType = 16
-	RPCHubCreateHubResponse_SHORT_TITLE_TOO_SHORT    RPCHubCreateHubResponse_ErrorType = 17
-	RPCHubCreateHubResponse_SHORT_TITLE_TOO_LONG     RPCHubCreateHubResponse_ErrorType = 18
-	RPCHubCreateHubResponse_SHORT_TITLE_RESERVED     RPCHubCreateHubResponse_ErrorType = 19
+	RPCHubCreateHubResponse_NONE                                       RPCHubCreateHubResponse_ErrorType = 0
+	RPCHubCreateHubResponse_SERVER_ERROR                               RPCHubCreateHubResponse_ErrorType = 1
+	RPCHubCreateHubResponse_TITLE_EXISTS                               RPCHubCreateHubResponse_ErrorType = 2
+	RPCHubCreateHubResponse_OWNER_INVALID                              RPCHubCreateHubResponse_ErrorType = 3
+	RPCHubCreateHubResponse_GROUP_INVALID                              RPCHubCreateHubResponse_ErrorType = 4
+	RPCHubCreateHubResponse_TITLE_IMAGE_INVALID                        RPCHubCreateHubResponse_ErrorType = 5
+	RPCHubCreateHubResponse_BACKGROUND_IMAGE_INVALID                   RPCHubCreateHubResponse_ErrorType = 6
+	RPCHubCreateHubResponse_PARENTS_INVALID                            RPCHubCreateHubResponse_ErrorType = 7
+	RPCHubCreateHubResponse_TRANSLATIONS_INVALID                       RPCHubCreateHubResponse_ErrorType = 8
+	RPCHubCreateHubResponse_LANGUAGE_INVALID                           RPCHubCreateHubResponse_ErrorType = 9
+	RPCHubCreateHubResponse_TITLE_INVALID                              RPCHubCreateHubResponse_ErrorType = 10
+	RPCHubCreateHubResponse_SHORT_TITLE_INVALID                        RPCHubCreateHubResponse_ErrorType = 11
+	RPCHubCreateHubResponse_BAD_REQUEST                                RPCHubCreateHubResponse_ErrorType = 12
+	RPCHubCreateHubResponse_SHORT_TITLE_EXISTS                         RPCHubCreateHubResponse_ErrorType = 13
+	RPCHubCreateHubResponse_FORBIDDEN                                  RPCHubCreateHubResponse_ErrorType = 14
+	RPCHubCreateHubResponse_TITLE_TOO_SHORT                            RPCHubCreateHubResponse_ErrorType = 15
+	RPCHubCreateHubResponse_TITLE_TOO_LONG                             RPCHubCreateHubResponse_ErrorType = 16
+	RPCHubCreateHubResponse_SHORT_TITLE_TOO_SHORT                      RPCHubCreateHubResponse_ErrorType = 17
+	RPCHubCreateHubResponse_SHORT_TITLE_TOO_LONG                       RPCHubCreateHubResponse_ErrorType = 18
+	RPCHubCreateHubResponse_SHORT_TITLE_RESERVED                       RPCHubCreateHubResponse_ErrorType = 19
+	RPCHubCreateHubResponse_MAX_MESSAGE_LENGTH_TOO_LOW                 RPCHubCreateHubResponse_ErrorType = 20
+	RPCHubCreateHubResponse_MAX_MESSAGE_LENGTH_TOO_HIGH                RPCHubCreateHubResponse_ErrorType = 21
+	RPCHubCreateHubResponse_MAX_MESSAGE_LENGTH_EPHEMERAL_TOO_LOW       RPCHubCreateHubResponse_ErrorType = 22
+	RPCHubCreateHubResponse_MAX_MESSAGE_LENGTH_EPHEMERAL_TOO_HIGH      RPCHubCreateHubResponse_ErrorType = 23
+	RPCHubCreateHubResponse_MAX_MESSAGES_PER_MINUTE_TOO_LOW            RPCHubCreateHubResponse_ErrorType = 24
+	RPCHubCreateHubResponse_MAX_MESSAGES_PER_MINUTE_TOO_HIGH           RPCHubCreateHubResponse_ErrorType = 25
+	RPCHubCreateHubResponse_MAX_MESSAGES_PER_MINUTE_EPHEMERAL_TOO_LOW  RPCHubCreateHubResponse_ErrorType = 26
+	RPCHubCreateHubResponse_MAX_MESSAGES_PER_MINUTE_EPHEMERAL_TOO_HIGH RPCHubCreateHubResponse_ErrorType = 27
 )
 
 var RPCHubCreateHubResponse_ErrorType_name = map[int32]string{
@@ -60,28 +68,44 @@ var RPCHubCreateHubResponse_ErrorType_name = map[int32]string{
 	17: "SHORT_TITLE_TOO_SHORT",
 	18: "SHORT_TITLE_TOO_LONG",
 	19: "SHORT_TITLE_RESERVED",
+	20: "MAX_MESSAGE_LENGTH_TOO_LOW",
+	21: "MAX_MESSAGE_LENGTH_TOO_HIGH",
+	22: "MAX_MESSAGE_LENGTH_EPHEMERAL_TOO_LOW",
+	23: "MAX_MESSAGE_LENGTH_EPHEMERAL_TOO_HIGH",
+	24: "MAX_MESSAGES_PER_MINUTE_TOO_LOW",
+	25: "MAX_MESSAGES_PER_MINUTE_TOO_HIGH",
+	26: "MAX_MESSAGES_PER_MINUTE_EPHEMERAL_TOO_LOW",
+	27: "MAX_MESSAGES_PER_MINUTE_EPHEMERAL_TOO_HIGH",
 }
 var RPCHubCreateHubResponse_ErrorType_value = map[string]int32{
-	"NONE":                     0,
-	"SERVER_ERROR":             1,
-	"TITLE_EXISTS":             2,
-	"OWNER_INVALID":            3,
-	"GROUP_INVALID":            4,
-	"TITLE_IMAGE_INVALID":      5,
-	"BACKGROUND_IMAGE_INVALID": 6,
-	"PARENTS_INVALID":          7,
-	"TRANSLATIONS_INVALID":     8,
-	"LANGUAGE_INVALID":         9,
-	"TITLE_INVALID":            10,
-	"SHORT_TITLE_INVALID":      11,
-	"BAD_REQUEST":              12,
-	"SHORT_TITLE_EXISTS":       13,
-	"FORBIDDEN":                14,
-	"TITLE_TOO_SHORT":          15,
-	"TITLE_TOO_LONG":           16,
-	"SHORT_TITLE_TOO_SHORT":    17,
-	"SHORT_TITLE_TOO_LONG":     18,
-	"SHORT_TITLE_RESERVED":     19,
+	"NONE":                                       0,
+	"SERVER_ERROR":                               1,
+	"TITLE_EXISTS":                               2,
+	"OWNER_INVALID":                              3,
+	"GROUP_INVALID":                              4,
+	"TITLE_IMAGE_INVALID":                        5,
+	"BACKGROUND_IMAGE_INVALID":                   6,
+	"PARENTS_INVALID":                            7,
+	"TRANSLATIONS_INVALID":                       8,
+	"LANGUAGE_INVALID":                           9,
+	"TITLE_INVALID":                              10,
+	"SHORT_TITLE_INVALID":                        11,
+	"BAD_REQUEST":                                12,
+	"SHORT_TITLE_EXISTS":                         13,
+	"FORBIDDEN":                                  14,
+	"TITLE_TOO_SHORT":                            15,
+	"TITLE_TOO_LONG":                             16,
+	"SHORT_TITLE_TOO_SHORT":                      17,
+	"SHORT_TITLE_TOO_LONG":                       18,
+	"SHORT_TITLE_RESERVED":                       19,
+	"MAX_MESSAGE_LENGTH_TOO_LOW":                 20,
+	"MAX_MESSAGE_LENGTH_TOO_HIGH":                21,
+	"MAX_MESSAGE_LENGTH_EPHEMERAL_TOO_LOW":       22,
+	"MAX_MESSAGE_LENGTH_EPHEMERAL_TOO_HIGH":      23,
+	"MAX_MESSAGES_PER_MINUTE_TOO_LOW":            24,
+	"MAX_MESSAGES_PER_MINUTE_TOO_HIGH":           25,
+	"MAX_MESSAGES_PER_MINUTE_EPHEMERAL_TOO_LOW":  26,
+	"MAX_MESSAGES_PER_MINUTE_EPHEMERAL_TOO_HIGH": 27,
 }
 
 func (x RPCHubCreateHubResponse_ErrorType) String() string {
@@ -715,6 +739,8 @@ const (
 	HubMembershipRecord_UNKNOWN         HubMembershipRecord_MembershipType = 0
 	HubMembershipRecord_BANNED          HubMembershipRecord_MembershipType = 5
 	HubMembershipRecord_NONE            HubMembershipRecord_MembershipType = 10
+	HubMembershipRecord_REQUEST_PENDING HubMembershipRecord_MembershipType = 15
+	HubMembershipRecord_INVITED         HubMembershipRecord_MembershipType = 20
 	HubMembershipRecord_MEMBER          HubMembershipRecord_MembershipType = 25
 	HubMembershipRecord_MODERATOR       HubMembershipRecord_MembershipType = 50
 	HubMembershipRecord_MODERATOR_GROUP HubMembershipRecord_MembershipType = 60
@@ -725,6 +751,8 @@ var HubMembershipRecord_MembershipType_name = map[int32]string{
 	0:  "UNKNOWN",
 	5:  "BANNED",
 	10: "NONE",
+	15: "REQUEST_PENDING",
+	20: "INVITED",
 	25: "MEMBER",
 	50: "MODERATOR",
 	60: "MODERATOR_GROUP",
@@ -734,6 +762,8 @@ var HubMembershipRecord_MembershipType_value = map[string]int32{
 	"UNKNOWN":         0,
 	"BANNED":          5,
 	"NONE":            10,
+	"REQUEST_PENDING": 15,
+	"INVITED":         20,
 	"MEMBER":          25,
 	"MODERATOR":       50,
 	"MODERATOR_GROUP": 60,
@@ -742,6 +772,70 @@ var HubMembershipRecord_MembershipType_value = map[string]int32{
 
 func (x HubMembershipRecord_MembershipType) String() string {
 	return proto.EnumName(HubMembershipRecord_MembershipType_name, int32(x))
+}
+
+type HubAddMembersResponse_ErrorType int32
+
+const (
+	HubAddMembersResponse_NONE          HubAddMembersResponse_ErrorType = 0
+	HubAddMembersResponse_UNKNOWN_ERROR HubAddMembersResponse_ErrorType = 1
+	HubAddMembersResponse_FORBIDDEN     HubAddMembersResponse_ErrorType = 2
+	HubAddMembersResponse_BAD_REQUEST   HubAddMembersResponse_ErrorType = 3
+)
+
+var HubAddMembersResponse_ErrorType_name = map[int32]string{
+	0: "NONE",
+	1: "UNKNOWN_ERROR",
+	2: "FORBIDDEN",
+	3: "BAD_REQUEST",
+}
+var HubAddMembersResponse_ErrorType_value = map[string]int32{
+	"NONE":          0,
+	"UNKNOWN_ERROR": 1,
+	"FORBIDDEN":     2,
+	"BAD_REQUEST":   3,
+}
+
+func (x HubAddMembersResponse_ErrorType) String() string {
+	return proto.EnumName(HubAddMembersResponse_ErrorType_name, int32(x))
+}
+
+type HubAddMembersResponseEntry_ErrorType int32
+
+const (
+	HubAddMembersResponseEntry_NONE                    HubAddMembersResponseEntry_ErrorType = 0
+	HubAddMembersResponseEntry_UNKNOWN_ERROR           HubAddMembersResponseEntry_ErrorType = 1
+	HubAddMembersResponseEntry_INVALID_USER_ID         HubAddMembersResponseEntry_ErrorType = 2
+	HubAddMembersResponseEntry_INVALID_EMAIL           HubAddMembersResponseEntry_ErrorType = 3
+	HubAddMembersResponseEntry_INVALID_MEMBERSHIP_TYPE HubAddMembersResponseEntry_ErrorType = 4
+	HubAddMembersResponseEntry_ALREADY_PENDING         HubAddMembersResponseEntry_ErrorType = 5
+	HubAddMembersResponseEntry_ALREADY_MEMBER          HubAddMembersResponseEntry_ErrorType = 6
+	HubAddMembersResponseEntry_ALREADY_BANNED          HubAddMembersResponseEntry_ErrorType = 7
+)
+
+var HubAddMembersResponseEntry_ErrorType_name = map[int32]string{
+	0: "NONE",
+	1: "UNKNOWN_ERROR",
+	2: "INVALID_USER_ID",
+	3: "INVALID_EMAIL",
+	4: "INVALID_MEMBERSHIP_TYPE",
+	5: "ALREADY_PENDING",
+	6: "ALREADY_MEMBER",
+	7: "ALREADY_BANNED",
+}
+var HubAddMembersResponseEntry_ErrorType_value = map[string]int32{
+	"NONE":                    0,
+	"UNKNOWN_ERROR":           1,
+	"INVALID_USER_ID":         2,
+	"INVALID_EMAIL":           3,
+	"INVALID_MEMBERSHIP_TYPE": 4,
+	"ALREADY_PENDING":         5,
+	"ALREADY_MEMBER":          6,
+	"ALREADY_BANNED":          7,
+}
+
+func (x HubAddMembersResponseEntry_ErrorType) String() string {
+	return proto.EnumName(HubAddMembersResponseEntry_ErrorType_name, int32(x))
 }
 
 type SearchMembersResponse_ErrorType int32
@@ -770,25 +864,61 @@ func (x SearchMembersResponse_ErrorType) String() string {
 	return proto.EnumName(SearchMembersResponse_ErrorType_name, int32(x))
 }
 
+type HubGetUserByExternalIDResponse_ErrorType int32
+
+const (
+	HubGetUserByExternalIDResponse_NONE          HubGetUserByExternalIDResponse_ErrorType = 0
+	HubGetUserByExternalIDResponse_UNKNOWN_ERROR HubGetUserByExternalIDResponse_ErrorType = 1
+	HubGetUserByExternalIDResponse_BAD_REQUEST   HubGetUserByExternalIDResponse_ErrorType = 2
+	HubGetUserByExternalIDResponse_NOT_FOUND     HubGetUserByExternalIDResponse_ErrorType = 3
+)
+
+var HubGetUserByExternalIDResponse_ErrorType_name = map[int32]string{
+	0: "NONE",
+	1: "UNKNOWN_ERROR",
+	2: "BAD_REQUEST",
+	3: "NOT_FOUND",
+}
+var HubGetUserByExternalIDResponse_ErrorType_value = map[string]int32{
+	"NONE":          0,
+	"UNKNOWN_ERROR": 1,
+	"BAD_REQUEST":   2,
+	"NOT_FOUND":     3,
+}
+
+func (x HubGetUserByExternalIDResponse_ErrorType) String() string {
+	return proto.EnumName(HubGetUserByExternalIDResponse_ErrorType_name, int32(x))
+}
+
 type RPCHubCreateHubRequest struct {
-	ParentIds       []string `protobuf:"bytes,1,rep,name=parent_ids" json:"parent_ids,omitempty"`
-	TranslationIds  []string `protobuf:"bytes,2,rep,name=translation_ids" json:"translation_ids,omitempty"`
-	UserId          string   `protobuf:"bytes,3,opt,name=user_id" json:"user_id,omitempty"`
-	GroupId         string   `protobuf:"bytes,13,opt,name=group_id" json:"group_id,omitempty"`
-	Closed          bool     `protobuf:"varint,4,opt,name=closed" json:"closed,omitempty"`
-	Title           string   `protobuf:"bytes,5,opt,name=title" json:"title,omitempty"`
-	ShortTitle      string   `protobuf:"bytes,6,opt,name=short_title" json:"short_title,omitempty"`
-	Description     string   `protobuf:"bytes,7,opt,name=description" json:"description,omitempty"`
-	TitleImage      string   `protobuf:"bytes,8,opt,name=title_image" json:"title_image,omitempty"`
-	BackgroundImage string   `protobuf:"bytes,9,opt,name=background_image" json:"background_image,omitempty"`
-	ClaimedGroupId  string   `protobuf:"bytes,10,opt,name=claimed_group_id" json:"claimed_group_id,omitempty"`
-	Language        string   `protobuf:"bytes,11,opt,name=language" json:"language,omitempty"`
-	Nsfw            bool     `protobuf:"varint,12,opt,name=nsfw" json:"nsfw,omitempty"`
+	ParentIds                    []string     `protobuf:"bytes,1,rep,name=parent_ids" json:"parent_ids,omitempty"`
+	TranslationIds               []string     `protobuf:"bytes,2,rep,name=translation_ids" json:"translation_ids,omitempty"`
+	UserId                       string       `protobuf:"bytes,3,opt,name=user_id" json:"user_id,omitempty"`
+	GroupId                      string       `protobuf:"bytes,13,opt,name=group_id" json:"group_id,omitempty"`
+	Closed                       bool         `protobuf:"varint,4,opt,name=closed" json:"closed,omitempty"`
+	Title                        string       `protobuf:"bytes,5,opt,name=title" json:"title,omitempty"`
+	ShortTitle                   string       `protobuf:"bytes,6,opt,name=short_title" json:"short_title,omitempty"`
+	Description                  string       `protobuf:"bytes,7,opt,name=description" json:"description,omitempty"`
+	TitleImage                   string       `protobuf:"bytes,8,opt,name=title_image" json:"title_image,omitempty"`
+	BackgroundImage              string       `protobuf:"bytes,9,opt,name=background_image" json:"background_image,omitempty"`
+	ClaimedGroupId               string       `protobuf:"bytes,10,opt,name=claimed_group_id" json:"claimed_group_id,omitempty"`
+	Language                     string       `protobuf:"bytes,11,opt,name=language" json:"language,omitempty"`
+	Nsfw                         bool         `protobuf:"varint,12,opt,name=nsfw" json:"nsfw,omitempty"`
+	AutoGenerateTitleSuffix      bool         `protobuf:"varint,14,opt,name=auto_generate_title_suffix" json:"auto_generate_title_suffix,omitempty"`
+	AutoGenerateShortTitleSuffix bool         `protobuf:"varint,15,opt,name=auto_generate_short_title_suffix" json:"auto_generate_short_title_suffix,omitempty"`
+	GeoLocation                  *GeoLocation `protobuf:"bytes,16,opt,name=geo_location" json:"geo_location,omitempty"`
 }
 
 func (m *RPCHubCreateHubRequest) Reset()         { *m = RPCHubCreateHubRequest{} }
 func (m *RPCHubCreateHubRequest) String() string { return proto.CompactTextString(m) }
 func (*RPCHubCreateHubRequest) ProtoMessage()    {}
+
+func (m *RPCHubCreateHubRequest) GetGeoLocation() *GeoLocation {
+	if m != nil {
+		return m.GeoLocation
+	}
+	return nil
+}
 
 type RPCHubCreateHubResponse struct {
 	Error    RPCHubCreateHubResponse_ErrorType `protobuf:"varint,1,opt,name=error,enum=proto.RPCHubCreateHubResponse_ErrorType" json:"error,omitempty"`
@@ -823,21 +953,31 @@ func (m *RPCHubCreateHubResponse) GetSiblings() []*Hub {
 }
 
 type RPCHubEditHubRequest struct {
-	HubId           string                  `protobuf:"bytes,1,opt,name=hub_id" json:"hub_id,omitempty"`
-	UserId          string                  `protobuf:"bytes,2,opt,name=user_id" json:"user_id,omitempty"`
-	GroupId         string                  `protobuf:"bytes,15,opt,name=group_id" json:"group_id,omitempty"`
-	ParentIds       *OptionalRepeatedString `protobuf:"bytes,3,opt,name=parent_ids" json:"parent_ids,omitempty"`
-	TranslationIds  *OptionalRepeatedString `protobuf:"bytes,4,opt,name=translation_ids" json:"translation_ids,omitempty"`
-	OwnerId         *StringValue            `protobuf:"bytes,5,opt,name=owner_id" json:"owner_id,omitempty"`
-	Closed          *BoolValue              `protobuf:"bytes,6,opt,name=closed" json:"closed,omitempty"`
-	Title           *StringValue            `protobuf:"bytes,7,opt,name=title" json:"title,omitempty"`
-	ShortTitle      *StringValue            `protobuf:"bytes,8,opt,name=short_title" json:"short_title,omitempty"`
-	Description     *StringValue            `protobuf:"bytes,9,opt,name=description" json:"description,omitempty"`
-	TitleImage      *StringValue            `protobuf:"bytes,10,opt,name=title_image" json:"title_image,omitempty"`
-	BackgroundImage *StringValue            `protobuf:"bytes,11,opt,name=background_image" json:"background_image,omitempty"`
-	ClaimedGroupId  *StringValue            `protobuf:"bytes,12,opt,name=claimed_group_id" json:"claimed_group_id,omitempty"`
-	Language        *StringValue            `protobuf:"bytes,13,opt,name=language" json:"language,omitempty"`
-	Nsfw            *BoolValue              `protobuf:"bytes,14,opt,name=nsfw" json:"nsfw,omitempty"`
+	HubId                         string                  `protobuf:"bytes,1,opt,name=hub_id" json:"hub_id,omitempty"`
+	UserId                        string                  `protobuf:"bytes,2,opt,name=user_id" json:"user_id,omitempty"`
+	GroupId                       string                  `protobuf:"bytes,15,opt,name=group_id" json:"group_id,omitempty"`
+	ParentIds                     *OptionalRepeatedString `protobuf:"bytes,3,opt,name=parent_ids" json:"parent_ids,omitempty"`
+	TranslationIds                *OptionalRepeatedString `protobuf:"bytes,4,opt,name=translation_ids" json:"translation_ids,omitempty"`
+	OwnerId                       *StringValue            `protobuf:"bytes,5,opt,name=owner_id" json:"owner_id,omitempty"`
+	Closed                        *BoolValue              `protobuf:"bytes,6,opt,name=closed" json:"closed,omitempty"`
+	Title                         *StringValue            `protobuf:"bytes,7,opt,name=title" json:"title,omitempty"`
+	ShortTitle                    *StringValue            `protobuf:"bytes,8,opt,name=short_title" json:"short_title,omitempty"`
+	Description                   *StringValue            `protobuf:"bytes,9,opt,name=description" json:"description,omitempty"`
+	TitleImage                    *StringValue            `protobuf:"bytes,10,opt,name=title_image" json:"title_image,omitempty"`
+	BackgroundImage               *StringValue            `protobuf:"bytes,11,opt,name=background_image" json:"background_image,omitempty"`
+	ClaimedGroupId                *StringValue            `protobuf:"bytes,12,opt,name=claimed_group_id" json:"claimed_group_id,omitempty"`
+	Language                      *StringValue            `protobuf:"bytes,13,opt,name=language" json:"language,omitempty"`
+	Nsfw                          *BoolValue              `protobuf:"bytes,14,opt,name=nsfw" json:"nsfw,omitempty"`
+	WordfilterEnabled             *BoolValue              `protobuf:"bytes,16,opt,name=wordfilter_enabled" json:"wordfilter_enabled,omitempty"`
+	WordfilterList                *StringValue            `protobuf:"bytes,17,opt,name=wordfilter_list" json:"wordfilter_list,omitempty"`
+	LinkwhitelistEnabled          *BoolValue              `protobuf:"bytes,18,opt,name=linkwhitelist_enabled" json:"linkwhitelist_enabled,omitempty"`
+	LinkwhitelistList             *StringValue            `protobuf:"bytes,19,opt,name=linkwhitelist_list" json:"linkwhitelist_list,omitempty"`
+	GeoLocation                   *OptionalGeoLocation    `protobuf:"bytes,20,opt,name=geo_location" json:"geo_location,omitempty"`
+	Topic                         *StringValue            `protobuf:"bytes,21,opt,name=topic" json:"topic,omitempty"`
+	MaxMessageLength              *Int32Value             `protobuf:"bytes,22,opt,name=max_message_length" json:"max_message_length,omitempty"`
+	MaxMessagesPerMinute          *Int32Value             `protobuf:"bytes,23,opt,name=max_messages_per_minute" json:"max_messages_per_minute,omitempty"`
+	MaxMessageLengthEphemeral     *Int32Value             `protobuf:"bytes,24,opt,name=max_message_length_ephemeral" json:"max_message_length_ephemeral,omitempty"`
+	MaxMessagesPerMinuteEphemeral *Int32Value             `protobuf:"bytes,25,opt,name=max_messages_per_minute_ephemeral" json:"max_messages_per_minute_ephemeral,omitempty"`
 }
 
 func (m *RPCHubEditHubRequest) Reset()         { *m = RPCHubEditHubRequest{} }
@@ -924,6 +1064,76 @@ func (m *RPCHubEditHubRequest) GetLanguage() *StringValue {
 func (m *RPCHubEditHubRequest) GetNsfw() *BoolValue {
 	if m != nil {
 		return m.Nsfw
+	}
+	return nil
+}
+
+func (m *RPCHubEditHubRequest) GetWordfilterEnabled() *BoolValue {
+	if m != nil {
+		return m.WordfilterEnabled
+	}
+	return nil
+}
+
+func (m *RPCHubEditHubRequest) GetWordfilterList() *StringValue {
+	if m != nil {
+		return m.WordfilterList
+	}
+	return nil
+}
+
+func (m *RPCHubEditHubRequest) GetLinkwhitelistEnabled() *BoolValue {
+	if m != nil {
+		return m.LinkwhitelistEnabled
+	}
+	return nil
+}
+
+func (m *RPCHubEditHubRequest) GetLinkwhitelistList() *StringValue {
+	if m != nil {
+		return m.LinkwhitelistList
+	}
+	return nil
+}
+
+func (m *RPCHubEditHubRequest) GetGeoLocation() *OptionalGeoLocation {
+	if m != nil {
+		return m.GeoLocation
+	}
+	return nil
+}
+
+func (m *RPCHubEditHubRequest) GetTopic() *StringValue {
+	if m != nil {
+		return m.Topic
+	}
+	return nil
+}
+
+func (m *RPCHubEditHubRequest) GetMaxMessageLength() *Int32Value {
+	if m != nil {
+		return m.MaxMessageLength
+	}
+	return nil
+}
+
+func (m *RPCHubEditHubRequest) GetMaxMessagesPerMinute() *Int32Value {
+	if m != nil {
+		return m.MaxMessagesPerMinute
+	}
+	return nil
+}
+
+func (m *RPCHubEditHubRequest) GetMaxMessageLengthEphemeral() *Int32Value {
+	if m != nil {
+		return m.MaxMessageLengthEphemeral
+	}
+	return nil
+}
+
+func (m *RPCHubEditHubRequest) GetMaxMessagesPerMinuteEphemeral() *Int32Value {
+	if m != nil {
+		return m.MaxMessagesPerMinuteEphemeral
 	}
 	return nil
 }
@@ -1123,6 +1333,9 @@ type RPCHubAddMemberRequest struct {
 	FetchExisting bool                           `protobuf:"varint,6,opt,name=fetch_existing" json:"fetch_existing,omitempty"`
 	FetchPending  bool                           `protobuf:"varint,7,opt,name=fetch_pending" json:"fetch_pending,omitempty"`
 	FetchBanned   bool                           `protobuf:"varint,8,opt,name=fetch_banned" json:"fetch_banned,omitempty"`
+	BanDuration   int64                          `protobuf:"varint,9,opt,name=ban_duration" json:"ban_duration,omitempty"`
+	InviteText    string                         `protobuf:"bytes,10,opt,name=invite_text" json:"invite_text,omitempty"`
+	JoinLink      string                         `protobuf:"bytes,11,opt,name=join_link" json:"join_link,omitempty"`
 }
 
 func (m *RPCHubAddMemberRequest) Reset()         { *m = RPCHubAddMemberRequest{} }
@@ -1165,6 +1378,42 @@ func (m *RPCHubAddMemberResponse) GetBannedUsers() []*MembershipEntry {
 func (m *RPCHubAddMemberResponse) GetUpdatedEntry() *MembershipEntry {
 	if m != nil {
 		return m.UpdatedEntry
+	}
+	return nil
+}
+
+// used to add (invite) a member to a hub
+type RPCHubAddMembersRequest struct {
+	HubId      string                       `protobuf:"bytes,1,opt,name=hub_id" json:"hub_id,omitempty"`
+	InviterId  string                       `protobuf:"bytes,2,opt,name=inviter_id" json:"inviter_id,omitempty"`
+	Entries    []*HubAddMembersRequestEntry `protobuf:"bytes,3,rep,name=entries" json:"entries,omitempty"`
+	InviteText string                       `protobuf:"bytes,4,opt,name=invite_text" json:"invite_text,omitempty"`
+	JoinLink   string                       `protobuf:"bytes,5,opt,name=join_link" json:"join_link,omitempty"`
+}
+
+func (m *RPCHubAddMembersRequest) Reset()         { *m = RPCHubAddMembersRequest{} }
+func (m *RPCHubAddMembersRequest) String() string { return proto.CompactTextString(m) }
+func (*RPCHubAddMembersRequest) ProtoMessage()    {}
+
+func (m *RPCHubAddMembersRequest) GetEntries() []*HubAddMembersRequestEntry {
+	if m != nil {
+		return m.Entries
+	}
+	return nil
+}
+
+type RPCHubAddMembersResponse struct {
+	Error          HubAddMembersResponse_ErrorType `protobuf:"varint,1,opt,name=error,enum=proto.HubAddMembersResponse_ErrorType" json:"error,omitempty"`
+	UpdatedEntries []*HubAddMembersResponseEntry   `protobuf:"bytes,2,rep,name=updated_entries" json:"updated_entries,omitempty"`
+}
+
+func (m *RPCHubAddMembersResponse) Reset()         { *m = RPCHubAddMembersResponse{} }
+func (m *RPCHubAddMembersResponse) String() string { return proto.CompactTextString(m) }
+func (*RPCHubAddMembersResponse) ProtoMessage()    {}
+
+func (m *RPCHubAddMembersResponse) GetUpdatedEntries() []*HubAddMembersResponseEntry {
+	if m != nil {
+		return m.UpdatedEntries
 	}
 	return nil
 }
@@ -1230,6 +1479,7 @@ type MembershipEntry struct {
 	UpdatedAt    int64                          `protobuf:"varint,8,opt,name=updated_at" json:"updated_at,omitempty"`
 	DerivedType  MembershipEntry_MembershipType `protobuf:"varint,9,opt,name=derived_type,enum=proto.MembershipEntry_MembershipType" json:"derived_type,omitempty"`
 	ParentType   MembershipEntry_MembershipType `protobuf:"varint,10,opt,name=parent_type,enum=proto.MembershipEntry_MembershipType" json:"parent_type,omitempty"`
+	BannedUntil  int64                          `protobuf:"varint,11,opt,name=banned_until" json:"banned_until,omitempty"`
 }
 
 func (m *MembershipEntry) Reset()         { *m = MembershipEntry{} }
@@ -1299,6 +1549,7 @@ type RPCHubEditMemberRequest struct {
 	FetchExisting bool                           `protobuf:"varint,6,opt,name=fetch_existing" json:"fetch_existing,omitempty"`
 	FetchPending  bool                           `protobuf:"varint,7,opt,name=fetch_pending" json:"fetch_pending,omitempty"`
 	FetchBanned   bool                           `protobuf:"varint,8,opt,name=fetch_banned" json:"fetch_banned,omitempty"`
+	BanDuration   int64                          `protobuf:"varint,9,opt,name=ban_duration" json:"ban_duration,omitempty"`
 }
 
 func (m *RPCHubEditMemberRequest) Reset()         { *m = RPCHubEditMemberRequest{} }
@@ -1516,6 +1767,31 @@ func (m *RPCHubRegisterExternalUserIDResponse) Reset()         { *m = RPCHubRegi
 func (m *RPCHubRegisterExternalUserIDResponse) String() string { return proto.CompactTextString(m) }
 func (*RPCHubRegisterExternalUserIDResponse) ProtoMessage()    {}
 
+type RPCHubGetUserByExternalIDRequest struct {
+	ExternalUserId string `protobuf:"bytes,1,opt,name=external_user_id" json:"external_user_id,omitempty"`
+	GroupId        string `protobuf:"bytes,2,opt,name=group_id" json:"group_id,omitempty"`
+}
+
+func (m *RPCHubGetUserByExternalIDRequest) Reset()         { *m = RPCHubGetUserByExternalIDRequest{} }
+func (m *RPCHubGetUserByExternalIDRequest) String() string { return proto.CompactTextString(m) }
+func (*RPCHubGetUserByExternalIDRequest) ProtoMessage()    {}
+
+type RPCHubGetUserByExternalIDResponse struct {
+	Error    HubGetUserByExternalIDResponse_ErrorType `protobuf:"varint,1,opt,name=error,enum=proto.HubGetUserByExternalIDResponse_ErrorType" json:"error,omitempty"`
+	UserInfo *ExternalUserInfo                        `protobuf:"bytes,2,opt,name=userInfo" json:"userInfo,omitempty"`
+}
+
+func (m *RPCHubGetUserByExternalIDResponse) Reset()         { *m = RPCHubGetUserByExternalIDResponse{} }
+func (m *RPCHubGetUserByExternalIDResponse) String() string { return proto.CompactTextString(m) }
+func (*RPCHubGetUserByExternalIDResponse) ProtoMessage()    {}
+
+func (m *RPCHubGetUserByExternalIDResponse) GetUserInfo() *ExternalUserInfo {
+	if m != nil {
+		return m.UserInfo
+	}
+	return nil
+}
+
 type HubInvite struct {
 	Id        string                             `protobuf:"bytes,1,opt,name=id" json:"id,omitempty"`
 	CreatedAt int64                              `protobuf:"varint,2,opt,name=created_at" json:"created_at,omitempty"`
@@ -1629,23 +1905,42 @@ func (m *HubExternalMembershipRecord) Reset()         { *m = HubExternalMembersh
 func (m *HubExternalMembershipRecord) String() string { return proto.CompactTextString(m) }
 func (*HubExternalMembershipRecord) ProtoMessage()    {}
 
+type ExternalUserInfo struct {
+	ExternalUserId string `protobuf:"bytes,1,opt,name=external_user_id" json:"external_user_id,omitempty"`
+	EmailAddress   string `protobuf:"bytes,2,opt,name=email_address" json:"email_address,omitempty"`
+}
+
+func (m *ExternalUserInfo) Reset()         { *m = ExternalUserInfo{} }
+func (m *ExternalUserInfo) String() string { return proto.CompactTextString(m) }
+func (*ExternalUserInfo) ProtoMessage()    {}
+
 type HubCreateHubRequest struct {
-	ParentIds       []string `protobuf:"bytes,1,rep,name=parent_ids" json:"parent_ids,omitempty"`
-	TranslationIds  []string `protobuf:"bytes,2,rep,name=translation_ids" json:"translation_ids,omitempty"`
-	Closed          bool     `protobuf:"varint,4,opt,name=closed" json:"closed,omitempty"`
-	Title           string   `protobuf:"bytes,5,opt,name=title" json:"title,omitempty"`
-	ShortTitle      string   `protobuf:"bytes,6,opt,name=short_title" json:"short_title,omitempty"`
-	Description     string   `protobuf:"bytes,7,opt,name=description" json:"description,omitempty"`
-	TitleImage      string   `protobuf:"bytes,8,opt,name=title_image" json:"title_image,omitempty"`
-	BackgroundImage string   `protobuf:"bytes,9,opt,name=background_image" json:"background_image,omitempty"`
-	ClaimedGroupId  string   `protobuf:"bytes,10,opt,name=claimed_group_id" json:"claimed_group_id,omitempty"`
-	Language        string   `protobuf:"bytes,11,opt,name=language" json:"language,omitempty"`
-	Nsfw            bool     `protobuf:"varint,12,opt,name=nsfw" json:"nsfw,omitempty"`
+	ParentIds                    []string     `protobuf:"bytes,1,rep,name=parent_ids" json:"parent_ids,omitempty"`
+	TranslationIds               []string     `protobuf:"bytes,2,rep,name=translation_ids" json:"translation_ids,omitempty"`
+	Closed                       bool         `protobuf:"varint,4,opt,name=closed" json:"closed,omitempty"`
+	Title                        string       `protobuf:"bytes,5,opt,name=title" json:"title,omitempty"`
+	ShortTitle                   string       `protobuf:"bytes,6,opt,name=short_title" json:"short_title,omitempty"`
+	Description                  string       `protobuf:"bytes,7,opt,name=description" json:"description,omitempty"`
+	TitleImage                   string       `protobuf:"bytes,8,opt,name=title_image" json:"title_image,omitempty"`
+	BackgroundImage              string       `protobuf:"bytes,9,opt,name=background_image" json:"background_image,omitempty"`
+	ClaimedGroupId               string       `protobuf:"bytes,10,opt,name=claimed_group_id" json:"claimed_group_id,omitempty"`
+	Language                     string       `protobuf:"bytes,11,opt,name=language" json:"language,omitempty"`
+	Nsfw                         bool         `protobuf:"varint,12,opt,name=nsfw" json:"nsfw,omitempty"`
+	AutoGenerateTitleSuffix      bool         `protobuf:"varint,13,opt,name=auto_generate_title_suffix" json:"auto_generate_title_suffix,omitempty"`
+	AutoGenerateShortTitleSuffix bool         `protobuf:"varint,14,opt,name=auto_generate_short_title_suffix" json:"auto_generate_short_title_suffix,omitempty"`
+	GeoLocation                  *GeoLocation `protobuf:"bytes,15,opt,name=geo_location" json:"geo_location,omitempty"`
 }
 
 func (m *HubCreateHubRequest) Reset()         { *m = HubCreateHubRequest{} }
 func (m *HubCreateHubRequest) String() string { return proto.CompactTextString(m) }
 func (*HubCreateHubRequest) ProtoMessage()    {}
+
+func (m *HubCreateHubRequest) GetGeoLocation() *GeoLocation {
+	if m != nil {
+		return m.GeoLocation
+	}
+	return nil
+}
 
 type HubCreateHubResponse struct {
 	Error    RPCHubCreateHubResponse_ErrorType `protobuf:"varint,1,opt,name=error,enum=proto.RPCHubCreateHubResponse_ErrorType" json:"error,omitempty"`
@@ -1726,17 +2021,27 @@ func (m *HubGetAllHubsResponse) GetHubs() []*Hub {
 }
 
 type HubEditHubRequest struct {
-	ParentIds       *OptionalRepeatedString `protobuf:"bytes,1,opt,name=parent_ids" json:"parent_ids,omitempty"`
-	TranslationIds  *OptionalRepeatedString `protobuf:"bytes,2,opt,name=translation_ids" json:"translation_ids,omitempty"`
-	Closed          *BoolValue              `protobuf:"bytes,3,opt,name=closed" json:"closed,omitempty"`
-	Title           *StringValue            `protobuf:"bytes,4,opt,name=title" json:"title,omitempty"`
-	ShortTitle      *StringValue            `protobuf:"bytes,5,opt,name=short_title" json:"short_title,omitempty"`
-	Description     *StringValue            `protobuf:"bytes,6,opt,name=description" json:"description,omitempty"`
-	TitleImage      *StringValue            `protobuf:"bytes,7,opt,name=title_image" json:"title_image,omitempty"`
-	BackgroundImage *StringValue            `protobuf:"bytes,8,opt,name=background_image" json:"background_image,omitempty"`
-	ClaimedGroupId  *StringValue            `protobuf:"bytes,9,opt,name=claimed_group_id" json:"claimed_group_id,omitempty"`
-	Language        *StringValue            `protobuf:"bytes,10,opt,name=language" json:"language,omitempty"`
-	Nsfw            *BoolValue              `protobuf:"bytes,11,opt,name=nsfw" json:"nsfw,omitempty"`
+	ParentIds                     *OptionalRepeatedString `protobuf:"bytes,1,opt,name=parent_ids" json:"parent_ids,omitempty"`
+	TranslationIds                *OptionalRepeatedString `protobuf:"bytes,2,opt,name=translation_ids" json:"translation_ids,omitempty"`
+	Closed                        *BoolValue              `protobuf:"bytes,3,opt,name=closed" json:"closed,omitempty"`
+	Title                         *StringValue            `protobuf:"bytes,4,opt,name=title" json:"title,omitempty"`
+	ShortTitle                    *StringValue            `protobuf:"bytes,5,opt,name=short_title" json:"short_title,omitempty"`
+	Description                   *StringValue            `protobuf:"bytes,6,opt,name=description" json:"description,omitempty"`
+	TitleImage                    *StringValue            `protobuf:"bytes,7,opt,name=title_image" json:"title_image,omitempty"`
+	BackgroundImage               *StringValue            `protobuf:"bytes,8,opt,name=background_image" json:"background_image,omitempty"`
+	ClaimedGroupId                *StringValue            `protobuf:"bytes,9,opt,name=claimed_group_id" json:"claimed_group_id,omitempty"`
+	Language                      *StringValue            `protobuf:"bytes,10,opt,name=language" json:"language,omitempty"`
+	Nsfw                          *BoolValue              `protobuf:"bytes,11,opt,name=nsfw" json:"nsfw,omitempty"`
+	WordfilterEnabled             *BoolValue              `protobuf:"bytes,12,opt,name=wordfilter_enabled" json:"wordfilter_enabled,omitempty"`
+	WordfilterList                *StringValue            `protobuf:"bytes,13,opt,name=wordfilter_list" json:"wordfilter_list,omitempty"`
+	LinkwhitelistEnabled          *BoolValue              `protobuf:"bytes,14,opt,name=linkwhitelist_enabled" json:"linkwhitelist_enabled,omitempty"`
+	LinkwhitelistList             *StringValue            `protobuf:"bytes,15,opt,name=linkwhitelist_list" json:"linkwhitelist_list,omitempty"`
+	GeoLocation                   *OptionalGeoLocation    `protobuf:"bytes,16,opt,name=geo_location" json:"geo_location,omitempty"`
+	Topic                         *StringValue            `protobuf:"bytes,17,opt,name=topic" json:"topic,omitempty"`
+	MaxMessageLength              *Int32Value             `protobuf:"bytes,18,opt,name=max_message_length" json:"max_message_length,omitempty"`
+	MaxMessagesPerMinute          *Int32Value             `protobuf:"bytes,19,opt,name=max_messages_per_minute" json:"max_messages_per_minute,omitempty"`
+	MaxMessageLengthEphemeral     *Int32Value             `protobuf:"bytes,20,opt,name=max_message_length_ephemeral" json:"max_message_length_ephemeral,omitempty"`
+	MaxMessagesPerMinuteEphemeral *Int32Value             `protobuf:"bytes,21,opt,name=max_messages_per_minute_ephemeral" json:"max_messages_per_minute_ephemeral,omitempty"`
 }
 
 func (m *HubEditHubRequest) Reset()         { *m = HubEditHubRequest{} }
@@ -1820,6 +2125,76 @@ func (m *HubEditHubRequest) GetNsfw() *BoolValue {
 	return nil
 }
 
+func (m *HubEditHubRequest) GetWordfilterEnabled() *BoolValue {
+	if m != nil {
+		return m.WordfilterEnabled
+	}
+	return nil
+}
+
+func (m *HubEditHubRequest) GetWordfilterList() *StringValue {
+	if m != nil {
+		return m.WordfilterList
+	}
+	return nil
+}
+
+func (m *HubEditHubRequest) GetLinkwhitelistEnabled() *BoolValue {
+	if m != nil {
+		return m.LinkwhitelistEnabled
+	}
+	return nil
+}
+
+func (m *HubEditHubRequest) GetLinkwhitelistList() *StringValue {
+	if m != nil {
+		return m.LinkwhitelistList
+	}
+	return nil
+}
+
+func (m *HubEditHubRequest) GetGeoLocation() *OptionalGeoLocation {
+	if m != nil {
+		return m.GeoLocation
+	}
+	return nil
+}
+
+func (m *HubEditHubRequest) GetTopic() *StringValue {
+	if m != nil {
+		return m.Topic
+	}
+	return nil
+}
+
+func (m *HubEditHubRequest) GetMaxMessageLength() *Int32Value {
+	if m != nil {
+		return m.MaxMessageLength
+	}
+	return nil
+}
+
+func (m *HubEditHubRequest) GetMaxMessagesPerMinute() *Int32Value {
+	if m != nil {
+		return m.MaxMessagesPerMinute
+	}
+	return nil
+}
+
+func (m *HubEditHubRequest) GetMaxMessageLengthEphemeral() *Int32Value {
+	if m != nil {
+		return m.MaxMessageLengthEphemeral
+	}
+	return nil
+}
+
+func (m *HubEditHubRequest) GetMaxMessagesPerMinuteEphemeral() *Int32Value {
+	if m != nil {
+		return m.MaxMessagesPerMinuteEphemeral
+	}
+	return nil
+}
+
 type HubEditHubResponse struct {
 	Error    RPCHubCreateHubResponse_ErrorType `protobuf:"varint,1,opt,name=error,enum=proto.RPCHubCreateHubResponse_ErrorType" json:"error,omitempty"`
 	Hub      *Hub                              `protobuf:"bytes,2,opt,name=hub" json:"hub,omitempty"`
@@ -1899,6 +2274,9 @@ type AddMemberRequest struct {
 	FetchExisting bool                           `protobuf:"varint,4,opt,name=fetch_existing" json:"fetch_existing,omitempty"`
 	FetchPending  bool                           `protobuf:"varint,5,opt,name=fetch_pending" json:"fetch_pending,omitempty"`
 	FetchBanned   bool                           `protobuf:"varint,6,opt,name=fetch_banned" json:"fetch_banned,omitempty"`
+	BanDuration   int64                          `protobuf:"varint,7,opt,name=ban_duration" json:"ban_duration,omitempty"`
+	InviteText    string                         `protobuf:"bytes,8,opt,name=invite_text" json:"invite_text,omitempty"`
+	JoinLink      string                         `protobuf:"bytes,9,opt,name=join_link" json:"join_link,omitempty"`
 }
 
 func (m *AddMemberRequest) Reset()         { *m = AddMemberRequest{} }
@@ -1941,6 +2319,68 @@ func (m *AddMemberResponse) GetBannedUsers() []*MembershipEntry {
 func (m *AddMemberResponse) GetUpdatedEntry() *MembershipEntry {
 	if m != nil {
 		return m.UpdatedEntry
+	}
+	return nil
+}
+
+type HubAddMembersRequest struct {
+	InviteText string                       `protobuf:"bytes,1,opt,name=invite_text" json:"invite_text,omitempty"`
+	JoinLink   string                       `protobuf:"bytes,2,opt,name=join_link" json:"join_link,omitempty"`
+	Entries    []*HubAddMembersRequestEntry `protobuf:"bytes,3,rep,name=entries" json:"entries,omitempty"`
+}
+
+func (m *HubAddMembersRequest) Reset()         { *m = HubAddMembersRequest{} }
+func (m *HubAddMembersRequest) String() string { return proto.CompactTextString(m) }
+func (*HubAddMembersRequest) ProtoMessage()    {}
+
+func (m *HubAddMembersRequest) GetEntries() []*HubAddMembersRequestEntry {
+	if m != nil {
+		return m.Entries
+	}
+	return nil
+}
+
+type HubAddMembersResponse struct {
+	Error          HubAddMembersResponse_ErrorType `protobuf:"varint,1,opt,name=error,enum=proto.HubAddMembersResponse_ErrorType" json:"error,omitempty"`
+	UpdatedEntries []*HubAddMembersResponseEntry   `protobuf:"bytes,2,rep,name=updated_entries" json:"updated_entries,omitempty"`
+}
+
+func (m *HubAddMembersResponse) Reset()         { *m = HubAddMembersResponse{} }
+func (m *HubAddMembersResponse) String() string { return proto.CompactTextString(m) }
+func (*HubAddMembersResponse) ProtoMessage()    {}
+
+func (m *HubAddMembersResponse) GetUpdatedEntries() []*HubAddMembersResponseEntry {
+	if m != nil {
+		return m.UpdatedEntries
+	}
+	return nil
+}
+
+type HubAddMembersRequestEntry struct {
+	UserId      string                         `protobuf:"bytes,1,opt,name=user_id" json:"user_id,omitempty"`
+	Email       string                         `protobuf:"bytes,2,opt,name=email" json:"email,omitempty"`
+	Type        MembershipEntry_MembershipType `protobuf:"varint,3,opt,name=type,enum=proto.MembershipEntry_MembershipType" json:"type,omitempty"`
+	BanDuration int64                          `protobuf:"varint,4,opt,name=ban_duration" json:"ban_duration,omitempty"`
+	InviteText  string                         `protobuf:"bytes,5,opt,name=invite_text" json:"invite_text,omitempty"`
+	JoinLink    string                         `protobuf:"bytes,6,opt,name=join_link" json:"join_link,omitempty"`
+}
+
+func (m *HubAddMembersRequestEntry) Reset()         { *m = HubAddMembersRequestEntry{} }
+func (m *HubAddMembersRequestEntry) String() string { return proto.CompactTextString(m) }
+func (*HubAddMembersRequestEntry) ProtoMessage()    {}
+
+type HubAddMembersResponseEntry struct {
+	Error HubAddMembersResponseEntry_ErrorType `protobuf:"varint,1,opt,name=error,enum=proto.HubAddMembersResponseEntry_ErrorType" json:"error,omitempty"`
+	Entry *HubAddMembersRequestEntry           `protobuf:"bytes,2,opt,name=entry" json:"entry,omitempty"`
+}
+
+func (m *HubAddMembersResponseEntry) Reset()         { *m = HubAddMembersResponseEntry{} }
+func (m *HubAddMembersResponseEntry) String() string { return proto.CompactTextString(m) }
+func (*HubAddMembersResponseEntry) ProtoMessage()    {}
+
+func (m *HubAddMembersResponseEntry) GetEntry() *HubAddMembersRequestEntry {
+	if m != nil {
+		return m.Entry
 	}
 	return nil
 }
@@ -2028,6 +2468,7 @@ type EditMemberRequest struct {
 	FetchExisting bool                           `protobuf:"varint,4,opt,name=fetch_existing" json:"fetch_existing,omitempty"`
 	FetchPending  bool                           `protobuf:"varint,5,opt,name=fetch_pending" json:"fetch_pending,omitempty"`
 	FetchBanned   bool                           `protobuf:"varint,6,opt,name=fetch_banned" json:"fetch_banned,omitempty"`
+	BanDuration   int64                          `protobuf:"varint,7,opt,name=ban_duration" json:"ban_duration,omitempty"`
 }
 
 func (m *EditMemberRequest) Reset()         { *m = EditMemberRequest{} }
@@ -2208,6 +2649,22 @@ func (m *HubGetMemberResponse) Reset()         { *m = HubGetMemberResponse{} }
 func (m *HubGetMemberResponse) String() string { return proto.CompactTextString(m) }
 func (*HubGetMemberResponse) ProtoMessage()    {}
 
+type HubGetUserByExternalIDResponse struct {
+	Error    HubGetUserByExternalIDResponse_ErrorType `protobuf:"varint,1,opt,name=error,enum=proto.HubGetUserByExternalIDResponse_ErrorType" json:"error,omitempty"`
+	UserInfo *ExternalUserInfo                        `protobuf:"bytes,2,opt,name=userInfo" json:"userInfo,omitempty"`
+}
+
+func (m *HubGetUserByExternalIDResponse) Reset()         { *m = HubGetUserByExternalIDResponse{} }
+func (m *HubGetUserByExternalIDResponse) String() string { return proto.CompactTextString(m) }
+func (*HubGetUserByExternalIDResponse) ProtoMessage()    {}
+
+func (m *HubGetUserByExternalIDResponse) GetUserInfo() *ExternalUserInfo {
+	if m != nil {
+		return m.UserInfo
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterEnum("proto.RPCHubCreateHubResponse_ErrorType", RPCHubCreateHubResponse_ErrorType_name, RPCHubCreateHubResponse_ErrorType_value)
 	proto.RegisterEnum("proto.RPCHubDeleteHubResponse_ErrorType", RPCHubDeleteHubResponse_ErrorType_name, RPCHubDeleteHubResponse_ErrorType_value)
@@ -2232,7 +2689,10 @@ func init() {
 	proto.RegisterEnum("proto.RPCHubGetMemberResponse_ErrorType", RPCHubGetMemberResponse_ErrorType_name, RPCHubGetMemberResponse_ErrorType_value)
 	proto.RegisterEnum("proto.RPCHubRegisterExternalUserIDResponse_ErrorType", RPCHubRegisterExternalUserIDResponse_ErrorType_name, RPCHubRegisterExternalUserIDResponse_ErrorType_value)
 	proto.RegisterEnum("proto.HubMembershipRecord_MembershipType", HubMembershipRecord_MembershipType_name, HubMembershipRecord_MembershipType_value)
+	proto.RegisterEnum("proto.HubAddMembersResponse_ErrorType", HubAddMembersResponse_ErrorType_name, HubAddMembersResponse_ErrorType_value)
+	proto.RegisterEnum("proto.HubAddMembersResponseEntry_ErrorType", HubAddMembersResponseEntry_ErrorType_name, HubAddMembersResponseEntry_ErrorType_value)
 	proto.RegisterEnum("proto.SearchMembersResponse_ErrorType", SearchMembersResponse_ErrorType_name, SearchMembersResponse_ErrorType_value)
+	proto.RegisterEnum("proto.HubGetUserByExternalIDResponse_ErrorType", HubGetUserByExternalIDResponse_ErrorType_name, HubGetUserByExternalIDResponse_ErrorType_value)
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -2249,6 +2709,7 @@ type HubServiceClient interface {
 	GetAllHubs(ctx context.Context, in *RPCHubGetAllHubsRequest, opts ...grpc.CallOption) (*RPCHubGetAllHubsResponse, error)
 	ValidateTitle(ctx context.Context, in *RPCHubValidateTitleRequest, opts ...grpc.CallOption) (*RPCHubValidateTitleResponse, error)
 	AddMember(ctx context.Context, in *RPCHubAddMemberRequest, opts ...grpc.CallOption) (*RPCHubAddMemberResponse, error)
+	AddMembers(ctx context.Context, in *RPCHubAddMembersRequest, opts ...grpc.CallOption) (*RPCHubAddMembersResponse, error)
 	EditMember(ctx context.Context, in *RPCHubEditMemberRequest, opts ...grpc.CallOption) (*RPCHubEditMemberResponse, error)
 	GetMembers(ctx context.Context, in *RPCHubGetMembersRequest, opts ...grpc.CallOption) (*RPCHubGetMembersResponse, error)
 	GetHubMember(ctx context.Context, in *RPCHubGetMemberRequest, opts ...grpc.CallOption) (*RPCHubGetMemberResponse, error)
@@ -2262,6 +2723,7 @@ type HubServiceClient interface {
 	LinkHub(ctx context.Context, in *RPCHubLinkHubRequest, opts ...grpc.CallOption) (*RPCHubLinkHubResponse, error)
 	UnlinkHub(ctx context.Context, in *RPCHubUnlinkHubRequest, opts ...grpc.CallOption) (*RPCHubUnlinkHubResponse, error)
 	RegisterExternalUserID(ctx context.Context, in *RPCHubRegisterExternalUserIDRequest, opts ...grpc.CallOption) (*RPCHubRegisterExternalUserIDResponse, error)
+	GetUserByExternalID(ctx context.Context, in *RPCHubGetUserByExternalIDRequest, opts ...grpc.CallOption) (*RPCHubGetUserByExternalIDResponse, error)
 }
 
 type hubServiceClient struct {
@@ -2329,6 +2791,15 @@ func (c *hubServiceClient) ValidateTitle(ctx context.Context, in *RPCHubValidate
 func (c *hubServiceClient) AddMember(ctx context.Context, in *RPCHubAddMemberRequest, opts ...grpc.CallOption) (*RPCHubAddMemberResponse, error) {
 	out := new(RPCHubAddMemberResponse)
 	err := grpc.Invoke(ctx, "/proto.HubService/AddMember", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *hubServiceClient) AddMembers(ctx context.Context, in *RPCHubAddMembersRequest, opts ...grpc.CallOption) (*RPCHubAddMembersResponse, error) {
+	out := new(RPCHubAddMembersResponse)
+	err := grpc.Invoke(ctx, "/proto.HubService/AddMembers", in, out, c.cc, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -2452,6 +2923,15 @@ func (c *hubServiceClient) RegisterExternalUserID(ctx context.Context, in *RPCHu
 	return out, nil
 }
 
+func (c *hubServiceClient) GetUserByExternalID(ctx context.Context, in *RPCHubGetUserByExternalIDRequest, opts ...grpc.CallOption) (*RPCHubGetUserByExternalIDResponse, error) {
+	out := new(RPCHubGetUserByExternalIDResponse)
+	err := grpc.Invoke(ctx, "/proto.HubService/GetUserByExternalID", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for HubService service
 
 type HubServiceServer interface {
@@ -2462,6 +2942,7 @@ type HubServiceServer interface {
 	GetAllHubs(context.Context, *RPCHubGetAllHubsRequest) (*RPCHubGetAllHubsResponse, error)
 	ValidateTitle(context.Context, *RPCHubValidateTitleRequest) (*RPCHubValidateTitleResponse, error)
 	AddMember(context.Context, *RPCHubAddMemberRequest) (*RPCHubAddMemberResponse, error)
+	AddMembers(context.Context, *RPCHubAddMembersRequest) (*RPCHubAddMembersResponse, error)
 	EditMember(context.Context, *RPCHubEditMemberRequest) (*RPCHubEditMemberResponse, error)
 	GetMembers(context.Context, *RPCHubGetMembersRequest) (*RPCHubGetMembersResponse, error)
 	GetHubMember(context.Context, *RPCHubGetMemberRequest) (*RPCHubGetMemberResponse, error)
@@ -2475,6 +2956,7 @@ type HubServiceServer interface {
 	LinkHub(context.Context, *RPCHubLinkHubRequest) (*RPCHubLinkHubResponse, error)
 	UnlinkHub(context.Context, *RPCHubUnlinkHubRequest) (*RPCHubUnlinkHubResponse, error)
 	RegisterExternalUserID(context.Context, *RPCHubRegisterExternalUserIDRequest) (*RPCHubRegisterExternalUserIDResponse, error)
+	GetUserByExternalID(context.Context, *RPCHubGetUserByExternalIDRequest) (*RPCHubGetUserByExternalIDResponse, error)
 }
 
 func RegisterHubServiceServer(s *grpc.Server, srv HubServiceServer) {
@@ -2559,6 +3041,18 @@ func _HubService_AddMember_Handler(srv interface{}, ctx context.Context, codec g
 		return nil, err
 	}
 	out, err := srv.(HubServiceServer).AddMember(ctx, in)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func _HubService_AddMembers_Handler(srv interface{}, ctx context.Context, codec grpc.Codec, buf []byte) (interface{}, error) {
+	in := new(RPCHubAddMembersRequest)
+	if err := codec.Unmarshal(buf, in); err != nil {
+		return nil, err
+	}
+	out, err := srv.(HubServiceServer).AddMembers(ctx, in)
 	if err != nil {
 		return nil, err
 	}
@@ -2721,6 +3215,18 @@ func _HubService_RegisterExternalUserID_Handler(srv interface{}, ctx context.Con
 	return out, nil
 }
 
+func _HubService_GetUserByExternalID_Handler(srv interface{}, ctx context.Context, codec grpc.Codec, buf []byte) (interface{}, error) {
+	in := new(RPCHubGetUserByExternalIDRequest)
+	if err := codec.Unmarshal(buf, in); err != nil {
+		return nil, err
+	}
+	out, err := srv.(HubServiceServer).GetUserByExternalID(ctx, in)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 var _HubService_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "proto.HubService",
 	HandlerType: (*HubServiceServer)(nil),
@@ -2752,6 +3258,10 @@ var _HubService_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AddMember",
 			Handler:    _HubService_AddMember_Handler,
+		},
+		{
+			MethodName: "AddMembers",
+			Handler:    _HubService_AddMembers_Handler,
 		},
 		{
 			MethodName: "EditMember",
@@ -2804,6 +3314,10 @@ var _HubService_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RegisterExternalUserID",
 			Handler:    _HubService_RegisterExternalUserID_Handler,
+		},
+		{
+			MethodName: "GetUserByExternalID",
+			Handler:    _HubService_GetUserByExternalID_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{},

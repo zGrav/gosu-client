@@ -10,28 +10,40 @@ import proto "github.com/golang/protobuf/proto"
 var _ = proto.Marshal
 
 type Hub struct {
-	Id                   string   `protobuf:"bytes,1,opt,name=id" json:"id,omitempty"`
-	ParentIds            []string `protobuf:"bytes,2,rep,name=parent_ids" json:"parent_ids,omitempty"`
-	Parents              []*Hub   `protobuf:"bytes,3,rep,name=parents" json:"parents,omitempty"`
-	TranslationIds       []string `protobuf:"bytes,4,rep,name=translation_ids" json:"translation_ids,omitempty"`
-	Translations         []*Hub   `protobuf:"bytes,5,rep,name=translations" json:"translations,omitempty"`
-	OwnerId              string   `protobuf:"bytes,6,opt,name=owner_id" json:"owner_id,omitempty"`
-	Closed               bool     `protobuf:"varint,7,opt,name=closed" json:"closed,omitempty"`
-	Title                string   `protobuf:"bytes,8,opt,name=title" json:"title,omitempty"`
-	ShortTitle           string   `protobuf:"bytes,9,opt,name=short_title" json:"short_title,omitempty"`
-	Slug                 string   `protobuf:"bytes,10,opt,name=slug" json:"slug,omitempty"`
-	Description          string   `protobuf:"bytes,11,opt,name=description" json:"description,omitempty"`
-	TitleImage           string   `protobuf:"bytes,12,opt,name=title_image" json:"title_image,omitempty"`
-	BackgroundImage      string   `protobuf:"bytes,13,opt,name=background_image" json:"background_image,omitempty"`
-	ClaimedGroupId       string   `protobuf:"bytes,14,opt,name=claimed_group_id" json:"claimed_group_id,omitempty"`
-	Language             string   `protobuf:"bytes,15,opt,name=language" json:"language,omitempty"`
-	Nsfw                 bool     `protobuf:"varint,16,opt,name=nsfw" json:"nsfw,omitempty"`
-	ChannelId            string   `protobuf:"bytes,17,opt,name=channel_id" json:"channel_id,omitempty"`
-	CreatedAt            int64    `protobuf:"varint,18,opt,name=created_at" json:"created_at,omitempty"`
-	UpdatedAt            int64    `protobuf:"varint,19,opt,name=updated_at" json:"updated_at,omitempty"`
-	NormalizedTitle      string   `protobuf:"bytes,20,opt,name=normalized_title" json:"normalized_title,omitempty"`
-	NormalizedShortTitle string   `protobuf:"bytes,21,opt,name=normalized_short_title" json:"normalized_short_title,omitempty"`
-	OnlineUserCount      int64    `protobuf:"varint,22,opt,name=online_user_count" json:"online_user_count,omitempty"`
+	Id                            string       `protobuf:"bytes,1,opt,name=id" json:"id,omitempty"`
+	ParentIds                     []string     `protobuf:"bytes,2,rep,name=parent_ids" json:"parent_ids,omitempty"`
+	Parents                       []*Hub       `protobuf:"bytes,3,rep,name=parents" json:"parents,omitempty"`
+	TranslationIds                []string     `protobuf:"bytes,4,rep,name=translation_ids" json:"translation_ids,omitempty"`
+	Translations                  []*Hub       `protobuf:"bytes,5,rep,name=translations" json:"translations,omitempty"`
+	OwnerId                       string       `protobuf:"bytes,6,opt,name=owner_id" json:"owner_id,omitempty"`
+	Closed                        bool         `protobuf:"varint,7,opt,name=closed" json:"closed,omitempty"`
+	Title                         string       `protobuf:"bytes,8,opt,name=title" json:"title,omitempty"`
+	ShortTitle                    string       `protobuf:"bytes,9,opt,name=short_title" json:"short_title,omitempty"`
+	Slug                          string       `protobuf:"bytes,10,opt,name=slug" json:"slug,omitempty"`
+	Description                   string       `protobuf:"bytes,11,opt,name=description" json:"description,omitempty"`
+	TitleImage                    string       `protobuf:"bytes,12,opt,name=title_image" json:"title_image,omitempty"`
+	BackgroundImage               string       `protobuf:"bytes,13,opt,name=background_image" json:"background_image,omitempty"`
+	ClaimedGroupId                string       `protobuf:"bytes,14,opt,name=claimed_group_id" json:"claimed_group_id,omitempty"`
+	Language                      string       `protobuf:"bytes,15,opt,name=language" json:"language,omitempty"`
+	Nsfw                          bool         `protobuf:"varint,16,opt,name=nsfw" json:"nsfw,omitempty"`
+	ChannelId                     string       `protobuf:"bytes,17,opt,name=channel_id" json:"channel_id,omitempty"`
+	CreatedAt                     int64        `protobuf:"varint,18,opt,name=created_at" json:"created_at,omitempty"`
+	UpdatedAt                     int64        `protobuf:"varint,19,opt,name=updated_at" json:"updated_at,omitempty"`
+	NormalizedTitle               string       `protobuf:"bytes,20,opt,name=normalized_title" json:"normalized_title,omitempty"`
+	NormalizedShortTitle          string       `protobuf:"bytes,21,opt,name=normalized_short_title" json:"normalized_short_title,omitempty"`
+	OnlineUserCount               int64        `protobuf:"varint,22,opt,name=online_user_count" json:"online_user_count,omitempty"`
+	WordfilterEnabled             bool         `protobuf:"varint,23,opt,name=wordfilter_enabled" json:"wordfilter_enabled,omitempty"`
+	WordfilterList                string       `protobuf:"bytes,24,opt,name=wordfilter_list" json:"wordfilter_list,omitempty"`
+	LinkwhitelistEnabled          bool         `protobuf:"varint,25,opt,name=linkwhitelist_enabled" json:"linkwhitelist_enabled,omitempty"`
+	LinkwhitelistList             string       `protobuf:"bytes,26,opt,name=linkwhitelist_list" json:"linkwhitelist_list,omitempty"`
+	GeoLocation                   *GeoLocation `protobuf:"bytes,27,opt,name=geo_location" json:"geo_location,omitempty"`
+	TotalUserCount                int64        `protobuf:"varint,28,opt,name=total_user_count" json:"total_user_count,omitempty"`
+	LatestMessageTimestamp        string       `protobuf:"bytes,29,opt,name=latest_message_timestamp" json:"latest_message_timestamp,omitempty"`
+	Topic                         string       `protobuf:"bytes,30,opt,name=topic" json:"topic,omitempty"`
+	MaxMessageLength              int32        `protobuf:"varint,31,opt,name=max_message_length" json:"max_message_length,omitempty"`
+	MaxMessagesPerMinute          int32        `protobuf:"varint,32,opt,name=max_messages_per_minute" json:"max_messages_per_minute,omitempty"`
+	MaxMessageLengthEphemeral     int32        `protobuf:"varint,33,opt,name=max_message_length_ephemeral" json:"max_message_length_ephemeral,omitempty"`
+	MaxMessagesPerMinuteEphemeral int32        `protobuf:"varint,34,opt,name=max_messages_per_minute_ephemeral" json:"max_messages_per_minute_ephemeral,omitempty"`
 }
 
 func (m *Hub) Reset()         { *m = Hub{} }
@@ -48,6 +60,37 @@ func (m *Hub) GetParents() []*Hub {
 func (m *Hub) GetTranslations() []*Hub {
 	if m != nil {
 		return m.Translations
+	}
+	return nil
+}
+
+func (m *Hub) GetGeoLocation() *GeoLocation {
+	if m != nil {
+		return m.GeoLocation
+	}
+	return nil
+}
+
+type GeoLocation struct {
+	Lat float32 `protobuf:"fixed32,1,opt,name=lat" json:"lat,omitempty"`
+	Lng float32 `protobuf:"fixed32,2,opt,name=lng" json:"lng,omitempty"`
+}
+
+func (m *GeoLocation) Reset()         { *m = GeoLocation{} }
+func (m *GeoLocation) String() string { return proto.CompactTextString(m) }
+func (*GeoLocation) ProtoMessage()    {}
+
+type OptionalGeoLocation struct {
+	Value *GeoLocation `protobuf:"bytes,1,opt" json:"Value,omitempty"`
+}
+
+func (m *OptionalGeoLocation) Reset()         { *m = OptionalGeoLocation{} }
+func (m *OptionalGeoLocation) String() string { return proto.CompactTextString(m) }
+func (*OptionalGeoLocation) ProtoMessage()    {}
+
+func (m *OptionalGeoLocation) GetValue() *GeoLocation {
+	if m != nil {
+		return m.Value
 	}
 	return nil
 }

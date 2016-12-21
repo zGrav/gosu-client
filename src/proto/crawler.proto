@@ -1,0 +1,67 @@
+syntax = "proto3";
+
+package proto;
+import "profile.proto";
+option java_package = "maple.proto";
+option go_package = "gosuproto";
+
+// rpc
+
+service CrawlerService {
+    rpc GetSiteInfo (RPCCrawlerGetSiteInfoRequest) returns (RPCCrawlerGetSiteInfoResponse);
+}
+
+message RPCCrawlerGetSiteInfoRequest {
+    string url = 1;
+}
+
+message RPCCrawlerGetSiteInfoResponse {
+    CrawlerGetSiteInfoResponse.ErrorType error = 1;
+    WebsiteInfo site_info = 2;
+}
+
+// api
+
+message CrawlerGetSiteInfoResponse {
+    enum ErrorType {
+        NONE = 0;
+        BAD_REQUEST = 1;
+        FORBIDDEN = 2;
+        UNKNOWN_ERROR = 3;
+        PAGE_NOT_FOUND = 4;
+        COULD_NOT_DECODE = 5;
+        COULD_NOT_CRAWL = 6;
+    }
+
+    ErrorType error = 1;
+    WebsiteInfo site_info = 2;
+}
+
+// model
+
+message WebsiteInfo {
+    enum WebsiteType {
+        UNKNOWN = 0;
+        WIKI = 1;
+        FORUM = 2;
+    }
+
+    string url = 1;
+    string canonical_url = 2;
+    string title = 3;
+    string description = 4;
+    repeated string keywords = 5;
+    string language = 6;
+
+    WebsiteType site_type = 7;
+    string topic = 8;
+
+    WebsiteColors colors = 9;
+    string short_name = 10;
+
+    string image_url = 11;
+    string icon_url = 12;
+}
+
+message WebsiteColors {
+}

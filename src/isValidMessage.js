@@ -1,6 +1,11 @@
 'use strict';
 
 function isValidMessage(msg) {
+	if (!msg) {
+		global.robot.logger.warning('Message is missing');
+		return false;
+	}
+
 	if (!msg.body && !msg.deleted_timestamp) {
 		global.robot.logger.warning('Message is missing body');
 		return false;

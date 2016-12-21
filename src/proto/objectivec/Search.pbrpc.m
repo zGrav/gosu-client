@@ -3,14 +3,11 @@
 #import <ProtoRPC/ProtoRPC.h>
 #import <RxLibrary/GRXWriter+Immediate.h>
 
-static NSString *const kPackageName = @"proto";
-static NSString *const kServiceName = @"SearchService";
-
 @implementation SearchService
 
 // Designated initializer
 - (instancetype)initWithHost:(NSString *)host {
-  return (self = [super initWithHost:host packageName:kPackageName serviceName:kServiceName]);
+  return (self = [super initWithHost:host packageName:@"proto" serviceName:@"SearchService"]);
 }
 
 // Override superclass initializer to disallow different package and service names.
@@ -27,47 +24,47 @@ static NSString *const kServiceName = @"SearchService";
 
 #pragma mark Search(SearchRequest) returns (SearchResponse)
 
-- (void)searchWithRequest:(SearchRequest *)request handler:(void(^)(SearchResponse *response, NSError *error))handler{
+- (void)searchWithRequest:(SearchRequest *)request handler:(void(^)(SearchResponse *_Nullable response, NSError *_Nullable error))handler{
   [[self RPCToSearchWithRequest:request handler:handler] start];
 }
 // Returns a not-yet-started RPC object.
-- (ProtoRPC *)RPCToSearchWithRequest:(SearchRequest *)request handler:(void(^)(SearchResponse *response, NSError *error))handler{
+- (GRPCProtoCall *)RPCToSearchWithRequest:(SearchRequest *)request handler:(void(^)(SearchResponse *_Nullable response, NSError *_Nullable error))handler{
   return [self RPCToMethod:@"Search"
             requestsWriter:[GRXWriter writerWithValue:request]
              responseClass:[SearchResponse class]
         responsesWriteable:[GRXWriteable writeableWithSingleHandler:handler]];
 }
-#pragma mark IndexGroup(Group) returns (IndexResponse)
+#pragma mark SearchCommunities(SearchCommunitiesRequest) returns (SearchCommunitiesResponse)
 
-- (void)indexGroupWithRequest:(Group *)request handler:(void(^)(IndexResponse *response, NSError *error))handler{
-  [[self RPCToIndexGroupWithRequest:request handler:handler] start];
+- (void)searchCommunitiesWithRequest:(SearchCommunitiesRequest *)request handler:(void(^)(SearchCommunitiesResponse *_Nullable response, NSError *_Nullable error))handler{
+  [[self RPCToSearchCommunitiesWithRequest:request handler:handler] start];
 }
 // Returns a not-yet-started RPC object.
-- (ProtoRPC *)RPCToIndexGroupWithRequest:(Group *)request handler:(void(^)(IndexResponse *response, NSError *error))handler{
-  return [self RPCToMethod:@"IndexGroup"
+- (GRPCProtoCall *)RPCToSearchCommunitiesWithRequest:(SearchCommunitiesRequest *)request handler:(void(^)(SearchCommunitiesResponse *_Nullable response, NSError *_Nullable error))handler{
+  return [self RPCToMethod:@"SearchCommunities"
             requestsWriter:[GRXWriter writerWithValue:request]
-             responseClass:[IndexResponse class]
+             responseClass:[SearchCommunitiesResponse class]
         responsesWriteable:[GRXWriteable writeableWithSingleHandler:handler]];
 }
-#pragma mark DeleteGroup(Group) returns (DeleteResponse)
+#pragma mark GetActiveCommunities(ActiveCommunitiesRequest) returns (SearchResponse)
 
-- (void)deleteGroupWithRequest:(Group *)request handler:(void(^)(DeleteResponse *response, NSError *error))handler{
-  [[self RPCToDeleteGroupWithRequest:request handler:handler] start];
+- (void)getActiveCommunitiesWithRequest:(ActiveCommunitiesRequest *)request handler:(void(^)(SearchResponse *_Nullable response, NSError *_Nullable error))handler{
+  [[self RPCToGetActiveCommunitiesWithRequest:request handler:handler] start];
 }
 // Returns a not-yet-started RPC object.
-- (ProtoRPC *)RPCToDeleteGroupWithRequest:(Group *)request handler:(void(^)(DeleteResponse *response, NSError *error))handler{
-  return [self RPCToMethod:@"DeleteGroup"
+- (GRPCProtoCall *)RPCToGetActiveCommunitiesWithRequest:(ActiveCommunitiesRequest *)request handler:(void(^)(SearchResponse *_Nullable response, NSError *_Nullable error))handler{
+  return [self RPCToMethod:@"GetActiveCommunities"
             requestsWriter:[GRXWriter writerWithValue:request]
-             responseClass:[DeleteResponse class]
+             responseClass:[SearchResponse class]
         responsesWriteable:[GRXWriteable writeableWithSingleHandler:handler]];
 }
 #pragma mark IndexUser(User) returns (IndexResponse)
 
-- (void)indexUserWithRequest:(User *)request handler:(void(^)(IndexResponse *response, NSError *error))handler{
+- (void)indexUserWithRequest:(User *)request handler:(void(^)(IndexResponse *_Nullable response, NSError *_Nullable error))handler{
   [[self RPCToIndexUserWithRequest:request handler:handler] start];
 }
 // Returns a not-yet-started RPC object.
-- (ProtoRPC *)RPCToIndexUserWithRequest:(User *)request handler:(void(^)(IndexResponse *response, NSError *error))handler{
+- (GRPCProtoCall *)RPCToIndexUserWithRequest:(User *)request handler:(void(^)(IndexResponse *_Nullable response, NSError *_Nullable error))handler{
   return [self RPCToMethod:@"IndexUser"
             requestsWriter:[GRXWriter writerWithValue:request]
              responseClass:[IndexResponse class]
@@ -75,11 +72,11 @@ static NSString *const kServiceName = @"SearchService";
 }
 #pragma mark DeleteUser(User) returns (DeleteResponse)
 
-- (void)deleteUserWithRequest:(User *)request handler:(void(^)(DeleteResponse *response, NSError *error))handler{
+- (void)deleteUserWithRequest:(User *)request handler:(void(^)(DeleteResponse *_Nullable response, NSError *_Nullable error))handler{
   [[self RPCToDeleteUserWithRequest:request handler:handler] start];
 }
 // Returns a not-yet-started RPC object.
-- (ProtoRPC *)RPCToDeleteUserWithRequest:(User *)request handler:(void(^)(DeleteResponse *response, NSError *error))handler{
+- (GRPCProtoCall *)RPCToDeleteUserWithRequest:(User *)request handler:(void(^)(DeleteResponse *_Nullable response, NSError *_Nullable error))handler{
   return [self RPCToMethod:@"DeleteUser"
             requestsWriter:[GRXWriter writerWithValue:request]
              responseClass:[DeleteResponse class]
@@ -87,11 +84,11 @@ static NSString *const kServiceName = @"SearchService";
 }
 #pragma mark GetSuggestions(SuggestionRequest) returns (SuggestionResponse)
 
-- (void)getSuggestionsWithRequest:(SuggestionRequest *)request handler:(void(^)(SuggestionResponse *response, NSError *error))handler{
+- (void)getSuggestionsWithRequest:(SuggestionRequest *)request handler:(void(^)(SuggestionResponse *_Nullable response, NSError *_Nullable error))handler{
   [[self RPCToGetSuggestionsWithRequest:request handler:handler] start];
 }
 // Returns a not-yet-started RPC object.
-- (ProtoRPC *)RPCToGetSuggestionsWithRequest:(SuggestionRequest *)request handler:(void(^)(SuggestionResponse *response, NSError *error))handler{
+- (GRPCProtoCall *)RPCToGetSuggestionsWithRequest:(SuggestionRequest *)request handler:(void(^)(SuggestionResponse *_Nullable response, NSError *_Nullable error))handler{
   return [self RPCToMethod:@"GetSuggestions"
             requestsWriter:[GRXWriter writerWithValue:request]
              responseClass:[SuggestionResponse class]

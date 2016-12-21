@@ -42,6 +42,7 @@ message MessageDeletedEvent {
 	string channel_id = 2;
 	MessageBatch message_batch = 3;
 	Any message_payload = 4;
+	string user_id = 5;
 }
 
 message UserUpdateWrapper {
@@ -119,4 +120,8 @@ message HubLinkUpdateWrapper {
     Action action = 2;
     string hub_id = 3;
     string group_id = 4;
+}
+
+message UserCountsUpdatedEvent {
+    repeated string community_ids = 1;
 }

@@ -7,6 +7,7 @@ import "message.proto";
 import "optional.proto";
 import "prefs.proto";
 import "hub_base.proto";
+import "struct.proto";
 option java_package = "maple.proto";
 option go_package = "gosuproto";
 
@@ -20,10 +21,50 @@ message AuthLoginRequest {
     UserAgent.UserAgentType agent_type = 5;
 }
 
+message AuthLoginOAuthRequest {
+    enum OAuthProvider {
+        UNKNOWN = 0;
+        FACEBOOK = 1;
+        GOOGLE = 2;
+    }
+
+    string oauth_token = 1;
+    OAuthProvider oauth_provider = 2;
+    string requested_username = 3;
+    string email_address = 4;
+    string agent_id = 5;
+    string agent_name = 6;
+    UserAgent.UserAgentType agent_type = 7;
+    string oauth_code = 8;
+    string oauth_redirect_uri = 9;
+}
+
+message AuthLoginEmailRequest {
+    string email = 1;
+    string source_url = 2;
+    string code = 3;
+    string requested_username = 4;
+    string agent_id = 5;
+    string agent_name = 6;
+    UserAgent.UserAgentType agent_type = 7;
+    bool reset_password = 8;
+    string new_password = 9;
+}
+
 message AuthLoginResponse {
+    enum ErrorType {
+        NONE = 0;
+        UNKNOWN_ERROR = 1;
+        BAD_REQUEST = 2;
+        NEW_PASSWORD_INVALID = 3;
+        IP_BANNED = 4;
+    }
+
     bool success = 1;
     string token = 2;
     User user = 3;
+    ErrorType error = 4;
+    bool new_user = 5;
 }
 
 message AuthWithTokenRequest {
@@ -49,6 +90,7 @@ message AuthRegisterRequest {
     bool ephemeral = 11;
     repeated string join_communities = 12;
     bool auto_generate_name_suffix = 13;
+    string avatar_image = 14;
 }
 
 message AuthRegisterResponse {
@@ -69,6 +111,7 @@ message AuthRegisterResponse {
         INVITE_CODE_MISSING = 13;
         BACKGROUND_IMAGE_INVALID = 14;
         TITLE_IMAGE_INVALID = 15;
+        IP_BANNED = 16;
     }
 
     bool success = 1;
@@ -84,10 +127,22 @@ message AuthActivateResponse {
 
 message AuthPasswordResetRequest {
     string email = 1;
+    string source_url = 2;
 }
 
 message AuthPasswordResetResponse {
     bool success = 1;
+}
+
+message AuthGetPasswordResetInfoResponse {
+    enum ErrorType {
+        NONE = 0;
+        UNKNOWN_ERROR = 1;
+        INVALID = 2;
+    }
+    ErrorType error = 1;
+    ChatUser user = 2;
+    string source_url = 3;
 }
 
 message AuthExecutePasswordResetRequest {
@@ -97,6 +152,7 @@ message AuthExecutePasswordResetRequest {
 
 message AuthExecutePasswordResetResponse {
     bool success = 1;
+    string token = 2;
 }
 
 // API - User
@@ -133,7 +189,17 @@ message ProfileUpdatePasswordRequest {
 }
 
 message ProfileUpdatePasswordResponse {
-    bool success = 1;
+    enum ErrorType {
+        NONE = 0;
+        UNKNOWN_ERROR = 1;
+        BAD_REQUEST = 2;
+        PW_TOO_SHORT = 3;
+        PW_BAD = 4;
+        OLD_PW_INVALID = 5;
+    }
+
+    bool success = 1; // deprecated
+    ErrorType error = 2;
 }
 
 message ProfileRequestFriendshipRequest {
@@ -200,12 +266,28 @@ message UserValidateUsernameResponse {
     AuthRegisterResponse.ErrorType error = 1;
 }
 
+message UserValidateEmailAddressRequest {
+    string email_address = 1;
+}
+
+message UserValidateEmailAddressResponse {
+    enum ErrorType {
+        NONE = 0;
+        UNKNOWN_ERROR = 1;
+        BAD_REQUEST = 2;
+        EMAIL_ADDRESS_INVALID = 3;
+        EMAIL_ADDRESS_UNAVAILABLE = 4;
+    }
+    ErrorType error = 1;
+}
+
 message UserConvertEphemeralUserRequest {
     string username = 1;
     string email_address = 2;
     string password = 3;
     bool newsletter = 4;
     bool terms_of_service = 5;
+    string avatar_image = 6;
 }
 
 message UserConvertEphemeralUserResponse {
@@ -225,6 +307,30 @@ message UserConvertEphemeralUserResponse {
     ErrorType error = 1;
     string token = 2;
     User user = 3;
+}
+
+message UserTransferOwnershipRequest {
+    string target_user_auth_token = 1;
+}
+
+message UserTransferOwnershipResponse {
+    enum ErrorType {
+        NONE = 0;
+        BAD_REQUEST = 1;
+        FORBIDDEN = 2;
+        UNKNOWN_ERROR = 3;
+    }
+
+    ErrorType error = 1;
+}
+
+message UserCheckBanStatusResponse {
+    enum ErrorType {
+        NONE = 0;
+        UNKNOWN_ERROR = 1;
+    }
+    ErrorType error = 1;
+    bool is_banned = 2;
 }
 
 // API - Chat
@@ -474,4 +580,73 @@ message ReportRequest {
     string message_timestamp = 7;
     string message_body = 8;
     Reason reason = 9;
+}
+
+// timeouts
+
+message APIError {
+    // uuid for this error object (for logging and persistence)
+    string id = 1;
+    // links object with an about property
+    Struct links = 2;
+    // HTTP status code
+    int64 status = 3;
+    // Application error code
+    int64 code = 4;
+    // a short, human-readable summary of the problem that SHOULD NOT change from occurrence to occurrence of the problem, except for purposes of localization.
+    string title = 5;
+    // a human-readable explanation specific to this occurrence of the problem. Like title, this field’s value can be localized.
+    string detail = 6;
+
+    oneof source {
+        // a JSON Pointer [RFC6901] to the associated entity in the request document [e.g. "/data" for a primary data object, or "/data/attributes/title" for a specific attribute].
+        string pointer = 7;
+        // a string indicating which URI query parameter caused the error.
+        string parameter = 8;
+    }
+
+    // a meta object containing non-standard meta-information about the error.
+    Struct meta = 9;
+}
+
+enum ApiErrorCodes {
+    UNKNOWN_ERROR = 0;
+
+    AUTH_MISSING_USER_ID = 10;
+
+    PARAM_MISSING_CHANNEL_ID = 100;
+    PARAM_MISSING_USER_ID = 101;
+
+    TIMEOUT_INVALID_DURATION = 1000;
+    TIMEOUT_INVALID_REASON = 1001;
+}
+
+message CreateTimeoutRequest {
+    int64 duration = 1;
+    string reason = 2;
+}
+
+message CreateTimeoutResponse {
+    bool success = 1;
+    repeated APIError errors = 2;
+}
+
+// blocked users
+
+message UserEditBlockedUserResponse {
+    enum ErrorType {
+        NONE = 0;
+        BAD_REQUEST = 1;
+        UNKNOWN_ERROR = 2;
+    }
+    ErrorType error = 1;
+}
+
+message UserGetBlockedUsersResponse {
+    enum ErrorType {
+        NONE = 0;
+        UNKNOWN_ERROR = 1;
+    }
+    ErrorType error = 1;
+    repeated ChatUser users = 2;
 }

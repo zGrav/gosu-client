@@ -3,14 +3,11 @@
 #import <ProtoRPC/ProtoRPC.h>
 #import <RxLibrary/GRXWriter+Immediate.h>
 
-static NSString *const kPackageName = @"proto";
-static NSString *const kServiceName = @"UserlistService";
-
 @implementation UserlistService
 
 // Designated initializer
 - (instancetype)initWithHost:(NSString *)host {
-  return (self = [super initWithHost:host packageName:kPackageName serviceName:kServiceName]);
+  return (self = [super initWithHost:host packageName:@"proto" serviceName:@"UserlistService"]);
 }
 
 // Override superclass initializer to disallow different package and service names.
@@ -27,11 +24,11 @@ static NSString *const kServiceName = @"UserlistService";
 
 #pragma mark GetChannelUsers(RPCUserlistGetChannelUsersRequest) returns (RPCUserlistGetChannelUsersResponse)
 
-- (void)getChannelUsersWithRequest:(RPCUserlistGetChannelUsersRequest *)request handler:(void(^)(RPCUserlistGetChannelUsersResponse *response, NSError *error))handler{
+- (void)getChannelUsersWithRequest:(RPCUserlistGetChannelUsersRequest *)request handler:(void(^)(RPCUserlistGetChannelUsersResponse *_Nullable response, NSError *_Nullable error))handler{
   [[self RPCToGetChannelUsersWithRequest:request handler:handler] start];
 }
 // Returns a not-yet-started RPC object.
-- (ProtoRPC *)RPCToGetChannelUsersWithRequest:(RPCUserlistGetChannelUsersRequest *)request handler:(void(^)(RPCUserlistGetChannelUsersResponse *response, NSError *error))handler{
+- (GRPCProtoCall *)RPCToGetChannelUsersWithRequest:(RPCUserlistGetChannelUsersRequest *)request handler:(void(^)(RPCUserlistGetChannelUsersResponse *_Nullable response, NSError *_Nullable error))handler{
   return [self RPCToMethod:@"GetChannelUsers"
             requestsWriter:[GRXWriter writerWithValue:request]
              responseClass:[RPCUserlistGetChannelUsersResponse class]
@@ -39,11 +36,11 @@ static NSString *const kServiceName = @"UserlistService";
 }
 #pragma mark GetHubMembers(RPCUserlistGetHubMembersRequest) returns (RPCUserlistGetHubMembersResponse)
 
-- (void)getHubMembersWithRequest:(RPCUserlistGetHubMembersRequest *)request handler:(void(^)(RPCUserlistGetHubMembersResponse *response, NSError *error))handler{
+- (void)getHubMembersWithRequest:(RPCUserlistGetHubMembersRequest *)request handler:(void(^)(RPCUserlistGetHubMembersResponse *_Nullable response, NSError *_Nullable error))handler{
   [[self RPCToGetHubMembersWithRequest:request handler:handler] start];
 }
 // Returns a not-yet-started RPC object.
-- (ProtoRPC *)RPCToGetHubMembersWithRequest:(RPCUserlistGetHubMembersRequest *)request handler:(void(^)(RPCUserlistGetHubMembersResponse *response, NSError *error))handler{
+- (GRPCProtoCall *)RPCToGetHubMembersWithRequest:(RPCUserlistGetHubMembersRequest *)request handler:(void(^)(RPCUserlistGetHubMembersResponse *_Nullable response, NSError *_Nullable error))handler{
   return [self RPCToMethod:@"GetHubMembers"
             requestsWriter:[GRXWriter writerWithValue:request]
              responseClass:[RPCUserlistGetHubMembersResponse class]
@@ -51,11 +48,11 @@ static NSString *const kServiceName = @"UserlistService";
 }
 #pragma mark SearchHubMembers(RPCUserlistSearchHubMembersRequest) returns (RPCUserlistSearchHubMembersResponse)
 
-- (void)searchHubMembersWithRequest:(RPCUserlistSearchHubMembersRequest *)request handler:(void(^)(RPCUserlistSearchHubMembersResponse *response, NSError *error))handler{
+- (void)searchHubMembersWithRequest:(RPCUserlistSearchHubMembersRequest *)request handler:(void(^)(RPCUserlistSearchHubMembersResponse *_Nullable response, NSError *_Nullable error))handler{
   [[self RPCToSearchHubMembersWithRequest:request handler:handler] start];
 }
 // Returns a not-yet-started RPC object.
-- (ProtoRPC *)RPCToSearchHubMembersWithRequest:(RPCUserlistSearchHubMembersRequest *)request handler:(void(^)(RPCUserlistSearchHubMembersResponse *response, NSError *error))handler{
+- (GRPCProtoCall *)RPCToSearchHubMembersWithRequest:(RPCUserlistSearchHubMembersRequest *)request handler:(void(^)(RPCUserlistSearchHubMembersResponse *_Nullable response, NSError *_Nullable error))handler{
   return [self RPCToMethod:@"SearchHubMembers"
             requestsWriter:[GRXWriter writerWithValue:request]
              responseClass:[RPCUserlistSearchHubMembersResponse class]
@@ -63,11 +60,11 @@ static NSString *const kServiceName = @"UserlistService";
 }
 #pragma mark GetUserCounts(RPCUserlistGetUserCountsRequest) returns (RPCUserlistGetUserCountsResponse)
 
-- (void)getUserCountsWithRequest:(RPCUserlistGetUserCountsRequest *)request handler:(void(^)(RPCUserlistGetUserCountsResponse *response, NSError *error))handler{
+- (void)getUserCountsWithRequest:(RPCUserlistGetUserCountsRequest *)request handler:(void(^)(RPCUserlistGetUserCountsResponse *_Nullable response, NSError *_Nullable error))handler{
   [[self RPCToGetUserCountsWithRequest:request handler:handler] start];
 }
 // Returns a not-yet-started RPC object.
-- (ProtoRPC *)RPCToGetUserCountsWithRequest:(RPCUserlistGetUserCountsRequest *)request handler:(void(^)(RPCUserlistGetUserCountsResponse *response, NSError *error))handler{
+- (GRPCProtoCall *)RPCToGetUserCountsWithRequest:(RPCUserlistGetUserCountsRequest *)request handler:(void(^)(RPCUserlistGetUserCountsResponse *_Nullable response, NSError *_Nullable error))handler{
   return [self RPCToMethod:@"GetUserCounts"
             requestsWriter:[GRXWriter writerWithValue:request]
              responseClass:[RPCUserlistGetUserCountsResponse class]

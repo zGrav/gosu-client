@@ -86,6 +86,29 @@ func (x RPCUserRemoveUserFromHubsResponse_ErrorType) String() string {
 	return proto.EnumName(RPCUserRemoveUserFromHubsResponse_ErrorType_name, int32(x))
 }
 
+type RPCUserAddMutualContactsResponse_ErrorType int32
+
+const (
+	RPCUserAddMutualContactsResponse_NONE          RPCUserAddMutualContactsResponse_ErrorType = 0
+	RPCUserAddMutualContactsResponse_BAD_REQUEST   RPCUserAddMutualContactsResponse_ErrorType = 1
+	RPCUserAddMutualContactsResponse_UNKNOWN_ERROR RPCUserAddMutualContactsResponse_ErrorType = 2
+)
+
+var RPCUserAddMutualContactsResponse_ErrorType_name = map[int32]string{
+	0: "NONE",
+	1: "BAD_REQUEST",
+	2: "UNKNOWN_ERROR",
+}
+var RPCUserAddMutualContactsResponse_ErrorType_value = map[string]int32{
+	"NONE":          0,
+	"BAD_REQUEST":   1,
+	"UNKNOWN_ERROR": 2,
+}
+
+func (x RPCUserAddMutualContactsResponse_ErrorType) String() string {
+	return proto.EnumName(RPCUserAddMutualContactsResponse_ErrorType_name, int32(x))
+}
+
 type RPCGenericResponse struct {
 	Success bool `protobuf:"varint,1,opt,name=success" json:"success,omitempty"`
 }
@@ -124,6 +147,61 @@ func (m *RPCAuthLoginRequest) Reset()         { *m = RPCAuthLoginRequest{} }
 func (m *RPCAuthLoginRequest) String() string { return proto.CompactTextString(m) }
 func (*RPCAuthLoginRequest) ProtoMessage()    {}
 
+type RPCAuthLoginOAuthRequest struct {
+	CurrentUserId     string                              `protobuf:"bytes,1,opt,name=current_user_id" json:"current_user_id,omitempty"`
+	OauthToken        string                              `protobuf:"bytes,2,opt,name=oauth_token" json:"oauth_token,omitempty"`
+	OauthProvider     AuthLoginOAuthRequest_OAuthProvider `protobuf:"varint,3,opt,name=oauth_provider,enum=proto.AuthLoginOAuthRequest_OAuthProvider" json:"oauth_provider,omitempty"`
+	RequestedUsername string                              `protobuf:"bytes,4,opt,name=requested_username" json:"requested_username,omitempty"`
+	EmailAddress      string                              `protobuf:"bytes,5,opt,name=email_address" json:"email_address,omitempty"`
+	AgentId           string                              `protobuf:"bytes,6,opt,name=agent_id" json:"agent_id,omitempty"`
+	AgentName         string                              `protobuf:"bytes,7,opt,name=agent_name" json:"agent_name,omitempty"`
+	AgentType         UserAgent_UserAgentType             `protobuf:"varint,8,opt,name=agent_type,enum=proto.UserAgent_UserAgentType" json:"agent_type,omitempty"`
+	ClientIp          string                              `protobuf:"bytes,9,opt,name=client_ip" json:"client_ip,omitempty"`
+	OauthCode         string                              `protobuf:"bytes,10,opt,name=oauth_code" json:"oauth_code,omitempty"`
+	OauthRedirectUri  string                              `protobuf:"bytes,11,opt,name=oauth_redirect_uri" json:"oauth_redirect_uri,omitempty"`
+}
+
+func (m *RPCAuthLoginOAuthRequest) Reset()         { *m = RPCAuthLoginOAuthRequest{} }
+func (m *RPCAuthLoginOAuthRequest) String() string { return proto.CompactTextString(m) }
+func (*RPCAuthLoginOAuthRequest) ProtoMessage()    {}
+
+type RPCAuthLoginEmailRequest struct {
+	CurrentUserId     string                  `protobuf:"bytes,1,opt,name=current_user_id" json:"current_user_id,omitempty"`
+	Email             string                  `protobuf:"bytes,2,opt,name=email" json:"email,omitempty"`
+	SourceUrl         string                  `protobuf:"bytes,3,opt,name=source_url" json:"source_url,omitempty"`
+	Code              string                  `protobuf:"bytes,4,opt,name=code" json:"code,omitempty"`
+	RequestedUsername string                  `protobuf:"bytes,5,opt,name=requested_username" json:"requested_username,omitempty"`
+	AgentId           string                  `protobuf:"bytes,6,opt,name=agent_id" json:"agent_id,omitempty"`
+	AgentName         string                  `protobuf:"bytes,7,opt,name=agent_name" json:"agent_name,omitempty"`
+	AgentType         UserAgent_UserAgentType `protobuf:"varint,8,opt,name=agent_type,enum=proto.UserAgent_UserAgentType" json:"agent_type,omitempty"`
+	ClientIp          string                  `protobuf:"bytes,9,opt,name=client_ip" json:"client_ip,omitempty"`
+	ResetPassword     bool                    `protobuf:"varint,10,opt,name=reset_password" json:"reset_password,omitempty"`
+	NewPassword       string                  `protobuf:"bytes,11,opt,name=new_password" json:"new_password,omitempty"`
+}
+
+func (m *RPCAuthLoginEmailRequest) Reset()         { *m = RPCAuthLoginEmailRequest{} }
+func (m *RPCAuthLoginEmailRequest) String() string { return proto.CompactTextString(m) }
+func (*RPCAuthLoginEmailRequest) ProtoMessage()    {}
+
+type RPCAuthLoginResponse struct {
+	Success bool                        `protobuf:"varint,1,opt,name=success" json:"success,omitempty"`
+	Token   string                      `protobuf:"bytes,2,opt,name=token" json:"token,omitempty"`
+	User    *User                       `protobuf:"bytes,3,opt,name=user" json:"user,omitempty"`
+	Error   AuthLoginResponse_ErrorType `protobuf:"varint,4,opt,name=error,enum=proto.AuthLoginResponse_ErrorType" json:"error,omitempty"`
+	NewUser bool                        `protobuf:"varint,5,opt,name=new_user" json:"new_user,omitempty"`
+}
+
+func (m *RPCAuthLoginResponse) Reset()         { *m = RPCAuthLoginResponse{} }
+func (m *RPCAuthLoginResponse) String() string { return proto.CompactTextString(m) }
+func (*RPCAuthLoginResponse) ProtoMessage()    {}
+
+func (m *RPCAuthLoginResponse) GetUser() *User {
+	if m != nil {
+		return m.User
+	}
+	return nil
+}
+
 type RPCAuthRegisterRequest struct {
 	Username               string                  `protobuf:"bytes,1,opt,name=username" json:"username,omitempty"`
 	Password               string                  `protobuf:"bytes,2,opt,name=password" json:"password,omitempty"`
@@ -140,6 +218,7 @@ type RPCAuthRegisterRequest struct {
 	Ephemeral              bool                    `protobuf:"varint,13,opt,name=ephemeral" json:"ephemeral,omitempty"`
 	JoinCommunities        []string                `protobuf:"bytes,14,rep,name=join_communities" json:"join_communities,omitempty"`
 	AutoGenerateNameSuffix bool                    `protobuf:"varint,15,opt,name=auto_generate_name_suffix" json:"auto_generate_name_suffix,omitempty"`
+	AvatarImage            string                  `protobuf:"bytes,16,opt,name=avatar_image" json:"avatar_image,omitempty"`
 }
 
 func (m *RPCAuthRegisterRequest) Reset()         { *m = RPCAuthRegisterRequest{} }
@@ -154,6 +233,7 @@ type RPCUserConvertEphemeralUserRequest struct {
 	Password       string `protobuf:"bytes,5,opt,name=password" json:"password,omitempty"`
 	Newsletter     bool   `protobuf:"varint,6,opt,name=newsletter" json:"newsletter,omitempty"`
 	TermsOfService bool   `protobuf:"varint,7,opt,name=terms_of_service" json:"terms_of_service,omitempty"`
+	AvatarImage    string `protobuf:"bytes,8,opt,name=avatar_image" json:"avatar_image,omitempty"`
 }
 
 func (m *RPCUserConvertEphemeralUserRequest) Reset()         { *m = RPCUserConvertEphemeralUserRequest{} }
@@ -195,6 +275,7 @@ type RPCUserUpdateRequest struct {
 	Games           *OptionalGames       `protobuf:"bytes,7,opt,name=games" json:"games,omitempty"`
 	BackgroundImage *OptionalString      `protobuf:"bytes,8,opt,name=background_image" json:"background_image,omitempty"`
 	TitleImage      *OptionalString      `protobuf:"bytes,9,opt,name=title_image" json:"title_image,omitempty"`
+	TermsOfService  *OptionalBool        `protobuf:"bytes,10,opt,name=terms_of_service" json:"terms_of_service,omitempty"`
 	Biography       *BiographyUpdateData `protobuf:"bytes,16,opt,name=biography" json:"biography,omitempty"`
 }
 
@@ -247,6 +328,13 @@ func (m *RPCUserUpdateRequest) GetBackgroundImage() *OptionalString {
 func (m *RPCUserUpdateRequest) GetTitleImage() *OptionalString {
 	if m != nil {
 		return m.TitleImage
+	}
+	return nil
+}
+
+func (m *RPCUserUpdateRequest) GetTermsOfService() *OptionalBool {
+	if m != nil {
+		return m.TermsOfService
 	}
 	return nil
 }
@@ -359,6 +447,22 @@ type RPCUserValidateUsernameResponse struct {
 func (m *RPCUserValidateUsernameResponse) Reset()         { *m = RPCUserValidateUsernameResponse{} }
 func (m *RPCUserValidateUsernameResponse) String() string { return proto.CompactTextString(m) }
 func (*RPCUserValidateUsernameResponse) ProtoMessage()    {}
+
+type RPCUserValidateEmailAddressRequest struct {
+	EmailAddress string `protobuf:"bytes,1,opt,name=email_address" json:"email_address,omitempty"`
+}
+
+func (m *RPCUserValidateEmailAddressRequest) Reset()         { *m = RPCUserValidateEmailAddressRequest{} }
+func (m *RPCUserValidateEmailAddressRequest) String() string { return proto.CompactTextString(m) }
+func (*RPCUserValidateEmailAddressRequest) ProtoMessage()    {}
+
+type RPCUserValidateEmailAddressResponse struct {
+	Error UserValidateEmailAddressResponse_ErrorType `protobuf:"varint,1,opt,name=error,enum=proto.UserValidateEmailAddressResponse_ErrorType" json:"error,omitempty"`
+}
+
+func (m *RPCUserValidateEmailAddressResponse) Reset()         { *m = RPCUserValidateEmailAddressResponse{} }
+func (m *RPCUserValidateEmailAddressResponse) String() string { return proto.CompactTextString(m) }
+func (*RPCUserValidateEmailAddressResponse) ProtoMessage()    {}
 
 type RPCUserGetUserResponse struct {
 	UserExists bool  `protobuf:"varint,1,opt,name=user_exists" json:"user_exists,omitempty"`
@@ -485,7 +589,8 @@ func (m *RPCUserExecuteActivationResponse) String() string { return proto.Compac
 func (*RPCUserExecuteActivationResponse) ProtoMessage()    {}
 
 type RPCUserPasswordResetEmailRequest struct {
-	Email string `protobuf:"bytes,1,opt,name=email" json:"email,omitempty"`
+	Email     string `protobuf:"bytes,1,opt,name=email" json:"email,omitempty"`
+	SourceUrl string `protobuf:"bytes,2,opt,name=source_url" json:"source_url,omitempty"`
 }
 
 func (m *RPCUserPasswordResetEmailRequest) Reset()         { *m = RPCUserPasswordResetEmailRequest{} }
@@ -500,6 +605,31 @@ func (m *RPCUserPasswordResetEmailResponse) Reset()         { *m = RPCUserPasswo
 func (m *RPCUserPasswordResetEmailResponse) String() string { return proto.CompactTextString(m) }
 func (*RPCUserPasswordResetEmailResponse) ProtoMessage()    {}
 
+type RPCUserGetPasswordResetInfoRequest struct {
+	Secret string `protobuf:"bytes,1,opt,name=secret" json:"secret,omitempty"`
+}
+
+func (m *RPCUserGetPasswordResetInfoRequest) Reset()         { *m = RPCUserGetPasswordResetInfoRequest{} }
+func (m *RPCUserGetPasswordResetInfoRequest) String() string { return proto.CompactTextString(m) }
+func (*RPCUserGetPasswordResetInfoRequest) ProtoMessage()    {}
+
+type RPCUserGetPasswordResetInfoResponse struct {
+	Error     AuthGetPasswordResetInfoResponse_ErrorType `protobuf:"varint,1,opt,name=error,enum=proto.AuthGetPasswordResetInfoResponse_ErrorType" json:"error,omitempty"`
+	User      *ChatUser                                  `protobuf:"bytes,2,opt,name=user" json:"user,omitempty"`
+	SourceUrl string                                     `protobuf:"bytes,3,opt,name=source_url" json:"source_url,omitempty"`
+}
+
+func (m *RPCUserGetPasswordResetInfoResponse) Reset()         { *m = RPCUserGetPasswordResetInfoResponse{} }
+func (m *RPCUserGetPasswordResetInfoResponse) String() string { return proto.CompactTextString(m) }
+func (*RPCUserGetPasswordResetInfoResponse) ProtoMessage()    {}
+
+func (m *RPCUserGetPasswordResetInfoResponse) GetUser() *ChatUser {
+	if m != nil {
+		return m.User
+	}
+	return nil
+}
+
 type RPCUserExecutePasswordResetRequest struct {
 	Secret      string `protobuf:"bytes,2,opt,name=secret" json:"secret,omitempty"`
 	NewPassword string `protobuf:"bytes,3,opt,name=new_password" json:"new_password,omitempty"`
@@ -510,7 +640,8 @@ func (m *RPCUserExecutePasswordResetRequest) String() string { return proto.Comp
 func (*RPCUserExecutePasswordResetRequest) ProtoMessage()    {}
 
 type RPCUserExecutePasswordResetResponse struct {
-	Success bool `protobuf:"varint,1,opt,name=success" json:"success,omitempty"`
+	Success bool   `protobuf:"varint,1,opt,name=success" json:"success,omitempty"`
+	Token   string `protobuf:"bytes,2,opt,name=token" json:"token,omitempty"`
 }
 
 func (m *RPCUserExecutePasswordResetResponse) Reset()         { *m = RPCUserExecutePasswordResetResponse{} }
@@ -528,7 +659,7 @@ func (m *RPCUserUpdatePasswordRequest) String() string { return proto.CompactTex
 func (*RPCUserUpdatePasswordRequest) ProtoMessage()    {}
 
 type RPCUserUpdatePasswordResponse struct {
-	Success bool `protobuf:"varint,1,opt,name=success" json:"success,omitempty"`
+	Error ProfileUpdatePasswordResponse_ErrorType `protobuf:"varint,1,opt,name=error,enum=proto.ProfileUpdatePasswordResponse_ErrorType" json:"error,omitempty"`
 }
 
 func (m *RPCUserUpdatePasswordResponse) Reset()         { *m = RPCUserUpdatePasswordResponse{} }
@@ -619,6 +750,73 @@ type RPCUserRemoveUserFromHubsResponse struct {
 func (m *RPCUserRemoveUserFromHubsResponse) Reset()         { *m = RPCUserRemoveUserFromHubsResponse{} }
 func (m *RPCUserRemoveUserFromHubsResponse) String() string { return proto.CompactTextString(m) }
 func (*RPCUserRemoveUserFromHubsResponse) ProtoMessage()    {}
+
+type RPCUserTransferOwnershipRequest struct {
+	UserId              string `protobuf:"bytes,1,opt,name=user_id" json:"user_id,omitempty"`
+	TargetUserAuthToken string `protobuf:"bytes,2,opt,name=target_user_auth_token" json:"target_user_auth_token,omitempty"`
+}
+
+func (m *RPCUserTransferOwnershipRequest) Reset()         { *m = RPCUserTransferOwnershipRequest{} }
+func (m *RPCUserTransferOwnershipRequest) String() string { return proto.CompactTextString(m) }
+func (*RPCUserTransferOwnershipRequest) ProtoMessage()    {}
+
+type RPCUserTransferOwnershipResponse struct {
+	Error UserTransferOwnershipResponse_ErrorType `protobuf:"varint,1,opt,name=error,enum=proto.UserTransferOwnershipResponse_ErrorType" json:"error,omitempty"`
+}
+
+func (m *RPCUserTransferOwnershipResponse) Reset()         { *m = RPCUserTransferOwnershipResponse{} }
+func (m *RPCUserTransferOwnershipResponse) String() string { return proto.CompactTextString(m) }
+func (*RPCUserTransferOwnershipResponse) ProtoMessage()    {}
+
+type RPCUserCheckBanStatusRequest struct {
+	ClientIp string `protobuf:"bytes,1,opt,name=client_ip" json:"client_ip,omitempty"`
+}
+
+func (m *RPCUserCheckBanStatusRequest) Reset()         { *m = RPCUserCheckBanStatusRequest{} }
+func (m *RPCUserCheckBanStatusRequest) String() string { return proto.CompactTextString(m) }
+func (*RPCUserCheckBanStatusRequest) ProtoMessage()    {}
+
+type RPCUserCheckBanStatusResponse struct {
+	Error    UserCheckBanStatusResponse_ErrorType `protobuf:"varint,1,opt,name=error,enum=proto.UserCheckBanStatusResponse_ErrorType" json:"error,omitempty"`
+	IsBanned bool                                 `protobuf:"varint,2,opt,name=is_banned" json:"is_banned,omitempty"`
+}
+
+func (m *RPCUserCheckBanStatusResponse) Reset()         { *m = RPCUserCheckBanStatusResponse{} }
+func (m *RPCUserCheckBanStatusResponse) String() string { return proto.CompactTextString(m) }
+func (*RPCUserCheckBanStatusResponse) ProtoMessage()    {}
+
+type RPCUserAddMutualContactsRequest struct {
+	Contacts []*AddMutualContactsRequestEntry `protobuf:"bytes,1,rep,name=contacts" json:"contacts,omitempty"`
+}
+
+func (m *RPCUserAddMutualContactsRequest) Reset()         { *m = RPCUserAddMutualContactsRequest{} }
+func (m *RPCUserAddMutualContactsRequest) String() string { return proto.CompactTextString(m) }
+func (*RPCUserAddMutualContactsRequest) ProtoMessage()    {}
+
+func (m *RPCUserAddMutualContactsRequest) GetContacts() []*AddMutualContactsRequestEntry {
+	if m != nil {
+		return m.Contacts
+	}
+	return nil
+}
+
+type AddMutualContactsRequestEntry struct {
+	FirstUserId  string `protobuf:"bytes,1,opt,name=first_user_id" json:"first_user_id,omitempty"`
+	SecondUserId string `protobuf:"bytes,2,opt,name=second_user_id" json:"second_user_id,omitempty"`
+	Mutual       bool   `protobuf:"varint,3,opt,name=mutual" json:"mutual,omitempty"`
+}
+
+func (m *AddMutualContactsRequestEntry) Reset()         { *m = AddMutualContactsRequestEntry{} }
+func (m *AddMutualContactsRequestEntry) String() string { return proto.CompactTextString(m) }
+func (*AddMutualContactsRequestEntry) ProtoMessage()    {}
+
+type RPCUserAddMutualContactsResponse struct {
+	Error RPCUserAddMutualContactsResponse_ErrorType `protobuf:"varint,1,opt,name=error,enum=proto.RPCUserAddMutualContactsResponse_ErrorType" json:"error,omitempty"`
+}
+
+func (m *RPCUserAddMutualContactsResponse) Reset()         { *m = RPCUserAddMutualContactsResponse{} }
+func (m *RPCUserAddMutualContactsResponse) String() string { return proto.CompactTextString(m) }
+func (*RPCUserAddMutualContactsResponse) ProtoMessage()    {}
 
 type RPCGroupRemoveUserRequest struct {
 	UserId  string                          `protobuf:"bytes,1,opt,name=user_id" json:"user_id,omitempty"`
@@ -1297,10 +1495,53 @@ func (m *RPCSearchSearchResponse) GetGames() []*Game {
 	return nil
 }
 
+type RPCUserEditBlockedUserRequest struct {
+	UserId        string `protobuf:"bytes,1,opt,name=user_id" json:"user_id,omitempty"`
+	BlockedUserId string `protobuf:"bytes,2,opt,name=blocked_user_id" json:"blocked_user_id,omitempty"`
+	Remove        bool   `protobuf:"varint,3,opt,name=remove" json:"remove,omitempty"`
+}
+
+func (m *RPCUserEditBlockedUserRequest) Reset()         { *m = RPCUserEditBlockedUserRequest{} }
+func (m *RPCUserEditBlockedUserRequest) String() string { return proto.CompactTextString(m) }
+func (*RPCUserEditBlockedUserRequest) ProtoMessage()    {}
+
+type RPCUserEditBlockedUserResponse struct {
+	Error UserEditBlockedUserResponse_ErrorType `protobuf:"varint,1,opt,name=error,enum=proto.UserEditBlockedUserResponse_ErrorType" json:"error,omitempty"`
+}
+
+func (m *RPCUserEditBlockedUserResponse) Reset()         { *m = RPCUserEditBlockedUserResponse{} }
+func (m *RPCUserEditBlockedUserResponse) String() string { return proto.CompactTextString(m) }
+func (*RPCUserEditBlockedUserResponse) ProtoMessage()    {}
+
+type RPCUserGetBlockedUsersRequest struct {
+	UserId string `protobuf:"bytes,1,opt,name=user_id" json:"user_id,omitempty"`
+}
+
+func (m *RPCUserGetBlockedUsersRequest) Reset()         { *m = RPCUserGetBlockedUsersRequest{} }
+func (m *RPCUserGetBlockedUsersRequest) String() string { return proto.CompactTextString(m) }
+func (*RPCUserGetBlockedUsersRequest) ProtoMessage()    {}
+
+type RPCUserGetBlockedUsersResponse struct {
+	Error UserGetBlockedUsersResponse_ErrorType `protobuf:"varint,1,opt,name=error,enum=proto.UserGetBlockedUsersResponse_ErrorType" json:"error,omitempty"`
+	Users []*ChatUser                           `protobuf:"bytes,2,rep,name=users" json:"users,omitempty"`
+}
+
+func (m *RPCUserGetBlockedUsersResponse) Reset()         { *m = RPCUserGetBlockedUsersResponse{} }
+func (m *RPCUserGetBlockedUsersResponse) String() string { return proto.CompactTextString(m) }
+func (*RPCUserGetBlockedUsersResponse) ProtoMessage()    {}
+
+func (m *RPCUserGetBlockedUsersResponse) GetUsers() []*ChatUser {
+	if m != nil {
+		return m.Users
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterEnum("proto.RPCUserGetOwnProfileResponse_ErrorType", RPCUserGetOwnProfileResponse_ErrorType_name, RPCUserGetOwnProfileResponse_ErrorType_value)
 	proto.RegisterEnum("proto.RPCUserDeleteUserResponse_ErrorType", RPCUserDeleteUserResponse_ErrorType_name, RPCUserDeleteUserResponse_ErrorType_value)
 	proto.RegisterEnum("proto.RPCUserRemoveUserFromHubsResponse_ErrorType", RPCUserRemoveUserFromHubsResponse_ErrorType_name, RPCUserRemoveUserFromHubsResponse_ErrorType_value)
+	proto.RegisterEnum("proto.RPCUserAddMutualContactsResponse_ErrorType", RPCUserAddMutualContactsResponse_ErrorType_name, RPCUserAddMutualContactsResponse_ErrorType_value)
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -1310,13 +1551,18 @@ var _ grpc.ClientConn
 // Client API for UserService service
 
 type UserServiceClient interface {
-	Login(ctx context.Context, in *RPCAuthLoginRequest, opts ...grpc.CallOption) (*AuthLoginResponse, error)
+	Login(ctx context.Context, in *RPCAuthLoginRequest, opts ...grpc.CallOption) (*RPCAuthLoginResponse, error)
+	LoginOAuth(ctx context.Context, in *RPCAuthLoginOAuthRequest, opts ...grpc.CallOption) (*RPCAuthLoginResponse, error)
+	LoginEmail(ctx context.Context, in *RPCAuthLoginEmailRequest, opts ...grpc.CallOption) (*RPCAuthLoginResponse, error)
 	Register(ctx context.Context, in *RPCAuthRegisterRequest, opts ...grpc.CallOption) (*AuthRegisterResponse, error)
 	ConvertEphemeralUser(ctx context.Context, in *RPCUserConvertEphemeralUserRequest, opts ...grpc.CallOption) (*RPCUserConvertEphemeralUserResponse, error)
+	TransferOwnership(ctx context.Context, in *RPCUserTransferOwnershipRequest, opts ...grpc.CallOption) (*RPCUserTransferOwnershipResponse, error)
+	CheckBanStatus(ctx context.Context, in *RPCUserCheckBanStatusRequest, opts ...grpc.CallOption) (*RPCUserCheckBanStatusResponse, error)
 	GetUser(ctx context.Context, in *RPCUserGetUserRequest, opts ...grpc.CallOption) (*RPCUserGetUserResponse, error)
 	DeleteUser(ctx context.Context, in *RPCUserDeleteUserRequest, opts ...grpc.CallOption) (*RPCUserDeleteUserResponse, error)
 	RemoveUserFromHubs(ctx context.Context, in *RPCUserRemoveUserFromHubsRequest, opts ...grpc.CallOption) (*RPCUserRemoveUserFromHubsResponse, error)
 	ValidateUsername(ctx context.Context, in *RPCUserValidateUsernameRequest, opts ...grpc.CallOption) (*RPCUserValidateUsernameResponse, error)
+	ValidateEmailAddress(ctx context.Context, in *RPCUserValidateEmailAddressRequest, opts ...grpc.CallOption) (*RPCUserValidateEmailAddressResponse, error)
 	GetUserAgent(ctx context.Context, in *RPCUserGetUserAgentRequest, opts ...grpc.CallOption) (*RPCUserGetUserAgentResponse, error)
 	GetOwnProfile(ctx context.Context, in *RPCUserGetOwnProfileRequest, opts ...grpc.CallOption) (*RPCUserGetOwnProfileResponse, error)
 	GetOtherProfile(ctx context.Context, in *RPCUserGetOtherProfileRequest, opts ...grpc.CallOption) (*RPCUserGetOtherProfileResponse, error)
@@ -1327,6 +1573,7 @@ type UserServiceClient interface {
 	RequestActivationEmail(ctx context.Context, in *RPCUserActivationEmailRequest, opts ...grpc.CallOption) (*RPCUserActivationEmailResponse, error)
 	ExecuteActivation(ctx context.Context, in *RPCUserExecuteActivationRequest, opts ...grpc.CallOption) (*RPCUserExecuteActivationResponse, error)
 	RequestPasswordReset(ctx context.Context, in *RPCUserPasswordResetEmailRequest, opts ...grpc.CallOption) (*RPCUserPasswordResetEmailResponse, error)
+	GetPasswordResetInfo(ctx context.Context, in *RPCUserGetPasswordResetInfoRequest, opts ...grpc.CallOption) (*RPCUserGetPasswordResetInfoResponse, error)
 	ExecutePasswordReset(ctx context.Context, in *RPCUserExecutePasswordResetRequest, opts ...grpc.CallOption) (*RPCUserExecutePasswordResetResponse, error)
 	UpdatePassword(ctx context.Context, in *RPCUserUpdatePasswordRequest, opts ...grpc.CallOption) (*RPCUserUpdatePasswordResponse, error)
 	GetUserProfile(ctx context.Context, in *RPCProfileGetRequest, opts ...grpc.CallOption) (*UserProfile, error)
@@ -1338,6 +1585,12 @@ type UserServiceClient interface {
 	SetGroupRole(ctx context.Context, in *RPCUserSetGroupRoleRequest, opts ...grpc.CallOption) (*RPCUserSetGroupRoleResponse, error)
 	CreateProprietaryGroupMembership(ctx context.Context, in *RPCCreateRelationRequest, opts ...grpc.CallOption) (*RPCCreateRelationResponse, error)
 	UpdateVoiceStatus(ctx context.Context, in *RPCUserUpdateVoiceStatusRequest, opts ...grpc.CallOption) (*RPCUserUpdateVoiceStatusResponse, error)
+	AddContact(ctx context.Context, in *RPCUserAddContactRequest, opts ...grpc.CallOption) (*RPCUserAddContactResponse, error)
+	RemoveContact(ctx context.Context, in *RPCUserRemoveContactRequest, opts ...grpc.CallOption) (*RPCUserRemoveContactResponse, error)
+	GetContacts(ctx context.Context, in *RPCUserGetContactsRequest, opts ...grpc.CallOption) (*RPCUserGetContactsResponse, error)
+	AddMutualContacts(ctx context.Context, in *RPCUserAddMutualContactsRequest, opts ...grpc.CallOption) (*RPCUserAddMutualContactsResponse, error)
+	EditBlockedUser(ctx context.Context, in *RPCUserEditBlockedUserRequest, opts ...grpc.CallOption) (*RPCUserEditBlockedUserResponse, error)
+	GetBlockedUsers(ctx context.Context, in *RPCUserGetBlockedUsersRequest, opts ...grpc.CallOption) (*RPCUserGetBlockedUsersResponse, error)
 }
 
 type userServiceClient struct {
@@ -1348,9 +1601,27 @@ func NewUserServiceClient(cc *grpc.ClientConn) UserServiceClient {
 	return &userServiceClient{cc}
 }
 
-func (c *userServiceClient) Login(ctx context.Context, in *RPCAuthLoginRequest, opts ...grpc.CallOption) (*AuthLoginResponse, error) {
-	out := new(AuthLoginResponse)
+func (c *userServiceClient) Login(ctx context.Context, in *RPCAuthLoginRequest, opts ...grpc.CallOption) (*RPCAuthLoginResponse, error) {
+	out := new(RPCAuthLoginResponse)
 	err := grpc.Invoke(ctx, "/proto.UserService/Login", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) LoginOAuth(ctx context.Context, in *RPCAuthLoginOAuthRequest, opts ...grpc.CallOption) (*RPCAuthLoginResponse, error) {
+	out := new(RPCAuthLoginResponse)
+	err := grpc.Invoke(ctx, "/proto.UserService/LoginOAuth", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) LoginEmail(ctx context.Context, in *RPCAuthLoginEmailRequest, opts ...grpc.CallOption) (*RPCAuthLoginResponse, error) {
+	out := new(RPCAuthLoginResponse)
+	err := grpc.Invoke(ctx, "/proto.UserService/LoginEmail", in, out, c.cc, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1369,6 +1640,24 @@ func (c *userServiceClient) Register(ctx context.Context, in *RPCAuthRegisterReq
 func (c *userServiceClient) ConvertEphemeralUser(ctx context.Context, in *RPCUserConvertEphemeralUserRequest, opts ...grpc.CallOption) (*RPCUserConvertEphemeralUserResponse, error) {
 	out := new(RPCUserConvertEphemeralUserResponse)
 	err := grpc.Invoke(ctx, "/proto.UserService/ConvertEphemeralUser", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) TransferOwnership(ctx context.Context, in *RPCUserTransferOwnershipRequest, opts ...grpc.CallOption) (*RPCUserTransferOwnershipResponse, error) {
+	out := new(RPCUserTransferOwnershipResponse)
+	err := grpc.Invoke(ctx, "/proto.UserService/TransferOwnership", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) CheckBanStatus(ctx context.Context, in *RPCUserCheckBanStatusRequest, opts ...grpc.CallOption) (*RPCUserCheckBanStatusResponse, error) {
+	out := new(RPCUserCheckBanStatusResponse)
+	err := grpc.Invoke(ctx, "/proto.UserService/CheckBanStatus", in, out, c.cc, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1405,6 +1694,15 @@ func (c *userServiceClient) RemoveUserFromHubs(ctx context.Context, in *RPCUserR
 func (c *userServiceClient) ValidateUsername(ctx context.Context, in *RPCUserValidateUsernameRequest, opts ...grpc.CallOption) (*RPCUserValidateUsernameResponse, error) {
 	out := new(RPCUserValidateUsernameResponse)
 	err := grpc.Invoke(ctx, "/proto.UserService/ValidateUsername", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) ValidateEmailAddress(ctx context.Context, in *RPCUserValidateEmailAddressRequest, opts ...grpc.CallOption) (*RPCUserValidateEmailAddressResponse, error) {
+	out := new(RPCUserValidateEmailAddressResponse)
+	err := grpc.Invoke(ctx, "/proto.UserService/ValidateEmailAddress", in, out, c.cc, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1495,6 +1793,15 @@ func (c *userServiceClient) ExecuteActivation(ctx context.Context, in *RPCUserEx
 func (c *userServiceClient) RequestPasswordReset(ctx context.Context, in *RPCUserPasswordResetEmailRequest, opts ...grpc.CallOption) (*RPCUserPasswordResetEmailResponse, error) {
 	out := new(RPCUserPasswordResetEmailResponse)
 	err := grpc.Invoke(ctx, "/proto.UserService/RequestPasswordReset", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) GetPasswordResetInfo(ctx context.Context, in *RPCUserGetPasswordResetInfoRequest, opts ...grpc.CallOption) (*RPCUserGetPasswordResetInfoResponse, error) {
+	out := new(RPCUserGetPasswordResetInfoResponse)
+	err := grpc.Invoke(ctx, "/proto.UserService/GetPasswordResetInfo", in, out, c.cc, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1600,16 +1907,75 @@ func (c *userServiceClient) UpdateVoiceStatus(ctx context.Context, in *RPCUserUp
 	return out, nil
 }
 
+func (c *userServiceClient) AddContact(ctx context.Context, in *RPCUserAddContactRequest, opts ...grpc.CallOption) (*RPCUserAddContactResponse, error) {
+	out := new(RPCUserAddContactResponse)
+	err := grpc.Invoke(ctx, "/proto.UserService/AddContact", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) RemoveContact(ctx context.Context, in *RPCUserRemoveContactRequest, opts ...grpc.CallOption) (*RPCUserRemoveContactResponse, error) {
+	out := new(RPCUserRemoveContactResponse)
+	err := grpc.Invoke(ctx, "/proto.UserService/RemoveContact", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) GetContacts(ctx context.Context, in *RPCUserGetContactsRequest, opts ...grpc.CallOption) (*RPCUserGetContactsResponse, error) {
+	out := new(RPCUserGetContactsResponse)
+	err := grpc.Invoke(ctx, "/proto.UserService/GetContacts", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) AddMutualContacts(ctx context.Context, in *RPCUserAddMutualContactsRequest, opts ...grpc.CallOption) (*RPCUserAddMutualContactsResponse, error) {
+	out := new(RPCUserAddMutualContactsResponse)
+	err := grpc.Invoke(ctx, "/proto.UserService/AddMutualContacts", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) EditBlockedUser(ctx context.Context, in *RPCUserEditBlockedUserRequest, opts ...grpc.CallOption) (*RPCUserEditBlockedUserResponse, error) {
+	out := new(RPCUserEditBlockedUserResponse)
+	err := grpc.Invoke(ctx, "/proto.UserService/EditBlockedUser", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) GetBlockedUsers(ctx context.Context, in *RPCUserGetBlockedUsersRequest, opts ...grpc.CallOption) (*RPCUserGetBlockedUsersResponse, error) {
+	out := new(RPCUserGetBlockedUsersResponse)
+	err := grpc.Invoke(ctx, "/proto.UserService/GetBlockedUsers", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for UserService service
 
 type UserServiceServer interface {
-	Login(context.Context, *RPCAuthLoginRequest) (*AuthLoginResponse, error)
+	Login(context.Context, *RPCAuthLoginRequest) (*RPCAuthLoginResponse, error)
+	LoginOAuth(context.Context, *RPCAuthLoginOAuthRequest) (*RPCAuthLoginResponse, error)
+	LoginEmail(context.Context, *RPCAuthLoginEmailRequest) (*RPCAuthLoginResponse, error)
 	Register(context.Context, *RPCAuthRegisterRequest) (*AuthRegisterResponse, error)
 	ConvertEphemeralUser(context.Context, *RPCUserConvertEphemeralUserRequest) (*RPCUserConvertEphemeralUserResponse, error)
+	TransferOwnership(context.Context, *RPCUserTransferOwnershipRequest) (*RPCUserTransferOwnershipResponse, error)
+	CheckBanStatus(context.Context, *RPCUserCheckBanStatusRequest) (*RPCUserCheckBanStatusResponse, error)
 	GetUser(context.Context, *RPCUserGetUserRequest) (*RPCUserGetUserResponse, error)
 	DeleteUser(context.Context, *RPCUserDeleteUserRequest) (*RPCUserDeleteUserResponse, error)
 	RemoveUserFromHubs(context.Context, *RPCUserRemoveUserFromHubsRequest) (*RPCUserRemoveUserFromHubsResponse, error)
 	ValidateUsername(context.Context, *RPCUserValidateUsernameRequest) (*RPCUserValidateUsernameResponse, error)
+	ValidateEmailAddress(context.Context, *RPCUserValidateEmailAddressRequest) (*RPCUserValidateEmailAddressResponse, error)
 	GetUserAgent(context.Context, *RPCUserGetUserAgentRequest) (*RPCUserGetUserAgentResponse, error)
 	GetOwnProfile(context.Context, *RPCUserGetOwnProfileRequest) (*RPCUserGetOwnProfileResponse, error)
 	GetOtherProfile(context.Context, *RPCUserGetOtherProfileRequest) (*RPCUserGetOtherProfileResponse, error)
@@ -1620,6 +1986,7 @@ type UserServiceServer interface {
 	RequestActivationEmail(context.Context, *RPCUserActivationEmailRequest) (*RPCUserActivationEmailResponse, error)
 	ExecuteActivation(context.Context, *RPCUserExecuteActivationRequest) (*RPCUserExecuteActivationResponse, error)
 	RequestPasswordReset(context.Context, *RPCUserPasswordResetEmailRequest) (*RPCUserPasswordResetEmailResponse, error)
+	GetPasswordResetInfo(context.Context, *RPCUserGetPasswordResetInfoRequest) (*RPCUserGetPasswordResetInfoResponse, error)
 	ExecutePasswordReset(context.Context, *RPCUserExecutePasswordResetRequest) (*RPCUserExecutePasswordResetResponse, error)
 	UpdatePassword(context.Context, *RPCUserUpdatePasswordRequest) (*RPCUserUpdatePasswordResponse, error)
 	GetUserProfile(context.Context, *RPCProfileGetRequest) (*UserProfile, error)
@@ -1631,6 +1998,12 @@ type UserServiceServer interface {
 	SetGroupRole(context.Context, *RPCUserSetGroupRoleRequest) (*RPCUserSetGroupRoleResponse, error)
 	CreateProprietaryGroupMembership(context.Context, *RPCCreateRelationRequest) (*RPCCreateRelationResponse, error)
 	UpdateVoiceStatus(context.Context, *RPCUserUpdateVoiceStatusRequest) (*RPCUserUpdateVoiceStatusResponse, error)
+	AddContact(context.Context, *RPCUserAddContactRequest) (*RPCUserAddContactResponse, error)
+	RemoveContact(context.Context, *RPCUserRemoveContactRequest) (*RPCUserRemoveContactResponse, error)
+	GetContacts(context.Context, *RPCUserGetContactsRequest) (*RPCUserGetContactsResponse, error)
+	AddMutualContacts(context.Context, *RPCUserAddMutualContactsRequest) (*RPCUserAddMutualContactsResponse, error)
+	EditBlockedUser(context.Context, *RPCUserEditBlockedUserRequest) (*RPCUserEditBlockedUserResponse, error)
+	GetBlockedUsers(context.Context, *RPCUserGetBlockedUsersRequest) (*RPCUserGetBlockedUsersResponse, error)
 }
 
 func RegisterUserServiceServer(s *grpc.Server, srv UserServiceServer) {
@@ -1643,6 +2016,30 @@ func _UserService_Login_Handler(srv interface{}, ctx context.Context, codec grpc
 		return nil, err
 	}
 	out, err := srv.(UserServiceServer).Login(ctx, in)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func _UserService_LoginOAuth_Handler(srv interface{}, ctx context.Context, codec grpc.Codec, buf []byte) (interface{}, error) {
+	in := new(RPCAuthLoginOAuthRequest)
+	if err := codec.Unmarshal(buf, in); err != nil {
+		return nil, err
+	}
+	out, err := srv.(UserServiceServer).LoginOAuth(ctx, in)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func _UserService_LoginEmail_Handler(srv interface{}, ctx context.Context, codec grpc.Codec, buf []byte) (interface{}, error) {
+	in := new(RPCAuthLoginEmailRequest)
+	if err := codec.Unmarshal(buf, in); err != nil {
+		return nil, err
+	}
+	out, err := srv.(UserServiceServer).LoginEmail(ctx, in)
 	if err != nil {
 		return nil, err
 	}
@@ -1667,6 +2064,30 @@ func _UserService_ConvertEphemeralUser_Handler(srv interface{}, ctx context.Cont
 		return nil, err
 	}
 	out, err := srv.(UserServiceServer).ConvertEphemeralUser(ctx, in)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func _UserService_TransferOwnership_Handler(srv interface{}, ctx context.Context, codec grpc.Codec, buf []byte) (interface{}, error) {
+	in := new(RPCUserTransferOwnershipRequest)
+	if err := codec.Unmarshal(buf, in); err != nil {
+		return nil, err
+	}
+	out, err := srv.(UserServiceServer).TransferOwnership(ctx, in)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func _UserService_CheckBanStatus_Handler(srv interface{}, ctx context.Context, codec grpc.Codec, buf []byte) (interface{}, error) {
+	in := new(RPCUserCheckBanStatusRequest)
+	if err := codec.Unmarshal(buf, in); err != nil {
+		return nil, err
+	}
+	out, err := srv.(UserServiceServer).CheckBanStatus(ctx, in)
 	if err != nil {
 		return nil, err
 	}
@@ -1715,6 +2136,18 @@ func _UserService_ValidateUsername_Handler(srv interface{}, ctx context.Context,
 		return nil, err
 	}
 	out, err := srv.(UserServiceServer).ValidateUsername(ctx, in)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func _UserService_ValidateEmailAddress_Handler(srv interface{}, ctx context.Context, codec grpc.Codec, buf []byte) (interface{}, error) {
+	in := new(RPCUserValidateEmailAddressRequest)
+	if err := codec.Unmarshal(buf, in); err != nil {
+		return nil, err
+	}
+	out, err := srv.(UserServiceServer).ValidateEmailAddress(ctx, in)
 	if err != nil {
 		return nil, err
 	}
@@ -1835,6 +2268,18 @@ func _UserService_RequestPasswordReset_Handler(srv interface{}, ctx context.Cont
 		return nil, err
 	}
 	out, err := srv.(UserServiceServer).RequestPasswordReset(ctx, in)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func _UserService_GetPasswordResetInfo_Handler(srv interface{}, ctx context.Context, codec grpc.Codec, buf []byte) (interface{}, error) {
+	in := new(RPCUserGetPasswordResetInfoRequest)
+	if err := codec.Unmarshal(buf, in); err != nil {
+		return nil, err
+	}
+	out, err := srv.(UserServiceServer).GetPasswordResetInfo(ctx, in)
 	if err != nil {
 		return nil, err
 	}
@@ -1973,6 +2418,78 @@ func _UserService_UpdateVoiceStatus_Handler(srv interface{}, ctx context.Context
 	return out, nil
 }
 
+func _UserService_AddContact_Handler(srv interface{}, ctx context.Context, codec grpc.Codec, buf []byte) (interface{}, error) {
+	in := new(RPCUserAddContactRequest)
+	if err := codec.Unmarshal(buf, in); err != nil {
+		return nil, err
+	}
+	out, err := srv.(UserServiceServer).AddContact(ctx, in)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func _UserService_RemoveContact_Handler(srv interface{}, ctx context.Context, codec grpc.Codec, buf []byte) (interface{}, error) {
+	in := new(RPCUserRemoveContactRequest)
+	if err := codec.Unmarshal(buf, in); err != nil {
+		return nil, err
+	}
+	out, err := srv.(UserServiceServer).RemoveContact(ctx, in)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func _UserService_GetContacts_Handler(srv interface{}, ctx context.Context, codec grpc.Codec, buf []byte) (interface{}, error) {
+	in := new(RPCUserGetContactsRequest)
+	if err := codec.Unmarshal(buf, in); err != nil {
+		return nil, err
+	}
+	out, err := srv.(UserServiceServer).GetContacts(ctx, in)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func _UserService_AddMutualContacts_Handler(srv interface{}, ctx context.Context, codec grpc.Codec, buf []byte) (interface{}, error) {
+	in := new(RPCUserAddMutualContactsRequest)
+	if err := codec.Unmarshal(buf, in); err != nil {
+		return nil, err
+	}
+	out, err := srv.(UserServiceServer).AddMutualContacts(ctx, in)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func _UserService_EditBlockedUser_Handler(srv interface{}, ctx context.Context, codec grpc.Codec, buf []byte) (interface{}, error) {
+	in := new(RPCUserEditBlockedUserRequest)
+	if err := codec.Unmarshal(buf, in); err != nil {
+		return nil, err
+	}
+	out, err := srv.(UserServiceServer).EditBlockedUser(ctx, in)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func _UserService_GetBlockedUsers_Handler(srv interface{}, ctx context.Context, codec grpc.Codec, buf []byte) (interface{}, error) {
+	in := new(RPCUserGetBlockedUsersRequest)
+	if err := codec.Unmarshal(buf, in); err != nil {
+		return nil, err
+	}
+	out, err := srv.(UserServiceServer).GetBlockedUsers(ctx, in)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 var _UserService_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "proto.UserService",
 	HandlerType: (*UserServiceServer)(nil),
@@ -1982,12 +2499,28 @@ var _UserService_serviceDesc = grpc.ServiceDesc{
 			Handler:    _UserService_Login_Handler,
 		},
 		{
+			MethodName: "LoginOAuth",
+			Handler:    _UserService_LoginOAuth_Handler,
+		},
+		{
+			MethodName: "LoginEmail",
+			Handler:    _UserService_LoginEmail_Handler,
+		},
+		{
 			MethodName: "Register",
 			Handler:    _UserService_Register_Handler,
 		},
 		{
 			MethodName: "ConvertEphemeralUser",
 			Handler:    _UserService_ConvertEphemeralUser_Handler,
+		},
+		{
+			MethodName: "TransferOwnership",
+			Handler:    _UserService_TransferOwnership_Handler,
+		},
+		{
+			MethodName: "CheckBanStatus",
+			Handler:    _UserService_CheckBanStatus_Handler,
 		},
 		{
 			MethodName: "GetUser",
@@ -2004,6 +2537,10 @@ var _UserService_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ValidateUsername",
 			Handler:    _UserService_ValidateUsername_Handler,
+		},
+		{
+			MethodName: "ValidateEmailAddress",
+			Handler:    _UserService_ValidateEmailAddress_Handler,
 		},
 		{
 			MethodName: "GetUserAgent",
@@ -2044,6 +2581,10 @@ var _UserService_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RequestPasswordReset",
 			Handler:    _UserService_RequestPasswordReset_Handler,
+		},
+		{
+			MethodName: "GetPasswordResetInfo",
+			Handler:    _UserService_GetPasswordResetInfo_Handler,
 		},
 		{
 			MethodName: "ExecutePasswordReset",
@@ -2088,6 +2629,30 @@ var _UserService_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateVoiceStatus",
 			Handler:    _UserService_UpdateVoiceStatus_Handler,
+		},
+		{
+			MethodName: "AddContact",
+			Handler:    _UserService_AddContact_Handler,
+		},
+		{
+			MethodName: "RemoveContact",
+			Handler:    _UserService_RemoveContact_Handler,
+		},
+		{
+			MethodName: "GetContacts",
+			Handler:    _UserService_GetContacts_Handler,
+		},
+		{
+			MethodName: "AddMutualContacts",
+			Handler:    _UserService_AddMutualContacts_Handler,
+		},
+		{
+			MethodName: "EditBlockedUser",
+			Handler:    _UserService_EditBlockedUser_Handler,
+		},
+		{
+			MethodName: "GetBlockedUsers",
+			Handler:    _UserService_GetBlockedUsers_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{},

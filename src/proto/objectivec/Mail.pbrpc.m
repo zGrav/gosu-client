@@ -3,14 +3,11 @@
 #import <ProtoRPC/ProtoRPC.h>
 #import <RxLibrary/GRXWriter+Immediate.h>
 
-static NSString *const kPackageName = @"proto";
-static NSString *const kServiceName = @"MailService";
-
 @implementation MailService
 
 // Designated initializer
 - (instancetype)initWithHost:(NSString *)host {
-  return (self = [super initWithHost:host packageName:kPackageName serviceName:kServiceName]);
+  return (self = [super initWithHost:host packageName:@"proto" serviceName:@"MailService"]);
 }
 
 // Override superclass initializer to disallow different package and service names.
@@ -27,11 +24,11 @@ static NSString *const kServiceName = @"MailService";
 
 #pragma mark SendEmail(SendEmailRequest) returns (SendEmailResponse)
 
-- (void)sendEmailWithRequest:(SendEmailRequest *)request handler:(void(^)(SendEmailResponse *response, NSError *error))handler{
+- (void)sendEmailWithRequest:(SendEmailRequest *)request handler:(void(^)(SendEmailResponse *_Nullable response, NSError *_Nullable error))handler{
   [[self RPCToSendEmailWithRequest:request handler:handler] start];
 }
 // Returns a not-yet-started RPC object.
-- (ProtoRPC *)RPCToSendEmailWithRequest:(SendEmailRequest *)request handler:(void(^)(SendEmailResponse *response, NSError *error))handler{
+- (GRPCProtoCall *)RPCToSendEmailWithRequest:(SendEmailRequest *)request handler:(void(^)(SendEmailResponse *_Nullable response, NSError *_Nullable error))handler{
   return [self RPCToMethod:@"SendEmail"
             requestsWriter:[GRXWriter writerWithValue:request]
              responseClass:[SendEmailResponse class]
@@ -39,11 +36,11 @@ static NSString *const kServiceName = @"MailService";
 }
 #pragma mark SendPushReminder(SendPushReminderRequest) returns (SendPushReminderResponse)
 
-- (void)sendPushReminderWithRequest:(SendPushReminderRequest *)request handler:(void(^)(SendPushReminderResponse *response, NSError *error))handler{
+- (void)sendPushReminderWithRequest:(SendPushReminderRequest *)request handler:(void(^)(SendPushReminderResponse *_Nullable response, NSError *_Nullable error))handler{
   [[self RPCToSendPushReminderWithRequest:request handler:handler] start];
 }
 // Returns a not-yet-started RPC object.
-- (ProtoRPC *)RPCToSendPushReminderWithRequest:(SendPushReminderRequest *)request handler:(void(^)(SendPushReminderResponse *response, NSError *error))handler{
+- (GRPCProtoCall *)RPCToSendPushReminderWithRequest:(SendPushReminderRequest *)request handler:(void(^)(SendPushReminderResponse *_Nullable response, NSError *_Nullable error))handler{
   return [self RPCToMethod:@"SendPushReminder"
             requestsWriter:[GRXWriter writerWithValue:request]
              responseClass:[SendPushReminderResponse class]

@@ -227,6 +227,7 @@ type MessageDeletedEvent struct {
 	ChannelId      string        `protobuf:"bytes,2,opt,name=channel_id" json:"channel_id,omitempty"`
 	MessageBatch   *MessageBatch `protobuf:"bytes,3,opt,name=message_batch" json:"message_batch,omitempty"`
 	MessagePayload *Any          `protobuf:"bytes,4,opt,name=message_payload" json:"message_payload,omitempty"`
+	UserId         string        `protobuf:"bytes,5,opt,name=user_id" json:"user_id,omitempty"`
 }
 
 func (m *MessageDeletedEvent) Reset()         { *m = MessageDeletedEvent{} }
@@ -349,6 +350,14 @@ type HubLinkUpdateWrapper struct {
 func (m *HubLinkUpdateWrapper) Reset()         { *m = HubLinkUpdateWrapper{} }
 func (m *HubLinkUpdateWrapper) String() string { return proto.CompactTextString(m) }
 func (*HubLinkUpdateWrapper) ProtoMessage()    {}
+
+type UserCountsUpdatedEvent struct {
+	CommunityIds []string `protobuf:"bytes,1,rep,name=community_ids" json:"community_ids,omitempty"`
+}
+
+func (m *UserCountsUpdatedEvent) Reset()         { *m = UserCountsUpdatedEvent{} }
+func (m *UserCountsUpdatedEvent) String() string { return proto.CompactTextString(m) }
+func (*UserCountsUpdatedEvent) ProtoMessage()    {}
 
 func init() {
 	proto.RegisterEnum("proto.GroupUpdateWrapper_Action", GroupUpdateWrapper_Action_name, GroupUpdateWrapper_Action_value)

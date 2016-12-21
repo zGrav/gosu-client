@@ -12,12 +12,17 @@ import "hub_base.proto";
 
 service SearchService {
     rpc Search (SearchRequest) returns (SearchResponse);
-    rpc IndexGroup (Group) returns (IndexResponse);
-    rpc DeleteGroup (Group) returns (DeleteResponse);
+    rpc SearchCommunities (SearchCommunitiesRequest) returns (SearchCommunitiesResponse);
+    rpc GetActiveCommunities (ActiveCommunitiesRequest) returns (SearchResponse);
     rpc IndexUser (User) returns (IndexResponse);
     rpc DeleteUser (User) returns (DeleteResponse);
 
     rpc GetSuggestions (SuggestionRequest) returns (SuggestionResponse);
+}
+
+message ActiveCommunitiesRequest {
+    int32 size = 1;
+    int32 from = 2;
 }
 
 message SearchRequest {
@@ -34,6 +39,29 @@ message SearchResponse {
     int32 from = 2;
 }
 
+message SearchCommunitiesRequest {
+    GeoLocation geo_location = 1;
+    int64 from = 2;
+    int64 size = 3;
+}
+
+message SearchCommunitiesResponse {
+    enum ErrorType {
+        NONE = 0;
+        UNKNOWN_ERROR = 1;
+        BAD_REQUEST = 2;
+    }
+    ErrorType error = 1;
+    int64 total_results = 2;
+    int64 from = 3;
+    repeated SearchCommunitiesResponseEntry communities = 4;
+}
+
+message SearchCommunitiesResponseEntry {
+    Hub hub = 1;
+    float distance = 2;
+}
+
 message SearchHits {
     repeated SearchHit hits = 1;
     string type = 2;
@@ -43,9 +71,9 @@ message SearchHits {
 message SearchHit {
     enum Type {
         UNKNOWN = 0;
-        GROUP = 1;
+        DEPRECATED_GROUP = 1;
         USER = 2;
-        GAME = 3;
+        DEPRECATED_GAME = 3;
         COMMUNITY = 4;
     }
 
@@ -58,8 +86,8 @@ message SearchHit {
 
     oneof source {
         SearchUser user = 10;
-        SearchGroup group = 11;
-        SearchGame game = 12;
+        SearchGroup DEPRECATED_group = 11;
+        SearchGame DEPRECATED_game = 12;
         Hub community = 13;
     }
 }
@@ -90,8 +118,8 @@ message Suggestion {
         UNKNOWN = 0;
         GROUP = 1;
         USER = 2;
-        GAME = 3;
-        COMMUNITY = 4;
+        DEPRECATED_GAME = 3;
+        DEPRECATED_COMMUNITY = 4;
     }
 
     string id = 1;

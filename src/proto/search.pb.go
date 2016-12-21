@@ -14,29 +14,52 @@ import (
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 
+type SearchCommunitiesResponse_ErrorType int32
+
+const (
+	SearchCommunitiesResponse_NONE          SearchCommunitiesResponse_ErrorType = 0
+	SearchCommunitiesResponse_UNKNOWN_ERROR SearchCommunitiesResponse_ErrorType = 1
+	SearchCommunitiesResponse_BAD_REQUEST   SearchCommunitiesResponse_ErrorType = 2
+)
+
+var SearchCommunitiesResponse_ErrorType_name = map[int32]string{
+	0: "NONE",
+	1: "UNKNOWN_ERROR",
+	2: "BAD_REQUEST",
+}
+var SearchCommunitiesResponse_ErrorType_value = map[string]int32{
+	"NONE":          0,
+	"UNKNOWN_ERROR": 1,
+	"BAD_REQUEST":   2,
+}
+
+func (x SearchCommunitiesResponse_ErrorType) String() string {
+	return proto.EnumName(SearchCommunitiesResponse_ErrorType_name, int32(x))
+}
+
 type SearchHit_Type int32
 
 const (
-	SearchHit_UNKNOWN   SearchHit_Type = 0
-	SearchHit_GROUP     SearchHit_Type = 1
-	SearchHit_USER      SearchHit_Type = 2
-	SearchHit_GAME      SearchHit_Type = 3
-	SearchHit_COMMUNITY SearchHit_Type = 4
+	SearchHit_UNKNOWN          SearchHit_Type = 0
+	SearchHit_DEPRECATED_GROUP SearchHit_Type = 1
+	SearchHit_USER             SearchHit_Type = 2
+	SearchHit_DEPRECATED_GAME  SearchHit_Type = 3
+	SearchHit_COMMUNITY        SearchHit_Type = 4
 )
 
 var SearchHit_Type_name = map[int32]string{
 	0: "UNKNOWN",
-	1: "GROUP",
+	1: "DEPRECATED_GROUP",
 	2: "USER",
-	3: "GAME",
+	3: "DEPRECATED_GAME",
 	4: "COMMUNITY",
 }
 var SearchHit_Type_value = map[string]int32{
-	"UNKNOWN":   0,
-	"GROUP":     1,
-	"USER":      2,
-	"GAME":      3,
-	"COMMUNITY": 4,
+	"UNKNOWN":          0,
+	"DEPRECATED_GROUP": 1,
+	"USER":             2,
+	"DEPRECATED_GAME":  3,
+	"COMMUNITY":        4,
 }
 
 func (x SearchHit_Type) String() string {
@@ -46,31 +69,40 @@ func (x SearchHit_Type) String() string {
 type Suggestion_Type int32
 
 const (
-	Suggestion_UNKNOWN   Suggestion_Type = 0
-	Suggestion_GROUP     Suggestion_Type = 1
-	Suggestion_USER      Suggestion_Type = 2
-	Suggestion_GAME      Suggestion_Type = 3
-	Suggestion_COMMUNITY Suggestion_Type = 4
+	Suggestion_UNKNOWN              Suggestion_Type = 0
+	Suggestion_GROUP                Suggestion_Type = 1
+	Suggestion_USER                 Suggestion_Type = 2
+	Suggestion_DEPRECATED_GAME      Suggestion_Type = 3
+	Suggestion_DEPRECATED_COMMUNITY Suggestion_Type = 4
 )
 
 var Suggestion_Type_name = map[int32]string{
 	0: "UNKNOWN",
 	1: "GROUP",
 	2: "USER",
-	3: "GAME",
-	4: "COMMUNITY",
+	3: "DEPRECATED_GAME",
+	4: "DEPRECATED_COMMUNITY",
 }
 var Suggestion_Type_value = map[string]int32{
-	"UNKNOWN":   0,
-	"GROUP":     1,
-	"USER":      2,
-	"GAME":      3,
-	"COMMUNITY": 4,
+	"UNKNOWN":              0,
+	"GROUP":                1,
+	"USER":                 2,
+	"DEPRECATED_GAME":      3,
+	"DEPRECATED_COMMUNITY": 4,
 }
 
 func (x Suggestion_Type) String() string {
 	return proto.EnumName(Suggestion_Type_name, int32(x))
 }
+
+type ActiveCommunitiesRequest struct {
+	Size int32 `protobuf:"varint,1,opt,name=size" json:"size,omitempty"`
+	From int32 `protobuf:"varint,2,opt,name=from" json:"from,omitempty"`
+}
+
+func (m *ActiveCommunitiesRequest) Reset()         { *m = ActiveCommunitiesRequest{} }
+func (m *ActiveCommunitiesRequest) String() string { return proto.CompactTextString(m) }
+func (*ActiveCommunitiesRequest) ProtoMessage()    {}
 
 type SearchRequest struct {
 	Types  []string `protobuf:"bytes,1,rep,name=types" json:"types,omitempty"`
@@ -101,6 +133,57 @@ func (m *SearchResponse) GetHits() map[string]*SearchHits {
 	return nil
 }
 
+type SearchCommunitiesRequest struct {
+	GeoLocation *GeoLocation `protobuf:"bytes,1,opt,name=geo_location" json:"geo_location,omitempty"`
+	From        int64        `protobuf:"varint,2,opt,name=from" json:"from,omitempty"`
+	Size        int64        `protobuf:"varint,3,opt,name=size" json:"size,omitempty"`
+}
+
+func (m *SearchCommunitiesRequest) Reset()         { *m = SearchCommunitiesRequest{} }
+func (m *SearchCommunitiesRequest) String() string { return proto.CompactTextString(m) }
+func (*SearchCommunitiesRequest) ProtoMessage()    {}
+
+func (m *SearchCommunitiesRequest) GetGeoLocation() *GeoLocation {
+	if m != nil {
+		return m.GeoLocation
+	}
+	return nil
+}
+
+type SearchCommunitiesResponse struct {
+	Error        SearchCommunitiesResponse_ErrorType `protobuf:"varint,1,opt,name=error,enum=proto.SearchCommunitiesResponse_ErrorType" json:"error,omitempty"`
+	TotalResults int64                               `protobuf:"varint,2,opt,name=total_results" json:"total_results,omitempty"`
+	From         int64                               `protobuf:"varint,3,opt,name=from" json:"from,omitempty"`
+	Communities  []*SearchCommunitiesResponseEntry   `protobuf:"bytes,4,rep,name=communities" json:"communities,omitempty"`
+}
+
+func (m *SearchCommunitiesResponse) Reset()         { *m = SearchCommunitiesResponse{} }
+func (m *SearchCommunitiesResponse) String() string { return proto.CompactTextString(m) }
+func (*SearchCommunitiesResponse) ProtoMessage()    {}
+
+func (m *SearchCommunitiesResponse) GetCommunities() []*SearchCommunitiesResponseEntry {
+	if m != nil {
+		return m.Communities
+	}
+	return nil
+}
+
+type SearchCommunitiesResponseEntry struct {
+	Hub      *Hub    `protobuf:"bytes,1,opt,name=hub" json:"hub,omitempty"`
+	Distance float32 `protobuf:"fixed32,2,opt,name=distance" json:"distance,omitempty"`
+}
+
+func (m *SearchCommunitiesResponseEntry) Reset()         { *m = SearchCommunitiesResponseEntry{} }
+func (m *SearchCommunitiesResponseEntry) String() string { return proto.CompactTextString(m) }
+func (*SearchCommunitiesResponseEntry) ProtoMessage()    {}
+
+func (m *SearchCommunitiesResponseEntry) GetHub() *Hub {
+	if m != nil {
+		return m.Hub
+	}
+	return nil
+}
+
 type SearchHits struct {
 	Hits  []*SearchHit `protobuf:"bytes,1,rep,name=hits" json:"hits,omitempty"`
 	Type  string       `protobuf:"bytes,2,opt,name=type" json:"type,omitempty"`
@@ -119,15 +202,15 @@ func (m *SearchHits) GetHits() []*SearchHit {
 }
 
 type SearchHit struct {
-	Score      float32                `protobuf:"fixed32,1,opt,name=score" json:"score,omitempty"`
-	Index      string                 `protobuf:"bytes,2,opt,name=index" json:"index,omitempty"`
-	Type       SearchHit_Type         `protobuf:"varint,3,opt,name=type,enum=proto.SearchHit_Type" json:"type,omitempty"`
-	Id         string                 `protobuf:"bytes,4,opt,name=id" json:"id,omitempty"`
-	Highlights map[string]*Highlights `protobuf:"bytes,5,rep,name=highlights" json:"highlights,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
-	User       *SearchUser            `protobuf:"bytes,10,opt,name=user" json:"user,omitempty"`
-	Group      *SearchGroup           `protobuf:"bytes,11,opt,name=group" json:"group,omitempty"`
-	Game       *SearchGame            `protobuf:"bytes,12,opt,name=game" json:"game,omitempty"`
-	Community  *Hub                   `protobuf:"bytes,13,opt,name=community" json:"community,omitempty"`
+	Score           float32                `protobuf:"fixed32,1,opt,name=score" json:"score,omitempty"`
+	Index           string                 `protobuf:"bytes,2,opt,name=index" json:"index,omitempty"`
+	Type            SearchHit_Type         `protobuf:"varint,3,opt,name=type,enum=proto.SearchHit_Type" json:"type,omitempty"`
+	Id              string                 `protobuf:"bytes,4,opt,name=id" json:"id,omitempty"`
+	Highlights      map[string]*Highlights `protobuf:"bytes,5,rep,name=highlights" json:"highlights,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	User            *SearchUser            `protobuf:"bytes,10,opt,name=user" json:"user,omitempty"`
+	DEPRECATEDGroup *SearchGroup           `protobuf:"bytes,11,opt,name=DEPRECATED_group" json:"DEPRECATED_group,omitempty"`
+	DEPRECATEDGame  *SearchGame            `protobuf:"bytes,12,opt,name=DEPRECATED_game" json:"DEPRECATED_game,omitempty"`
+	Community       *Hub                   `protobuf:"bytes,13,opt,name=community" json:"community,omitempty"`
 }
 
 func (m *SearchHit) Reset()         { *m = SearchHit{} }
@@ -148,16 +231,16 @@ func (m *SearchHit) GetUser() *SearchUser {
 	return nil
 }
 
-func (m *SearchHit) GetGroup() *SearchGroup {
+func (m *SearchHit) GetDEPRECATEDGroup() *SearchGroup {
 	if m != nil {
-		return m.Group
+		return m.DEPRECATEDGroup
 	}
 	return nil
 }
 
-func (m *SearchHit) GetGame() *SearchGame {
+func (m *SearchHit) GetDEPRECATEDGame() *SearchGame {
 	if m != nil {
-		return m.Game
+		return m.DEPRECATEDGame
 	}
 	return nil
 }
@@ -310,6 +393,7 @@ func (m *SearchUser) String() string { return proto.CompactTextString(m) }
 func (*SearchUser) ProtoMessage()    {}
 
 func init() {
+	proto.RegisterEnum("proto.SearchCommunitiesResponse_ErrorType", SearchCommunitiesResponse_ErrorType_name, SearchCommunitiesResponse_ErrorType_value)
 	proto.RegisterEnum("proto.SearchHit_Type", SearchHit_Type_name, SearchHit_Type_value)
 	proto.RegisterEnum("proto.Suggestion_Type", Suggestion_Type_name, Suggestion_Type_value)
 }
@@ -322,8 +406,8 @@ var _ grpc.ClientConn
 
 type SearchServiceClient interface {
 	Search(ctx context.Context, in *SearchRequest, opts ...grpc.CallOption) (*SearchResponse, error)
-	IndexGroup(ctx context.Context, in *Group, opts ...grpc.CallOption) (*IndexResponse, error)
-	DeleteGroup(ctx context.Context, in *Group, opts ...grpc.CallOption) (*DeleteResponse, error)
+	SearchCommunities(ctx context.Context, in *SearchCommunitiesRequest, opts ...grpc.CallOption) (*SearchCommunitiesResponse, error)
+	GetActiveCommunities(ctx context.Context, in *ActiveCommunitiesRequest, opts ...grpc.CallOption) (*SearchResponse, error)
 	IndexUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*IndexResponse, error)
 	DeleteUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*DeleteResponse, error)
 	GetSuggestions(ctx context.Context, in *SuggestionRequest, opts ...grpc.CallOption) (*SuggestionResponse, error)
@@ -346,18 +430,18 @@ func (c *searchServiceClient) Search(ctx context.Context, in *SearchRequest, opt
 	return out, nil
 }
 
-func (c *searchServiceClient) IndexGroup(ctx context.Context, in *Group, opts ...grpc.CallOption) (*IndexResponse, error) {
-	out := new(IndexResponse)
-	err := grpc.Invoke(ctx, "/proto.SearchService/IndexGroup", in, out, c.cc, opts...)
+func (c *searchServiceClient) SearchCommunities(ctx context.Context, in *SearchCommunitiesRequest, opts ...grpc.CallOption) (*SearchCommunitiesResponse, error) {
+	out := new(SearchCommunitiesResponse)
+	err := grpc.Invoke(ctx, "/proto.SearchService/SearchCommunities", in, out, c.cc, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *searchServiceClient) DeleteGroup(ctx context.Context, in *Group, opts ...grpc.CallOption) (*DeleteResponse, error) {
-	out := new(DeleteResponse)
-	err := grpc.Invoke(ctx, "/proto.SearchService/DeleteGroup", in, out, c.cc, opts...)
+func (c *searchServiceClient) GetActiveCommunities(ctx context.Context, in *ActiveCommunitiesRequest, opts ...grpc.CallOption) (*SearchResponse, error) {
+	out := new(SearchResponse)
+	err := grpc.Invoke(ctx, "/proto.SearchService/GetActiveCommunities", in, out, c.cc, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -395,8 +479,8 @@ func (c *searchServiceClient) GetSuggestions(ctx context.Context, in *Suggestion
 
 type SearchServiceServer interface {
 	Search(context.Context, *SearchRequest) (*SearchResponse, error)
-	IndexGroup(context.Context, *Group) (*IndexResponse, error)
-	DeleteGroup(context.Context, *Group) (*DeleteResponse, error)
+	SearchCommunities(context.Context, *SearchCommunitiesRequest) (*SearchCommunitiesResponse, error)
+	GetActiveCommunities(context.Context, *ActiveCommunitiesRequest) (*SearchResponse, error)
 	IndexUser(context.Context, *User) (*IndexResponse, error)
 	DeleteUser(context.Context, *User) (*DeleteResponse, error)
 	GetSuggestions(context.Context, *SuggestionRequest) (*SuggestionResponse, error)
@@ -418,24 +502,24 @@ func _SearchService_Search_Handler(srv interface{}, ctx context.Context, codec g
 	return out, nil
 }
 
-func _SearchService_IndexGroup_Handler(srv interface{}, ctx context.Context, codec grpc.Codec, buf []byte) (interface{}, error) {
-	in := new(Group)
+func _SearchService_SearchCommunities_Handler(srv interface{}, ctx context.Context, codec grpc.Codec, buf []byte) (interface{}, error) {
+	in := new(SearchCommunitiesRequest)
 	if err := codec.Unmarshal(buf, in); err != nil {
 		return nil, err
 	}
-	out, err := srv.(SearchServiceServer).IndexGroup(ctx, in)
+	out, err := srv.(SearchServiceServer).SearchCommunities(ctx, in)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func _SearchService_DeleteGroup_Handler(srv interface{}, ctx context.Context, codec grpc.Codec, buf []byte) (interface{}, error) {
-	in := new(Group)
+func _SearchService_GetActiveCommunities_Handler(srv interface{}, ctx context.Context, codec grpc.Codec, buf []byte) (interface{}, error) {
+	in := new(ActiveCommunitiesRequest)
 	if err := codec.Unmarshal(buf, in); err != nil {
 		return nil, err
 	}
-	out, err := srv.(SearchServiceServer).DeleteGroup(ctx, in)
+	out, err := srv.(SearchServiceServer).GetActiveCommunities(ctx, in)
 	if err != nil {
 		return nil, err
 	}
@@ -487,12 +571,12 @@ var _SearchService_serviceDesc = grpc.ServiceDesc{
 			Handler:    _SearchService_Search_Handler,
 		},
 		{
-			MethodName: "IndexGroup",
-			Handler:    _SearchService_IndexGroup_Handler,
+			MethodName: "SearchCommunities",
+			Handler:    _SearchService_SearchCommunities_Handler,
 		},
 		{
-			MethodName: "DeleteGroup",
-			Handler:    _SearchService_DeleteGroup_Handler,
+			MethodName: "GetActiveCommunities",
+			Handler:    _SearchService_GetActiveCommunities_Handler,
 		},
 		{
 			MethodName: "IndexUser",

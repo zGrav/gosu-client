@@ -19,8 +19,12 @@ message AnalyticsEvent {
     // Chat / Own Profile / User Profile / ...
     string screen = 6;
     map<string, string> properties = 7;
-	UserAgent.UserAgentType agent_type = 8;
+    UserAgent.UserAgentType agent_type = 8;
     // locally generated agent id
     string local_agent_id = 9;
-
+    string label = 10;
+    int64 value = 11;
+    string agent_name = 12;
+	// do not report individual events, but create batches, segmented by these keys from properties
+	repeated string aggregation_properties = 13;
 }

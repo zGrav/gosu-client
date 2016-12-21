@@ -221,6 +221,7 @@ message RPCChannelAddUsersToHubChannelRequest {
     string hub_id = 2;
     repeated string user_ids = 3;
     bool remove = 4;
+    bool publish_profile_pull_requests = 5;
 }
 
 message RPCChannelAddUsersToHubChannelResponse {
@@ -230,6 +231,7 @@ message RPCChannelAddUsersToHubChannelResponse {
         BAD_REQUEST = 2;
     }
     ErrorType error = 1;
+    repeated string processed_user_ids = 2;
 }
 
 message RPCChannelAddUserToHubChannelsRequest {

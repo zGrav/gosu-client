@@ -3,14 +3,11 @@
 #import <ProtoRPC/ProtoRPC.h>
 #import <RxLibrary/GRXWriter+Immediate.h>
 
-static NSString *const kPackageName = @"proto";
-static NSString *const kServiceName = @"PushService";
-
 @implementation PushService
 
 // Designated initializer
 - (instancetype)initWithHost:(NSString *)host {
-  return (self = [super initWithHost:host packageName:kPackageName serviceName:kServiceName]);
+  return (self = [super initWithHost:host packageName:@"proto" serviceName:@"PushService"]);
 }
 
 // Override superclass initializer to disallow different package and service names.
@@ -27,11 +24,11 @@ static NSString *const kServiceName = @"PushService";
 
 #pragma mark Register(PushRegisterRequest) returns (PushRegisterResponse)
 
-- (void)registerWithRequest:(PushRegisterRequest *)request handler:(void(^)(PushRegisterResponse *response, NSError *error))handler{
+- (void)registerWithRequest:(PushRegisterRequest *)request handler:(void(^)(PushRegisterResponse *_Nullable response, NSError *_Nullable error))handler{
   [[self RPCToRegisterWithRequest:request handler:handler] start];
 }
 // Returns a not-yet-started RPC object.
-- (ProtoRPC *)RPCToRegisterWithRequest:(PushRegisterRequest *)request handler:(void(^)(PushRegisterResponse *response, NSError *error))handler{
+- (GRPCProtoCall *)RPCToRegisterWithRequest:(PushRegisterRequest *)request handler:(void(^)(PushRegisterResponse *_Nullable response, NSError *_Nullable error))handler{
   return [self RPCToMethod:@"Register"
             requestsWriter:[GRXWriter writerWithValue:request]
              responseClass:[PushRegisterResponse class]
@@ -39,11 +36,11 @@ static NSString *const kServiceName = @"PushService";
 }
 #pragma mark SendMessage(PushMessageRequest) returns (PushMessageResponse)
 
-- (void)sendMessageWithRequest:(PushMessageRequest *)request handler:(void(^)(PushMessageResponse *response, NSError *error))handler{
+- (void)sendMessageWithRequest:(PushMessageRequest *)request handler:(void(^)(PushMessageResponse *_Nullable response, NSError *_Nullable error))handler{
   [[self RPCToSendMessageWithRequest:request handler:handler] start];
 }
 // Returns a not-yet-started RPC object.
-- (ProtoRPC *)RPCToSendMessageWithRequest:(PushMessageRequest *)request handler:(void(^)(PushMessageResponse *response, NSError *error))handler{
+- (GRPCProtoCall *)RPCToSendMessageWithRequest:(PushMessageRequest *)request handler:(void(^)(PushMessageResponse *_Nullable response, NSError *_Nullable error))handler{
   return [self RPCToMethod:@"SendMessage"
             requestsWriter:[GRXWriter writerWithValue:request]
              responseClass:[PushMessageResponse class]

@@ -9,7 +9,7 @@ module.exports = require("protobufjs").newBuilder({})['import']({
             "options": {
                 "java_package": "maple.proto",
                 "go_package": "gosuproto",
-                "java_outer_classname": "Community"
+                "java_outer_classname": "Structure"
             },
             "messages": [
                 {
@@ -190,6 +190,106 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                             "type": "int64",
                             "name": "online_user_count",
                             "id": 22
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "bool",
+                            "name": "wordfilter_enabled",
+                            "id": 23
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "wordfilter_list",
+                            "id": 24
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "bool",
+                            "name": "linkwhitelist_enabled",
+                            "id": 25
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "linkwhitelist_list",
+                            "id": 26
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "GeoLocation",
+                            "name": "geo_location",
+                            "id": 27
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "int64",
+                            "name": "total_user_count",
+                            "id": 28
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "latest_message_timestamp",
+                            "id": 29
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "topic",
+                            "id": 30
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "int32",
+                            "name": "max_message_length",
+                            "id": 31
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "int32",
+                            "name": "max_messages_per_minute",
+                            "id": 32
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "int32",
+                            "name": "max_message_length_ephemeral",
+                            "id": 33
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "int32",
+                            "name": "max_messages_per_minute_ephemeral",
+                            "id": 34
+                        }
+                    ]
+                },
+                {
+                    "name": "GeoLocation",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "float",
+                            "name": "lat",
+                            "id": 1
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "float",
+                            "name": "lng",
+                            "id": 2
+                        }
+                    ]
+                },
+                {
+                    "name": "OptionalGeoLocation",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "GeoLocation",
+                            "name": "Value",
+                            "id": 1
                         }
                     ]
                 },
@@ -333,6 +433,42 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                             "type": "bool",
                             "name": "ephemeral",
                             "id": 23
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "facebook_id",
+                            "id": 24
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "bool",
+                            "name": "avatar_image_is_autogenerated",
+                            "id": 25
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "bool",
+                            "name": "name_is_autogenerated",
+                            "id": 26
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "google_id",
+                            "id": 27
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "bool",
+                            "name": "has_set_password",
+                            "id": 28
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "bool",
+                            "name": "has_mobile_client",
+                            "id": 29
                         }
                     ],
                     "enums": [
@@ -653,6 +789,10 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                                 {
                                     "name": "LOAD_TEST",
                                     "id": 6
+                                },
+                                {
+                                    "name": "MANAGEMENT_CONSOLE",
+                                    "id": 7
                                 }
                             ]
                         }
@@ -2115,6 +2255,30 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                             "type": "string",
                             "name": "local_agent_id",
                             "id": 9
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "label",
+                            "id": 10
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "int64",
+                            "name": "value",
+                            "id": 11
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "agent_name",
+                            "id": 12
+                        },
+                        {
+                            "rule": "repeated",
+                            "type": "string",
+                            "name": "aggregation_properties",
+                            "id": 13
                         }
                     ]
                 },
@@ -2198,6 +2362,24 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                             "type": "bool",
                             "name": "nsfw",
                             "id": 12
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "bool",
+                            "name": "auto_generate_title_suffix",
+                            "id": 14
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "bool",
+                            "name": "auto_generate_short_title_suffix",
+                            "id": 15
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "GeoLocation",
+                            "name": "geo_location",
+                            "id": 16
                         }
                     ]
                 },
@@ -2312,6 +2494,38 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                                 {
                                     "name": "SHORT_TITLE_RESERVED",
                                     "id": 19
+                                },
+                                {
+                                    "name": "MAX_MESSAGE_LENGTH_TOO_LOW",
+                                    "id": 20
+                                },
+                                {
+                                    "name": "MAX_MESSAGE_LENGTH_TOO_HIGH",
+                                    "id": 21
+                                },
+                                {
+                                    "name": "MAX_MESSAGE_LENGTH_EPHEMERAL_TOO_LOW",
+                                    "id": 22
+                                },
+                                {
+                                    "name": "MAX_MESSAGE_LENGTH_EPHEMERAL_TOO_HIGH",
+                                    "id": 23
+                                },
+                                {
+                                    "name": "MAX_MESSAGES_PER_MINUTE_TOO_LOW",
+                                    "id": 24
+                                },
+                                {
+                                    "name": "MAX_MESSAGES_PER_MINUTE_TOO_HIGH",
+                                    "id": 25
+                                },
+                                {
+                                    "name": "MAX_MESSAGES_PER_MINUTE_EPHEMERAL_TOO_LOW",
+                                    "id": 26
+                                },
+                                {
+                                    "name": "MAX_MESSAGES_PER_MINUTE_EPHEMERAL_TOO_HIGH",
+                                    "id": 27
                                 }
                             ]
                         }
@@ -2409,6 +2623,66 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                             "type": "google.protobuf.BoolValue",
                             "name": "nsfw",
                             "id": 14
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "google.protobuf.BoolValue",
+                            "name": "wordfilter_enabled",
+                            "id": 16
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "google.protobuf.StringValue",
+                            "name": "wordfilter_list",
+                            "id": 17
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "google.protobuf.BoolValue",
+                            "name": "linkwhitelist_enabled",
+                            "id": 18
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "google.protobuf.StringValue",
+                            "name": "linkwhitelist_list",
+                            "id": 19
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "OptionalGeoLocation",
+                            "name": "geo_location",
+                            "id": 20
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "google.protobuf.StringValue",
+                            "name": "topic",
+                            "id": 21
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "google.protobuf.Int32Value",
+                            "name": "max_message_length",
+                            "id": 22
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "google.protobuf.Int32Value",
+                            "name": "max_messages_per_minute",
+                            "id": 23
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "google.protobuf.Int32Value",
+                            "name": "max_message_length_ephemeral",
+                            "id": 24
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "google.protobuf.Int32Value",
+                            "name": "max_messages_per_minute_ephemeral",
+                            "id": 25
                         }
                     ]
                 },
@@ -2868,6 +3142,24 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                             "type": "bool",
                             "name": "fetch_banned",
                             "id": 8
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "int64",
+                            "name": "ban_duration",
+                            "id": 9
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "invite_text",
+                            "id": 10
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "join_link",
+                            "id": 11
                         }
                     ],
                     "oneofs": {
@@ -2956,6 +3248,58 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                                     "id": 9
                                 }
                             ]
+                        }
+                    ]
+                },
+                {
+                    "name": "RPCHubAddMembersRequest",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "hub_id",
+                            "id": 1
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "inviter_id",
+                            "id": 2
+                        },
+                        {
+                            "rule": "repeated",
+                            "type": "HubAddMembersRequestEntry",
+                            "name": "entries",
+                            "id": 3
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "invite_text",
+                            "id": 4
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "join_link",
+                            "id": 5
+                        }
+                    ]
+                },
+                {
+                    "name": "RPCHubAddMembersResponse",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "HubAddMembersResponse.ErrorType",
+                            "name": "error",
+                            "id": 1
+                        },
+                        {
+                            "rule": "repeated",
+                            "type": "HubAddMembersResponseEntry",
+                            "name": "updated_entries",
+                            "id": 2
                         }
                     ]
                 },
@@ -3138,6 +3482,12 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                             "type": "MembershipType",
                             "name": "parent_type",
                             "id": 10
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "int64",
+                            "name": "banned_until",
+                            "id": 11
                         }
                     ],
                     "enums": [
@@ -3373,6 +3723,12 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                             "type": "bool",
                             "name": "fetch_banned",
                             "id": 8
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "int64",
+                            "name": "ban_duration",
+                            "id": 9
                         }
                     ]
                 },
@@ -3955,6 +4311,40 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                     ]
                 },
                 {
+                    "name": "RPCHubGetUserByExternalIDRequest",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "external_user_id",
+                            "id": 1
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "group_id",
+                            "id": 2
+                        }
+                    ]
+                },
+                {
+                    "name": "RPCHubGetUserByExternalIDResponse",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "HubGetUserByExternalIDResponse.ErrorType",
+                            "name": "error",
+                            "id": 1
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "ExternalUserInfo",
+                            "name": "userInfo",
+                            "id": 2
+                        }
+                    ]
+                },
+                {
                     "name": "HubInvite",
                     "fields": [
                         {
@@ -4158,6 +4548,14 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                                     "id": 10
                                 },
                                 {
+                                    "name": "REQUEST_PENDING",
+                                    "id": 15
+                                },
+                                {
+                                    "name": "INVITED",
+                                    "id": 20
+                                },
+                                {
                                     "name": "MEMBER",
                                     "id": 25
                                 },
@@ -4236,6 +4634,23 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                     ]
                 },
                 {
+                    "name": "ExternalUserInfo",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "external_user_id",
+                            "id": 1
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "email_address",
+                            "id": 2
+                        }
+                    ]
+                },
+                {
                     "name": "HubCreateHubRequest",
                     "fields": [
                         {
@@ -4303,6 +4718,24 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                             "type": "bool",
                             "name": "nsfw",
                             "id": 12
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "bool",
+                            "name": "auto_generate_title_suffix",
+                            "id": 13
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "bool",
+                            "name": "auto_generate_short_title_suffix",
+                            "id": 14
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "GeoLocation",
+                            "name": "geo_location",
+                            "id": 15
                         }
                     ]
                 },
@@ -4437,6 +4870,66 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                             "type": "google.protobuf.BoolValue",
                             "name": "nsfw",
                             "id": 11
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "google.protobuf.BoolValue",
+                            "name": "wordfilter_enabled",
+                            "id": 12
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "google.protobuf.StringValue",
+                            "name": "wordfilter_list",
+                            "id": 13
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "google.protobuf.BoolValue",
+                            "name": "linkwhitelist_enabled",
+                            "id": 14
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "google.protobuf.StringValue",
+                            "name": "linkwhitelist_list",
+                            "id": 15
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "OptionalGeoLocation",
+                            "name": "geo_location",
+                            "id": 16
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "google.protobuf.StringValue",
+                            "name": "topic",
+                            "id": 17
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "google.protobuf.Int32Value",
+                            "name": "max_message_length",
+                            "id": 18
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "google.protobuf.Int32Value",
+                            "name": "max_messages_per_minute",
+                            "id": 19
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "google.protobuf.Int32Value",
+                            "name": "max_message_length_ephemeral",
+                            "id": 20
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "google.protobuf.Int32Value",
+                            "name": "max_messages_per_minute_ephemeral",
+                            "id": 21
                         }
                     ]
                 },
@@ -4546,6 +5039,24 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                             "type": "bool",
                             "name": "fetch_banned",
                             "id": 6
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "int64",
+                            "name": "ban_duration",
+                            "id": 7
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "invite_text",
+                            "id": 8
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "join_link",
+                            "id": 9
                         }
                     ],
                     "oneofs": {
@@ -4587,6 +5098,172 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                             "type": "MembershipEntry",
                             "name": "updated_entry",
                             "id": 5
+                        }
+                    ]
+                },
+                {
+                    "name": "HubAddMembersRequest",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "invite_text",
+                            "id": 1
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "join_link",
+                            "id": 2
+                        },
+                        {
+                            "rule": "repeated",
+                            "type": "HubAddMembersRequestEntry",
+                            "name": "entries",
+                            "id": 3
+                        }
+                    ]
+                },
+                {
+                    "name": "HubAddMembersResponse",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "ErrorType",
+                            "name": "error",
+                            "id": 1
+                        },
+                        {
+                            "rule": "repeated",
+                            "type": "HubAddMembersResponseEntry",
+                            "name": "updated_entries",
+                            "id": 2
+                        }
+                    ],
+                    "enums": [
+                        {
+                            "name": "ErrorType",
+                            "values": [
+                                {
+                                    "name": "NONE",
+                                    "id": 0
+                                },
+                                {
+                                    "name": "UNKNOWN_ERROR",
+                                    "id": 1
+                                },
+                                {
+                                    "name": "FORBIDDEN",
+                                    "id": 2
+                                },
+                                {
+                                    "name": "BAD_REQUEST",
+                                    "id": 3
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "HubAddMembersRequestEntry",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "user_id",
+                            "id": 1
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "email",
+                            "id": 2
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "MembershipEntry.MembershipType",
+                            "name": "type",
+                            "id": 3
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "int64",
+                            "name": "ban_duration",
+                            "id": 4
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "invite_text",
+                            "id": 5
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "join_link",
+                            "id": 6
+                        }
+                    ],
+                    "oneofs": {
+                        "identifier": [
+                            1,
+                            2
+                        ]
+                    }
+                },
+                {
+                    "name": "HubAddMembersResponseEntry",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "ErrorType",
+                            "name": "error",
+                            "id": 1
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "HubAddMembersRequestEntry",
+                            "name": "entry",
+                            "id": 2
+                        }
+                    ],
+                    "enums": [
+                        {
+                            "name": "ErrorType",
+                            "values": [
+                                {
+                                    "name": "NONE",
+                                    "id": 0
+                                },
+                                {
+                                    "name": "UNKNOWN_ERROR",
+                                    "id": 1
+                                },
+                                {
+                                    "name": "INVALID_USER_ID",
+                                    "id": 2
+                                },
+                                {
+                                    "name": "INVALID_EMAIL",
+                                    "id": 3
+                                },
+                                {
+                                    "name": "INVALID_MEMBERSHIP_TYPE",
+                                    "id": 4
+                                },
+                                {
+                                    "name": "ALREADY_PENDING",
+                                    "id": 5
+                                },
+                                {
+                                    "name": "ALREADY_MEMBER",
+                                    "id": 6
+                                },
+                                {
+                                    "name": "ALREADY_BANNED",
+                                    "id": 7
+                                }
+                            ]
                         }
                     ]
                 },
@@ -4755,6 +5432,12 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                             "type": "bool",
                             "name": "fetch_banned",
                             "id": 6
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "int64",
+                            "name": "ban_duration",
+                            "id": 7
                         }
                     ]
                 },
@@ -4979,6 +5662,46 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                     ]
                 },
                 {
+                    "name": "HubGetUserByExternalIDResponse",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "ErrorType",
+                            "name": "error",
+                            "id": 1
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "ExternalUserInfo",
+                            "name": "userInfo",
+                            "id": 2
+                        }
+                    ],
+                    "enums": [
+                        {
+                            "name": "ErrorType",
+                            "values": [
+                                {
+                                    "name": "NONE",
+                                    "id": 0
+                                },
+                                {
+                                    "name": "UNKNOWN_ERROR",
+                                    "id": 1
+                                },
+                                {
+                                    "name": "BAD_REQUEST",
+                                    "id": 2
+                                },
+                                {
+                                    "name": "NOT_FOUND",
+                                    "id": 3
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
                     "name": "UserInfo",
                     "fields": [
                         {
@@ -5106,6 +5829,12 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                             "id": 9
                         },
                         {
+                            "rule": "repeated",
+                            "type": "string",
+                            "name": "recipients",
+                            "id": 11
+                        },
+                        {
                             "rule": "optional",
                             "type": "bool",
                             "name": "processed_by_crawler",
@@ -5229,6 +5958,10 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                                 {
                                     "name": "TEAMSPEAK",
                                     "id": 6
+                                },
+                                {
+                                    "name": "QUESTION",
+                                    "id": 7
                                 }
                             ]
                         }
@@ -5291,6 +6024,18 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                         },
                         {
                             "rule": "optional",
+                            "type": "Type",
+                            "name": "type",
+                            "id": 6
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "conversation_id",
+                            "id": 7
+                        },
+                        {
+                            "rule": "optional",
                             "type": "string",
                             "name": "quote",
                             "id": 16
@@ -5300,6 +6045,12 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                             "type": "Website",
                             "name": "website",
                             "id": 17
+                        },
+                        {
+                            "rule": "repeated",
+                            "type": "MessageAttachment",
+                            "name": "attachments",
+                            "id": 18
                         }
                     ],
                     "oneofs": {
@@ -5307,7 +6058,408 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                             16,
                             17
                         ]
-                    }
+                    },
+                    "enums": [
+                        {
+                            "name": "Type",
+                            "values": [
+                                {
+                                    "name": "NONE",
+                                    "id": 0
+                                },
+                                {
+                                    "name": "QUESTION",
+                                    "id": 1
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "MessageAttachment",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "AttachmentType",
+                            "name": "type",
+                            "id": 1
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "int32",
+                            "name": "pos_start",
+                            "id": 2
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "int32",
+                            "name": "pos_end",
+                            "id": 3
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "fallback_url",
+                            "id": 4
+                        },
+                        {
+                            "rule": "repeated",
+                            "type": "AttachmentAction",
+                            "name": "actions",
+                            "id": 5
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "quote",
+                            "id": 16
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "AttachmentWebsite",
+                            "name": "website",
+                            "id": 17
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "AttachmentImage",
+                            "name": "image",
+                            "id": 18
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "AttachmentImageGallery",
+                            "name": "gallery",
+                            "id": 19
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "AttachmentMedia",
+                            "name": "media",
+                            "id": 20
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "AttachmentExternalMedia",
+                            "name": "external_media",
+                            "id": 21
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "AttachmentFile",
+                            "name": "file",
+                            "id": 22
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "WebsocketMessage",
+                            "name": "message",
+                            "id": 23
+                        }
+                    ],
+                    "oneofs": {
+                        "body": [
+                            16,
+                            17,
+                            18,
+                            19,
+                            20,
+                            21,
+                            22,
+                            23
+                        ]
+                    },
+                    "enums": [
+                        {
+                            "name": "AttachmentType",
+                            "values": [
+                                {
+                                    "name": "UNKNOWN",
+                                    "id": 0
+                                },
+                                {
+                                    "name": "QUOTE",
+                                    "id": 1
+                                },
+                                {
+                                    "name": "IMAGE",
+                                    "id": 2
+                                },
+                                {
+                                    "name": "IMAGE_GALLERY",
+                                    "id": 3
+                                },
+                                {
+                                    "name": "VIDEO",
+                                    "id": 4
+                                },
+                                {
+                                    "name": "AUDIO",
+                                    "id": 5
+                                },
+                                {
+                                    "name": "WEBSITE",
+                                    "id": 6
+                                },
+                                {
+                                    "name": "EMBED",
+                                    "id": 7
+                                },
+                                {
+                                    "name": "DOCUMENT",
+                                    "id": 8
+                                },
+                                {
+                                    "name": "FILE",
+                                    "id": 9
+                                },
+                                {
+                                    "name": "MESSAGE",
+                                    "id": 10
+                                },
+                                {
+                                    "name": "REPLY_TO",
+                                    "id": 11
+                                },
+                                {
+                                    "name": "EXTERNAL_TWITCH",
+                                    "id": 100
+                                },
+                                {
+                                    "name": "EXTERNAL_YOUTUBE",
+                                    "id": 101
+                                },
+                                {
+                                    "name": "EXTERNAL_VIMEO",
+                                    "id": 102
+                                },
+                                {
+                                    "name": "EXTERNAL_SOUNDCLOUD",
+                                    "id": 103
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "AttachmentAction",
+                    "fields": []
+                },
+                {
+                    "name": "AttachmentWebsite",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "url",
+                            "id": 1
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "title",
+                            "id": 2
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "description",
+                            "id": 3
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "favicon",
+                            "id": 4
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "AttachmentImage",
+                            "name": "image",
+                            "id": 16
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "AttachmentMedia",
+                            "name": "media",
+                            "id": 17
+                        }
+                    ]
+                },
+                {
+                    "name": "AttachmentImage",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "url",
+                            "id": 1
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "int32",
+                            "name": "width",
+                            "id": 2
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "int32",
+                            "name": "height",
+                            "id": 3
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "bytes",
+                            "name": "placeholder",
+                            "id": 4
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "caption",
+                            "id": 5
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "mime_type",
+                            "id": 6
+                        }
+                    ]
+                },
+                {
+                    "name": "AttachmentImageGallery",
+                    "fields": [
+                        {
+                            "rule": "repeated",
+                            "type": "AttachmentImage",
+                            "name": "images",
+                            "id": 1
+                        }
+                    ]
+                },
+                {
+                    "name": "AttachmentMedia",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "url",
+                            "id": 1
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "int32",
+                            "name": "width",
+                            "id": 2
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "int32",
+                            "name": "height",
+                            "id": 3
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "bytes",
+                            "name": "placeholder",
+                            "id": 4
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "preview_url",
+                            "id": 5
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "mime_type",
+                            "id": 6
+                        }
+                    ]
+                },
+                {
+                    "name": "AttachmentExternalMedia",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "url",
+                            "id": 1
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "int32",
+                            "name": "width",
+                            "id": 2
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "int32",
+                            "name": "height",
+                            "id": 3
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "bytes",
+                            "name": "placeholder",
+                            "id": 4
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "preview_url",
+                            "id": 5
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "content_id",
+                            "id": 6
+                        }
+                    ]
+                },
+                {
+                    "name": "AttachmentFile",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "url",
+                            "id": 1
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "title",
+                            "id": 2
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "preview",
+                            "id": 3
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "mime_type",
+                            "id": 4
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "encoding",
+                            "id": 5
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "int64",
+                            "name": "size",
+                            "id": 6
+                        }
+                    ]
                 },
                 {
                     "name": "Website",
@@ -5588,6 +6740,10 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                                 {
                                     "name": "USER_LOGGED_IN",
                                     "id": 2
+                                },
+                                {
+                                    "name": "DONATION",
+                                    "id": 3
                                 }
                             ]
                         }
@@ -5774,6 +6930,80 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                     ]
                 },
                 {
+                    "name": "Struct",
+                    "fields": [
+                        {
+                            "rule": "map",
+                            "type": "Value",
+                            "keytype": "string",
+                            "name": "fields",
+                            "id": 1
+                        }
+                    ]
+                },
+                {
+                    "name": "Value",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "NullValue",
+                            "name": "null_value",
+                            "id": 1
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "double",
+                            "name": "number_value",
+                            "id": 2
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "string_value",
+                            "id": 3
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "bool",
+                            "name": "bool_value",
+                            "id": 4
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "Struct",
+                            "name": "struct_value",
+                            "id": 5
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "ListValue",
+                            "name": "list_value",
+                            "id": 6
+                        }
+                    ],
+                    "oneofs": {
+                        "kind": [
+                            1,
+                            2,
+                            3,
+                            4,
+                            5,
+                            6
+                        ]
+                    }
+                },
+                {
+                    "name": "ListValue",
+                    "fields": [
+                        {
+                            "rule": "repeated",
+                            "type": "Value",
+                            "name": "values",
+                            "id": 1
+                        }
+                    ]
+                },
+                {
                     "name": "AuthLoginRequest",
                     "fields": [
                         {
@@ -5809,6 +7039,143 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                     ]
                 },
                 {
+                    "name": "AuthLoginOAuthRequest",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "oauth_token",
+                            "id": 1
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "OAuthProvider",
+                            "name": "oauth_provider",
+                            "id": 2
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "requested_username",
+                            "id": 3
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "email_address",
+                            "id": 4
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "agent_id",
+                            "id": 5
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "agent_name",
+                            "id": 6
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "UserAgent.UserAgentType",
+                            "name": "agent_type",
+                            "id": 7
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "oauth_code",
+                            "id": 8
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "oauth_redirect_uri",
+                            "id": 9
+                        }
+                    ],
+                    "enums": [
+                        {
+                            "name": "OAuthProvider",
+                            "values": [
+                                {
+                                    "name": "UNKNOWN",
+                                    "id": 0
+                                },
+                                {
+                                    "name": "FACEBOOK",
+                                    "id": 1
+                                },
+                                {
+                                    "name": "GOOGLE",
+                                    "id": 2
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "AuthLoginEmailRequest",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "email",
+                            "id": 1
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "source_url",
+                            "id": 2
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "code",
+                            "id": 3
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "requested_username",
+                            "id": 4
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "agent_id",
+                            "id": 5
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "agent_name",
+                            "id": 6
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "UserAgent.UserAgentType",
+                            "name": "agent_type",
+                            "id": 7
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "bool",
+                            "name": "reset_password",
+                            "id": 8
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "new_password",
+                            "id": 9
+                        }
+                    ]
+                },
+                {
                     "name": "AuthLoginResponse",
                     "fields": [
                         {
@@ -5828,6 +7195,45 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                             "type": "User",
                             "name": "user",
                             "id": 3
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "ErrorType",
+                            "name": "error",
+                            "id": 4
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "bool",
+                            "name": "new_user",
+                            "id": 5
+                        }
+                    ],
+                    "enums": [
+                        {
+                            "name": "ErrorType",
+                            "values": [
+                                {
+                                    "name": "NONE",
+                                    "id": 0
+                                },
+                                {
+                                    "name": "UNKNOWN_ERROR",
+                                    "id": 1
+                                },
+                                {
+                                    "name": "BAD_REQUEST",
+                                    "id": 2
+                                },
+                                {
+                                    "name": "NEW_PASSWORD_INVALID",
+                                    "id": 3
+                                },
+                                {
+                                    "name": "IP_BANNED",
+                                    "id": 4
+                                }
+                            ]
                         }
                     ]
                 },
@@ -5939,6 +7345,12 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                             "type": "bool",
                             "name": "auto_generate_name_suffix",
                             "id": 13
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "avatar_image",
+                            "id": 14
                         }
                     ]
                 },
@@ -6043,6 +7455,10 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                                 {
                                     "name": "TITLE_IMAGE_INVALID",
                                     "id": 15
+                                },
+                                {
+                                    "name": "IP_BANNED",
+                                    "id": 16
                                 }
                             ]
                         }
@@ -6067,6 +7483,12 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                             "type": "string",
                             "name": "email",
                             "id": 1
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "source_url",
+                            "id": 2
                         }
                     ]
                 },
@@ -6078,6 +7500,48 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                             "type": "bool",
                             "name": "success",
                             "id": 1
+                        }
+                    ]
+                },
+                {
+                    "name": "AuthGetPasswordResetInfoResponse",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "ErrorType",
+                            "name": "error",
+                            "id": 1
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "ChatUser",
+                            "name": "user",
+                            "id": 2
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "source_url",
+                            "id": 3
+                        }
+                    ],
+                    "enums": [
+                        {
+                            "name": "ErrorType",
+                            "values": [
+                                {
+                                    "name": "NONE",
+                                    "id": 0
+                                },
+                                {
+                                    "name": "UNKNOWN_ERROR",
+                                    "id": 1
+                                },
+                                {
+                                    "name": "INVALID",
+                                    "id": 2
+                                }
+                            ]
                         }
                     ]
                 },
@@ -6106,6 +7570,12 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                             "type": "bool",
                             "name": "success",
                             "id": 1
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "token",
+                            "id": 2
                         }
                     ]
                 },
@@ -6232,6 +7702,43 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                             "type": "bool",
                             "name": "success",
                             "id": 1
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "ErrorType",
+                            "name": "error",
+                            "id": 2
+                        }
+                    ],
+                    "enums": [
+                        {
+                            "name": "ErrorType",
+                            "values": [
+                                {
+                                    "name": "NONE",
+                                    "id": 0
+                                },
+                                {
+                                    "name": "UNKNOWN_ERROR",
+                                    "id": 1
+                                },
+                                {
+                                    "name": "BAD_REQUEST",
+                                    "id": 2
+                                },
+                                {
+                                    "name": "PW_TOO_SHORT",
+                                    "id": 3
+                                },
+                                {
+                                    "name": "PW_BAD",
+                                    "id": 4
+                                },
+                                {
+                                    "name": "OLD_PW_INVALID",
+                                    "id": 5
+                                }
+                            ]
                         }
                     ]
                 },
@@ -6442,6 +7949,55 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                     ]
                 },
                 {
+                    "name": "UserValidateEmailAddressRequest",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "email_address",
+                            "id": 1
+                        }
+                    ]
+                },
+                {
+                    "name": "UserValidateEmailAddressResponse",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "ErrorType",
+                            "name": "error",
+                            "id": 1
+                        }
+                    ],
+                    "enums": [
+                        {
+                            "name": "ErrorType",
+                            "values": [
+                                {
+                                    "name": "NONE",
+                                    "id": 0
+                                },
+                                {
+                                    "name": "UNKNOWN_ERROR",
+                                    "id": 1
+                                },
+                                {
+                                    "name": "BAD_REQUEST",
+                                    "id": 2
+                                },
+                                {
+                                    "name": "EMAIL_ADDRESS_INVALID",
+                                    "id": 3
+                                },
+                                {
+                                    "name": "EMAIL_ADDRESS_UNAVAILABLE",
+                                    "id": 4
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
                     "name": "UserConvertEphemeralUserRequest",
                     "fields": [
                         {
@@ -6473,6 +8029,12 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                             "type": "bool",
                             "name": "terms_of_service",
                             "id": 5
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "avatar_image",
+                            "id": 6
                         }
                     ]
                 },
@@ -6541,6 +8103,83 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                                 {
                                     "name": "PW_BAD",
                                     "id": 9
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "UserTransferOwnershipRequest",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "target_user_auth_token",
+                            "id": 1
+                        }
+                    ]
+                },
+                {
+                    "name": "UserTransferOwnershipResponse",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "ErrorType",
+                            "name": "error",
+                            "id": 1
+                        }
+                    ],
+                    "enums": [
+                        {
+                            "name": "ErrorType",
+                            "values": [
+                                {
+                                    "name": "NONE",
+                                    "id": 0
+                                },
+                                {
+                                    "name": "BAD_REQUEST",
+                                    "id": 1
+                                },
+                                {
+                                    "name": "FORBIDDEN",
+                                    "id": 2
+                                },
+                                {
+                                    "name": "UNKNOWN_ERROR",
+                                    "id": 3
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "UserCheckBanStatusResponse",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "ErrorType",
+                            "name": "error",
+                            "id": 1
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "bool",
+                            "name": "is_banned",
+                            "id": 2
+                        }
+                    ],
+                    "enums": [
+                        {
+                            "name": "ErrorType",
+                            "values": [
+                                {
+                                    "name": "NONE",
+                                    "id": 0
+                                },
+                                {
+                                    "name": "UNKNOWN_ERROR",
+                                    "id": 1
                                 }
                             ]
                         }
@@ -7303,6 +8942,167 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                     ]
                 },
                 {
+                    "name": "APIError",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "id",
+                            "id": 1
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "Struct",
+                            "name": "links",
+                            "id": 2
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "int64",
+                            "name": "status",
+                            "id": 3
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "int64",
+                            "name": "code",
+                            "id": 4
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "title",
+                            "id": 5
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "detail",
+                            "id": 6
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "pointer",
+                            "id": 7
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "parameter",
+                            "id": 8
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "Struct",
+                            "name": "meta",
+                            "id": 9
+                        }
+                    ],
+                    "oneofs": {
+                        "source": [
+                            7,
+                            8
+                        ]
+                    }
+                },
+                {
+                    "name": "CreateTimeoutRequest",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "int64",
+                            "name": "duration",
+                            "id": 1
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "reason",
+                            "id": 2
+                        }
+                    ]
+                },
+                {
+                    "name": "CreateTimeoutResponse",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "bool",
+                            "name": "success",
+                            "id": 1
+                        },
+                        {
+                            "rule": "repeated",
+                            "type": "APIError",
+                            "name": "errors",
+                            "id": 2
+                        }
+                    ]
+                },
+                {
+                    "name": "UserEditBlockedUserResponse",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "ErrorType",
+                            "name": "error",
+                            "id": 1
+                        }
+                    ],
+                    "enums": [
+                        {
+                            "name": "ErrorType",
+                            "values": [
+                                {
+                                    "name": "NONE",
+                                    "id": 0
+                                },
+                                {
+                                    "name": "BAD_REQUEST",
+                                    "id": 1
+                                },
+                                {
+                                    "name": "UNKNOWN_ERROR",
+                                    "id": 2
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "UserGetBlockedUsersResponse",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "ErrorType",
+                            "name": "error",
+                            "id": 1
+                        },
+                        {
+                            "rule": "repeated",
+                            "type": "ChatUser",
+                            "name": "users",
+                            "id": 2
+                        }
+                    ],
+                    "enums": [
+                        {
+                            "name": "ErrorType",
+                            "values": [
+                                {
+                                    "name": "NONE",
+                                    "id": 0
+                                },
+                                {
+                                    "name": "UNKNOWN_ERROR",
+                                    "id": 1
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
                     "name": "ChannelInfoResponse",
                     "fields": [
                         {
@@ -7936,6 +9736,12 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                             "type": "bool",
                             "name": "remove",
                             "id": 4
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "bool",
+                            "name": "publish_profile_pull_requests",
+                            "id": 5
                         }
                     ]
                 },
@@ -7947,6 +9753,12 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                             "type": "ErrorType",
                             "name": "error",
                             "id": 1
+                        },
+                        {
+                            "rule": "repeated",
+                            "type": "string",
+                            "name": "processed_user_ids",
+                            "id": 2
                         }
                     ],
                     "enums": [
@@ -8308,6 +10120,246 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                     ]
                 },
                 {
+                    "name": "EventLogGetLogEntriesResponse",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "ErrorType",
+                            "name": "error",
+                            "id": 1
+                        },
+                        {
+                            "rule": "repeated",
+                            "type": "LogEntry",
+                            "name": "log_entries",
+                            "id": 2
+                        }
+                    ],
+                    "enums": [
+                        {
+                            "name": "ErrorType",
+                            "values": [
+                                {
+                                    "name": "NONE",
+                                    "id": 0
+                                },
+                                {
+                                    "name": "UNKNOWN_ERROR",
+                                    "id": 1
+                                },
+                                {
+                                    "name": "FORBIDDEN",
+                                    "id": 2
+                                },
+                                {
+                                    "name": "BAD_REQUEST",
+                                    "id": 3
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "LogEntryEvent",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "int64",
+                            "name": "timestamp",
+                            "id": 1
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "channel_id",
+                            "id": 2
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "community_id",
+                            "id": 3
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "source_user_id",
+                            "id": 4
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "target_id",
+                            "id": 5
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "WebsocketMessage",
+                            "name": "target_message",
+                            "id": 6
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "LogEntry.TargetType",
+                            "name": "target_type",
+                            "id": 7
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "action",
+                            "id": 8
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "LogEntry.ActionType",
+                            "name": "action_type",
+                            "id": 9
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "reason",
+                            "id": 10
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "description",
+                            "id": 11
+                        }
+                    ]
+                },
+                {
+                    "name": "LogEntry",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "id",
+                            "id": 1
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "int64",
+                            "name": "timestamp",
+                            "id": 2
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "channel_id",
+                            "id": 3
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "community_id",
+                            "id": 4
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "ChatUser",
+                            "name": "source_user",
+                            "id": 5
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "ChatUser",
+                            "name": "target_user",
+                            "id": 6
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "WebsocketMessage",
+                            "name": "target_message",
+                            "id": 7
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "TargetType",
+                            "name": "target_type",
+                            "id": 8
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "action",
+                            "id": 9
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "ActionType",
+                            "name": "action_type",
+                            "id": 10
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "reason",
+                            "id": 11
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "description",
+                            "id": 12
+                        },
+                        {
+                            "rule": "repeated",
+                            "type": "WebsocketMessage",
+                            "name": "context",
+                            "id": 13
+                        }
+                    ],
+                    "oneofs": {
+                        "target": [
+                            6,
+                            7
+                        ]
+                    },
+                    "enums": [
+                        {
+                            "name": "TargetType",
+                            "values": [
+                                {
+                                    "name": "NOTARGET",
+                                    "id": 0
+                                },
+                                {
+                                    "name": "USER",
+                                    "id": 1
+                                },
+                                {
+                                    "name": "MESSAGE",
+                                    "id": 2
+                                }
+                            ]
+                        },
+                        {
+                            "name": "ActionType",
+                            "values": [
+                                {
+                                    "name": "OTHER",
+                                    "id": 0
+                                },
+                                {
+                                    "name": "KICK_BAN",
+                                    "id": 1
+                                },
+                                {
+                                    "name": "MESSAGE_DELETE",
+                                    "id": 2
+                                },
+                                {
+                                    "name": "MESSAGE_PURGE",
+                                    "id": 3
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
                     "name": "PushRegisterRequest",
                     "fields": [
                         {
@@ -8437,6 +10489,23 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                     "fields": []
                 },
                 {
+                    "name": "ActiveCommunitiesRequest",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "int32",
+                            "name": "size",
+                            "id": 1
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "int32",
+                            "name": "from",
+                            "id": 2
+                        }
+                    ]
+                },
+                {
                     "name": "SearchRequest",
                     "fields": [
                         {
@@ -8491,6 +10560,94 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                             "rule": "optional",
                             "type": "int32",
                             "name": "from",
+                            "id": 2
+                        }
+                    ]
+                },
+                {
+                    "name": "SearchCommunitiesRequest",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "GeoLocation",
+                            "name": "geo_location",
+                            "id": 1
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "int64",
+                            "name": "from",
+                            "id": 2
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "int64",
+                            "name": "size",
+                            "id": 3
+                        }
+                    ]
+                },
+                {
+                    "name": "SearchCommunitiesResponse",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "ErrorType",
+                            "name": "error",
+                            "id": 1
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "int64",
+                            "name": "total_results",
+                            "id": 2
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "int64",
+                            "name": "from",
+                            "id": 3
+                        },
+                        {
+                            "rule": "repeated",
+                            "type": "SearchCommunitiesResponseEntry",
+                            "name": "communities",
+                            "id": 4
+                        }
+                    ],
+                    "enums": [
+                        {
+                            "name": "ErrorType",
+                            "values": [
+                                {
+                                    "name": "NONE",
+                                    "id": 0
+                                },
+                                {
+                                    "name": "UNKNOWN_ERROR",
+                                    "id": 1
+                                },
+                                {
+                                    "name": "BAD_REQUEST",
+                                    "id": 2
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "SearchCommunitiesResponseEntry",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "Hub",
+                            "name": "hub",
+                            "id": 1
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "float",
+                            "name": "distance",
                             "id": 2
                         }
                     ]
@@ -8561,13 +10718,13 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                         {
                             "rule": "optional",
                             "type": "SearchGroup",
-                            "name": "group",
+                            "name": "DEPRECATED_group",
                             "id": 11
                         },
                         {
                             "rule": "optional",
                             "type": "SearchGame",
-                            "name": "game",
+                            "name": "DEPRECATED_game",
                             "id": 12
                         },
                         {
@@ -8594,7 +10751,7 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                                     "id": 0
                                 },
                                 {
-                                    "name": "GROUP",
+                                    "name": "DEPRECATED_GROUP",
                                     "id": 1
                                 },
                                 {
@@ -8602,7 +10759,7 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                                     "id": 2
                                 },
                                 {
-                                    "name": "GAME",
+                                    "name": "DEPRECATED_GAME",
                                     "id": 3
                                 },
                                 {
@@ -8757,11 +10914,11 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                                     "id": 2
                                 },
                                 {
-                                    "name": "GAME",
+                                    "name": "DEPRECATED_GAME",
                                     "id": 3
                                 },
                                 {
-                                    "name": "COMMUNITY",
+                                    "name": "DEPRECATED_COMMUNITY",
                                     "id": 4
                                 }
                             ]
@@ -8992,6 +11149,216 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                             "id": 1
                         }
                     ]
+                },
+                {
+                    "name": "RPCUserAddContactRequest",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "user_id",
+                            "id": 1
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "contact_id",
+                            "id": 2
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "bool",
+                            "name": "mutual",
+                            "id": 3
+                        }
+                    ]
+                },
+                {
+                    "name": "RPCUserAddContactResponse",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "UserAddContactResponse.ErrorType",
+                            "name": "error",
+                            "id": 1
+                        }
+                    ]
+                },
+                {
+                    "name": "RPCUserRemoveContactRequest",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "user_id",
+                            "id": 1
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "contact_id",
+                            "id": 2
+                        }
+                    ]
+                },
+                {
+                    "name": "RPCUserRemoveContactResponse",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "UserRemoveContactResponse.ErrorType",
+                            "name": "error",
+                            "id": 1
+                        }
+                    ]
+                },
+                {
+                    "name": "RPCUserGetContactsRequest",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "user_id",
+                            "id": 1
+                        }
+                    ]
+                },
+                {
+                    "name": "RPCUserGetContactsResponse",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "UserGetContactsResponse.ErrorType",
+                            "name": "error",
+                            "id": 1
+                        },
+                        {
+                            "rule": "repeated",
+                            "type": "Contact",
+                            "name": "contacts",
+                            "id": 2
+                        }
+                    ]
+                },
+                {
+                    "name": "UserAddContactRequest",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "string",
+                            "name": "contact_id",
+                            "id": 1
+                        },
+                        {
+                            "rule": "optional",
+                            "type": "bool",
+                            "name": "mutual",
+                            "id": 2
+                        }
+                    ]
+                },
+                {
+                    "name": "UserAddContactResponse",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "ErrorType",
+                            "name": "error",
+                            "id": 1
+                        }
+                    ],
+                    "enums": [
+                        {
+                            "name": "ErrorType",
+                            "values": [
+                                {
+                                    "name": "NONE",
+                                    "id": 0
+                                },
+                                {
+                                    "name": "UNKNOWN_ERROR",
+                                    "id": 1
+                                },
+                                {
+                                    "name": "BAD_REQUEST",
+                                    "id": 2
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "UserRemoveContactResponse",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "ErrorType",
+                            "name": "error",
+                            "id": 1
+                        }
+                    ],
+                    "enums": [
+                        {
+                            "name": "ErrorType",
+                            "values": [
+                                {
+                                    "name": "NONE",
+                                    "id": 0
+                                },
+                                {
+                                    "name": "UNKNOWN_ERROR",
+                                    "id": 1
+                                },
+                                {
+                                    "name": "BAD_REQUEST",
+                                    "id": 2
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "UserGetContactsResponse",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "ErrorType",
+                            "name": "error",
+                            "id": 1
+                        },
+                        {
+                            "rule": "repeated",
+                            "type": "Contact",
+                            "name": "contacts",
+                            "id": 2
+                        }
+                    ],
+                    "enums": [
+                        {
+                            "name": "ErrorType",
+                            "values": [
+                                {
+                                    "name": "NONE",
+                                    "id": 0
+                                },
+                                {
+                                    "name": "UNKNOWN_ERROR",
+                                    "id": 1
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "Contact",
+                    "fields": [
+                        {
+                            "rule": "optional",
+                            "type": "ChatUser",
+                            "name": "user",
+                            "id": 1
+                        }
+                    ]
                 }
             ],
             "enums": [
@@ -9022,6 +11389,15 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                     ]
                 },
                 {
+                    "name": "NullValue",
+                    "values": [
+                        {
+                            "name": "NULL",
+                            "id": 0
+                        }
+                    ]
+                },
+                {
                     "name": "CreateGroupErrorType",
                     "values": [
                         {
@@ -9047,6 +11423,35 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                         {
                             "name": "SERVER_ERROR",
                             "id": 5
+                        }
+                    ]
+                },
+                {
+                    "name": "ApiErrorCodes",
+                    "values": [
+                        {
+                            "name": "UNKNOWN_ERROR",
+                            "id": 0
+                        },
+                        {
+                            "name": "AUTH_MISSING_USER_ID",
+                            "id": 10
+                        },
+                        {
+                            "name": "PARAM_MISSING_CHANNEL_ID",
+                            "id": 100
+                        },
+                        {
+                            "name": "PARAM_MISSING_USER_ID",
+                            "id": 101
+                        },
+                        {
+                            "name": "TIMEOUT_INVALID_DURATION",
+                            "id": 1000
+                        },
+                        {
+                            "name": "TIMEOUT_INVALID_REASON",
+                            "id": 1001
                         }
                     ]
                 }
@@ -9089,6 +11494,11 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                         "AddMember": {
                             "request": "RPCHubAddMemberRequest",
                             "response": "RPCHubAddMemberResponse",
+                            "options": {}
+                        },
+                        "AddMembers": {
+                            "request": "RPCHubAddMembersRequest",
+                            "response": "RPCHubAddMembersResponse",
                             "options": {}
                         },
                         "EditMember": {
@@ -9154,6 +11564,11 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                         "RegisterExternalUserID": {
                             "request": "RPCHubRegisterExternalUserIDRequest",
                             "response": "RPCHubRegisterExternalUserIDResponse",
+                            "options": {}
+                        },
+                        "GetUserByExternalID": {
+                            "request": "RPCHubGetUserByExternalIDRequest",
+                            "response": "RPCHubGetUserByExternalIDResponse",
                             "options": {}
                         }
                     }
@@ -9294,14 +11709,14 @@ module.exports = require("protobufjs").newBuilder({})['import']({
                             "response": "SearchResponse",
                             "options": {}
                         },
-                        "IndexGroup": {
-                            "request": "Group",
-                            "response": "IndexResponse",
+                        "SearchCommunities": {
+                            "request": "SearchCommunitiesRequest",
+                            "response": "SearchCommunitiesResponse",
                             "options": {}
                         },
-                        "DeleteGroup": {
-                            "request": "Group",
-                            "response": "DeleteResponse",
+                        "GetActiveCommunities": {
+                            "request": "ActiveCommunitiesRequest",
+                            "response": "SearchResponse",
                             "options": {}
                         },
                         "IndexUser": {

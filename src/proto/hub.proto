@@ -22,6 +22,7 @@ service HubService {
     rpc ValidateTitle (RPCHubValidateTitleRequest) returns (RPCHubValidateTitleResponse);
 
     rpc AddMember (RPCHubAddMemberRequest) returns (RPCHubAddMemberResponse);
+    rpc AddMembers (RPCHubAddMembersRequest) returns (RPCHubAddMembersResponse);
     rpc EditMember (RPCHubEditMemberRequest) returns (RPCHubEditMemberResponse);
     rpc GetMembers (RPCHubGetMembersRequest) returns (RPCHubGetMembersResponse);
     rpc GetHubMember (RPCHubGetMemberRequest) returns (RPCHubGetMemberResponse);
@@ -38,6 +39,7 @@ service HubService {
     rpc UnlinkHub (RPCHubUnlinkHubRequest) returns (RPCHubUnlinkHubResponse);
 
     rpc RegisterExternalUserID (RPCHubRegisterExternalUserIDRequest) returns (RPCHubRegisterExternalUserIDResponse);
+    rpc GetUserByExternalID (RPCHubGetUserByExternalIDRequest) returns (RPCHubGetUserByExternalIDResponse);
 }
 
 message RPCHubCreateHubRequest {
@@ -54,6 +56,9 @@ message RPCHubCreateHubRequest {
     string claimed_group_id = 10;
     string language = 11;
     bool nsfw = 12;
+    bool auto_generate_title_suffix = 14;
+    bool auto_generate_short_title_suffix = 15;
+    GeoLocation geo_location = 16;
 }
 
 message RPCHubCreateHubResponse {
@@ -78,7 +83,14 @@ message RPCHubCreateHubResponse {
         SHORT_TITLE_TOO_SHORT = 17;
         SHORT_TITLE_TOO_LONG = 18;
         SHORT_TITLE_RESERVED = 19;
-
+        MAX_MESSAGE_LENGTH_TOO_LOW = 20;
+        MAX_MESSAGE_LENGTH_TOO_HIGH = 21;
+        MAX_MESSAGE_LENGTH_EPHEMERAL_TOO_LOW = 22;
+        MAX_MESSAGE_LENGTH_EPHEMERAL_TOO_HIGH = 23;
+        MAX_MESSAGES_PER_MINUTE_TOO_LOW = 24;
+        MAX_MESSAGES_PER_MINUTE_TOO_HIGH = 25;
+        MAX_MESSAGES_PER_MINUTE_EPHEMERAL_TOO_LOW = 26;
+        MAX_MESSAGES_PER_MINUTE_EPHEMERAL_TOO_HIGH = 27;
     }
 
     ErrorType error = 1;
@@ -103,6 +115,16 @@ message RPCHubEditHubRequest {
     google.protobuf.StringValue claimed_group_id = 12;
     google.protobuf.StringValue language = 13;
     google.protobuf.BoolValue nsfw = 14;
+    google.protobuf.BoolValue wordfilter_enabled = 16;
+    google.protobuf.StringValue wordfilter_list = 17;
+    google.protobuf.BoolValue linkwhitelist_enabled = 18;
+    google.protobuf.StringValue linkwhitelist_list = 19;
+    OptionalGeoLocation geo_location = 20;
+    google.protobuf.StringValue topic = 21;
+    google.protobuf.Int32Value max_message_length = 22;
+    google.protobuf.Int32Value max_messages_per_minute = 23;
+    google.protobuf.Int32Value max_message_length_ephemeral = 24;
+    google.protobuf.Int32Value max_messages_per_minute_ephemeral = 25;
 }
 
 message RPCHubEditHubResponse {
@@ -228,6 +250,9 @@ message RPCHubAddMemberRequest {
     bool fetch_existing = 6;
     bool fetch_pending = 7;
     bool fetch_banned = 8;
+    int64 ban_duration = 9;
+    string invite_text = 10;
+    string join_link = 11;
 }
 
 message RPCHubAddMemberResponse {
@@ -249,6 +274,20 @@ message RPCHubAddMemberResponse {
     repeated MembershipEntry pending_users = 3;
     repeated MembershipEntry banned_users = 4;
     MembershipEntry updated_entry = 5;
+}
+
+// used to add (invite) a member to a hub
+message RPCHubAddMembersRequest {
+    string hub_id = 1;
+    string inviter_id = 2;
+    repeated HubAddMembersRequestEntry entries = 3;
+    string invite_text = 4;
+    string join_link = 5;
+}
+
+message RPCHubAddMembersResponse {
+    HubAddMembersResponse.ErrorType error = 1;
+    repeated HubAddMembersResponseEntry updated_entries = 2;
 }
 
 // used to fetch all members for a hub
@@ -305,6 +344,7 @@ message MembershipEntry {
     int64 updated_at = 8;
     MembershipType derived_type = 9;
     MembershipType parent_type = 10;
+    int64 banned_until = 11;
 }
 
 // used to resend an invitation email for an invited member that has not joined the hub yet
@@ -357,6 +397,7 @@ message RPCHubEditMemberRequest {
     bool fetch_existing = 6;
     bool fetch_pending = 7;
     bool fetch_banned = 8;
+    int64 ban_duration = 9;
 }
 
 message RPCHubEditMemberResponse {
@@ -529,6 +570,16 @@ message RPCHubRegisterExternalUserIDResponse {
     ErrorType error = 1;
 }
 
+message RPCHubGetUserByExternalIDRequest {
+    string external_user_id = 1;
+    string group_id = 2;
+}
+
+message RPCHubGetUserByExternalIDResponse {
+    HubGetUserByExternalIDResponse.ErrorType error = 1;
+    ExternalUserInfo userInfo = 2;
+}
+
 // storage
 
 message HubInvite {
@@ -564,6 +615,8 @@ message HubMembershipRecord {
         UNKNOWN = 0;
         BANNED = 5;
         NONE = 10;
+        REQUEST_PENDING = 15;
+        INVITED = 20;
         MEMBER = 25;
         MODERATOR = 50;
         MODERATOR_GROUP = 60;
@@ -595,6 +648,11 @@ message HubExternalMembershipRecord {
     HubMembershipRecord.MembershipType type = 7;
 }
 
+message ExternalUserInfo {
+    string external_user_id = 1;
+    string email_address = 2;
+}
+
 // api
 
 message HubCreateHubRequest {
@@ -609,6 +667,9 @@ message HubCreateHubRequest {
     string claimed_group_id = 10;
     string language = 11;
     bool nsfw = 12;
+    bool auto_generate_title_suffix = 13;
+    bool auto_generate_short_title_suffix = 14;
+    GeoLocation geo_location = 15;
 }
 
 message HubCreateHubResponse {
@@ -640,6 +701,16 @@ message HubEditHubRequest {
     google.protobuf.StringValue claimed_group_id = 9;
     google.protobuf.StringValue language = 10;
     google.protobuf.BoolValue nsfw = 11;
+    google.protobuf.BoolValue wordfilter_enabled = 12;
+    google.protobuf.StringValue wordfilter_list = 13;
+    google.protobuf.BoolValue linkwhitelist_enabled = 14;
+    google.protobuf.StringValue linkwhitelist_list = 15;
+    OptionalGeoLocation geo_location = 16;
+    google.protobuf.StringValue topic = 17;
+    google.protobuf.Int32Value max_message_length = 18;
+    google.protobuf.Int32Value max_messages_per_minute = 19;
+    google.protobuf.Int32Value max_message_length_ephemeral = 20;
+    google.protobuf.Int32Value max_messages_per_minute_ephemeral = 21;
 }
 
 message HubEditHubResponse {
@@ -672,6 +743,9 @@ message AddMemberRequest {
     bool fetch_existing = 4; // if this is set to yes, the response will contain all members with status existing
     bool fetch_pending = 5; // if this is set to yes, the response will contain all members with status pending
     bool fetch_banned = 6; // if this is set to yes, the response will contain all members with status banned
+    int64 ban_duration = 7;
+    string invite_text = 8;
+    string join_link = 9;
 }
 
 message AddMemberResponse {
@@ -680,6 +754,51 @@ message AddMemberResponse {
     repeated MembershipEntry pending_users = 3;
     repeated MembershipEntry banned_users = 4;
     MembershipEntry updated_entry = 5;
+}
+
+message HubAddMembersRequest {
+    string invite_text = 1;
+    string join_link = 2;
+    repeated HubAddMembersRequestEntry entries = 3;
+}
+
+message HubAddMembersResponse {
+    enum ErrorType {
+        NONE = 0;
+        UNKNOWN_ERROR = 1;
+        FORBIDDEN = 2;
+        BAD_REQUEST = 3;
+    }
+
+    ErrorType error = 1;
+    repeated HubAddMembersResponseEntry updated_entries = 2;
+}
+
+message HubAddMembersRequestEntry {
+    oneof identifier {
+        string user_id = 1;
+        string email = 2;
+    }
+    MembershipEntry.MembershipType type = 3;
+    int64 ban_duration = 4;
+    string invite_text = 5;
+    string join_link = 6;
+}
+
+message HubAddMembersResponseEntry {
+    enum ErrorType {
+        NONE = 0;
+        UNKNOWN_ERROR = 1;
+        INVALID_USER_ID = 2;
+        INVALID_EMAIL = 3;
+        INVALID_MEMBERSHIP_TYPE = 4;
+        ALREADY_PENDING = 5;
+        ALREADY_MEMBER = 6;
+        ALREADY_BANNED = 7;
+    }
+
+    ErrorType error = 1;
+    HubAddMembersRequestEntry entry = 2;
 }
 
 // used to fetch all members for a hub or group
@@ -727,6 +846,7 @@ message EditMemberRequest {
     bool fetch_existing = 4;
     bool fetch_pending = 5;
     bool fetch_banned = 6;
+    int64 ban_duration = 7;
 }
 
 message EditMemberResponse {
@@ -796,4 +916,15 @@ message RegisterExternalUserIDResponse {
 message HubGetMemberResponse {
     RPCHubGetMemberResponse.ErrorType error = 1;
     HubMembershipRecord.MembershipType type = 2;
+}
+
+message HubGetUserByExternalIDResponse {
+    enum ErrorType {
+        NONE = 0;
+        UNKNOWN_ERROR = 1;
+        BAD_REQUEST = 2;
+        NOT_FOUND = 3;
+    }
+    ErrorType error = 1;
+    ExternalUserInfo userInfo = 2;
 }

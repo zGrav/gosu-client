@@ -296,6 +296,18 @@ function emitToHubot(message, wrapper) {
 				communityURL = message.website.url;
 			}
 
+			let replyToSender = null;
+			let replyToMessage = null;
+
+			if (message.attachments) {
+				message.attachments.map(function (key) {
+					if (key.type === 'REPLY_TO') {
+						replyToSender = key.message.sender;
+						replyToMessage = key.message.user_message.body;
+					}
+				});
+			}
+
 			let getChannelIndex = findKeyIndex(global.channels_by_index, 'id', channelId);
 			let getChannelType = null;
 
@@ -370,6 +382,13 @@ function emitToHubot(message, wrapper) {
 				obj.body = obj.body.replace(searchstr, '');
 
 				global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
+			} else if (bodyidx === null && replyToSender === global.user_id && replyToMessage !== null && replyToMessage.indexOf('Answer by mentioning me') > -1) {
+				// used exclusively for trivia message replies.
+
+				global.robot.logger.info('New trivia message reply! (in channel with id: ' + channelId + ' & title ' + global.channels_by_index[getChannelIndex].title +')');
+				obj.body = global.robot.name + ' answer ' + obj.body;
+
+				global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
 			}
 		}
 	} catch (e) {
@@ -410,9 +429,18 @@ function onReceiveChatMessage(wrapper) {
 			});
 		}
 
+		if (msg.attachments.length > 0) {
+			msg.attachments.map(function (keys) {
+				if (keys.type !== 'REPLY_TO') {
+					return null;
+				}
+			});
+		}
+
 		return msg;
 	} catch (e) {
 		console.log('onReceiveChatMessage exception')
+		console.log(e)
 	}
 }
 

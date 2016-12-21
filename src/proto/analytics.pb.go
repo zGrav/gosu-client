@@ -11,12 +11,17 @@ It is generated from these files:
 	api.proto
 	channel.proto
 	chatservice_control.proto
+	contacts.proto
+	crawler.proto
 	esl.proto
+	eventlog.proto
 	gosu.proto
 	hub.proto
 	hub_base.proto
 	mail.proto
 	message.proto
+	message_store.proto
+	notifications.proto
 	nsq.proto
 	optional.proto
 	prefs.proto
@@ -26,8 +31,9 @@ It is generated from these files:
 	rpc.proto
 	search.proto
 	sip.proto
+	struct.proto
 	userlist.proto
-	webhook.proto
+	view.proto
 	wrappers.proto
 
 It has these top-level messages:
@@ -55,6 +61,11 @@ type AnalyticsEvent struct {
 	AgentType  UserAgent_UserAgentType `protobuf:"varint,8,opt,name=agent_type,enum=proto.UserAgent_UserAgentType" json:"agent_type,omitempty"`
 	// locally generated agent id
 	LocalAgentId string `protobuf:"bytes,9,opt,name=local_agent_id" json:"local_agent_id,omitempty"`
+	Label        string `protobuf:"bytes,10,opt,name=label" json:"label,omitempty"`
+	Value        int64  `protobuf:"varint,11,opt,name=value" json:"value,omitempty"`
+	AgentName    string `protobuf:"bytes,12,opt,name=agent_name" json:"agent_name,omitempty"`
+	// do not report individual events, but create batches, segmented by these keys from properties
+	AggregationProperties []string `protobuf:"bytes,13,rep,name=aggregation_properties" json:"aggregation_properties,omitempty"`
 }
 
 func (m *AnalyticsEvent) Reset()         { *m = AnalyticsEvent{} }

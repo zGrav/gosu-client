@@ -30,7 +30,8 @@ message WebsocketMessage {
         SystemAction system_action = 10;
     }
 
-    string recipient = 9;
+    string recipient = 9; // this field is deprecated => use recipients field
+    repeated string recipients = 11;
 
     bool processed_by_crawler = 16;
 	bool deleted = 17;
@@ -46,6 +47,7 @@ message MessageBodyAnnotation {
         CHANNEL_LINK = 4;
         EMAIL = 5;
         TEAMSPEAK = 6;
+        QUESTION = 7;
     }
 
     SliceType type = 1;
@@ -65,17 +67,125 @@ message MessageBodyAnnotationChannelLinkExtensionInvitation {
 }
 
 message UserMessage {
+    enum Type {
+        NONE = 0;
+        QUESTION = 1;
+        // future types might include website/image/video etc.
+    }
+
     string body = 1;
     repeated MessageBodyAnnotation body_annotations = 2;
     ChatUser user = 3;
     string deleted_timestamp = 4;
     string deleted_user = 5;
+    Type type = 6;
+
+    string conversation_id = 7;
 
     // rich message >= 16;
     oneof extension {
         string quote = 16;
         Website website = 17;
     }
+
+    repeated MessageAttachment attachments = 18;
+}
+
+message MessageAttachment {
+    enum AttachmentType {
+        UNKNOWN = 0;
+        QUOTE = 1; // body string
+        IMAGE = 2; // body AttachmentImage
+        IMAGE_GALLERY = 3; // body AttachmentImageGallery
+        VIDEO = 4; // body AttachmentMedia
+        AUDIO = 5; // body AttachmentMedia
+        WEBSITE = 6; // body AttachmentWebsite
+        EMBED = 7; // body ??
+        DOCUMENT = 8; // AttachmentFile
+        FILE = 9; // AttachmentFile
+        MESSAGE = 10; // WebsocketMessage
+        REPLY_TO = 11; // WebsocketMessage
+
+        // External services with rich attachment support
+        EXTERNAL_TWITCH = 100; // AttachmentExternalMedia
+        EXTERNAL_YOUTUBE = 101; // AttachmentExternalMedia
+        EXTERNAL_VIMEO = 102; // AttachmentExternalMedia
+        EXTERNAL_SOUNDCLOUD = 103; // AttachmentExternalMedia
+
+        // TODO: Add Social Media Sites
+    }
+
+    AttachmentType type = 1;
+    int32 pos_start = 2;
+    int32 pos_end = 3;
+    string fallback_url = 4;
+
+    repeated AttachmentAction actions = 5;
+
+    oneof body {
+        string quote = 16; // QUOTE
+        AttachmentWebsite website = 17; // WEBSITE
+        AttachmentImage image = 18; // IMAGE
+        AttachmentImageGallery gallery = 19; // IMAGE_GALLERY
+        AttachmentMedia media = 20; // VIDEO, AUDIO
+        AttachmentExternalMedia external_media = 21; // EXTERNAL_TWITCH, EXTERNAL_YOUTUBE, EXTERNAL_VIMEO, EXTERNAL_SOUNDCLOUD
+        AttachmentFile file = 22; // DOCUMENT, FILE
+        WebsocketMessage message = 23; // MESSAGE, REPLY_TO
+    }
+}
+
+message AttachmentAction {
+    // VOID
+}
+
+message AttachmentWebsite {
+    string url = 1;
+    string title = 2;
+    string description = 3;
+    string favicon = 4;
+
+    AttachmentImage image = 16;
+    AttachmentMedia media = 17;
+}
+
+message AttachmentImage {
+    string url = 1;
+    int32 width = 2;
+    int32 height = 3;
+    bytes placeholder = 4;
+    string caption = 5;
+    string mime_type = 6;
+}
+
+message AttachmentImageGallery {
+    repeated AttachmentImage images = 1;
+}
+
+message AttachmentMedia {
+    string url = 1;
+    int32 width = 2;
+    int32 height = 3;
+    bytes placeholder = 4;
+    string preview_url = 5;
+    string mime_type = 6;
+}
+
+message AttachmentExternalMedia {
+    string url = 1;
+    int32 width = 2;
+    int32 height = 3;
+    bytes placeholder = 4;
+    string preview_url = 5;
+    string content_id = 6;
+}
+
+message AttachmentFile {
+    string url = 1;
+    string title = 2;
+    string preview = 3;
+    string mime_type = 4;
+    string encoding = 5;
+    int64 size = 6;
 }
 
 message Website {
@@ -140,6 +250,7 @@ message SystemAction {
         UNKNOWN = 0;
         GENERAL = 1;
         USER_LOGGED_IN = 2;
+		DONATION = 3;
     }
     Type type = 1;
     string body = 2;

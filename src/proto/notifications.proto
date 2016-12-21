@@ -1,0 +1,128 @@
+syntax = "proto3";
+
+package proto;
+
+option java_package = "maple.proto";
+option java_outer_classname = "Notifications";
+option go_package = "gosuproto";
+option objc_class_prefix = "GOSU";
+
+import "any.proto";
+import "api.proto";
+
+message ReadStatusUpdate {
+	string user_id = 1;
+	string channel_id = 2;
+	string timestamp = 3;
+}
+
+message Notification {
+
+	enum NotificationType {
+		UNKNOWN = 0;
+		NEW_MESSAGE = 1;
+		MESSAGE_REPLY = 2;
+		CHANNEL_INVITE = 3;
+	}
+
+    string id = 1;
+    string title = 2;
+    string detail = 3;
+    string image_url = 4;
+    bool read = 5;
+    int32 priority = 6;
+    NotificationType type = 7;
+    int64 created_at = 8;
+    int64 updated_at = 9;
+    int64 deleted_at = 10;
+
+    // relations
+    string channel_id = 11;
+    string user_id = 12;
+
+	Any data = 13;
+}
+
+message NotificationPreference {
+	enum Value {
+		UNKNOWN = 0;
+		ALL_MESSAGES = 1;
+		ONLY_MENTIONS = 2;
+		NO_NOTIFICATIONS = 3;
+	}
+	Value value = 1;
+}
+
+message NotificationPreferences {
+	string user_id = 1;
+	map<string, NotificationPreference> preferences = 2;
+}
+
+// RPC - Notification Service
+
+service NotificationService {
+	rpc GetNotifications (GetNotificationsRequest) returns (GetNotificationsResponse);
+	rpc DeleteNotifications (DeleteNotificationsRequest) returns (DeleteNotificationsResponse);
+    rpc GetPreferences (GetPreferencesRequest) returns (GetPreferencesResponse);
+    rpc UpdatePreference (UpdatePreferenceRequest) returns (UpdatePreferenceResponse);
+	rpc RegisterPushToken (RegisterTokenRequest) returns (RegisterTokenResponse);
+}
+
+message GetNotificationsRequest {
+	string user_id = 1;
+	string agent_id = 2;
+	int64 timestamp = 3;
+}
+
+message GetNotificationsResponse {
+	repeated Notification notifications = 1;
+	bool success = 2;
+	APIError error = 3;
+}
+
+message DeleteNotificationsRequest {
+	string user_id = 1;
+	repeated string notification_ids = 3;
+}
+
+message DeleteNotificationsResponse {
+	bool success = 2;
+	APIError error = 3;
+}
+
+message RegisterTokenRequest {
+    string  user_id     = 1;
+    string  agent_id    = 2;
+    string  token       = 3;
+    string  provider    = 4;
+    string  language    = 5;
+}
+
+message RegisterTokenResponse {
+    string  user_id         = 1;
+    string  agent_id        = 2;
+    string  token           = 3;
+    string  provider        = 4;
+    string  subscriber_id   = 5;
+}
+
+message GetPreferencesRequest {
+	string user_id = 1;
+}
+
+message GetPreferencesResponse {
+	NotificationPreferences preferences = 1;
+	bool success = 2;
+	APIError error = 3;
+}
+
+message UpdatePreferenceRequest {
+	string user_id = 1;
+	string channel_id = 2;
+	NotificationPreference preference = 3;
+}
+
+message UpdatePreferenceResponse {
+	bool success = 2;
+	APIError error = 3;
+}

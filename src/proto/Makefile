@@ -11,5 +11,12 @@ objc: $(SOURCE)
 go: $(SOURCE)
 	protoc -I ./ *.proto --go_out=plugins=grpc:./
 
+java: $(SOURCE)
+	protoc -I ./ '--javanano_out=\
+	  ignore_services=true,\
+	  generate_intdefs=true\
+	  :./java'\
+	  *.proto
+
 all: js objc go
 	echo 'Rebuilding all output files'

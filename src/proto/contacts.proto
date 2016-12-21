@@ -1,0 +1,81 @@
+syntax = "proto3";
+
+package proto;
+option java_package = "maple.proto";
+option go_package = "gosuproto";
+
+import "wrappers.proto";
+import "profile.proto";
+
+// rpc
+
+message RPCUserAddContactRequest {
+    string user_id = 1;
+    string contact_id = 2;
+    bool mutual = 3;
+}
+
+message RPCUserAddContactResponse {
+    UserAddContactResponse.ErrorType error = 1;
+}
+
+message RPCUserRemoveContactRequest {
+    string user_id = 1;
+    string contact_id = 2;
+}
+
+message RPCUserRemoveContactResponse {
+    UserRemoveContactResponse.ErrorType error = 1;
+}
+
+message RPCUserGetContactsRequest {
+    string user_id = 1;
+}
+
+message RPCUserGetContactsResponse {
+    UserGetContactsResponse.ErrorType error = 1;
+    repeated Contact contacts = 2;
+}
+
+// api
+
+message UserAddContactRequest {
+    string contact_id = 1;
+    bool mutual = 2;
+}
+
+message UserAddContactResponse {
+    enum ErrorType {
+        NONE = 0;
+        UNKNOWN_ERROR = 1;
+        BAD_REQUEST = 2;
+    }
+
+    ErrorType error = 1;
+}
+
+message UserRemoveContactResponse {
+    enum ErrorType {
+        NONE = 0;
+        UNKNOWN_ERROR = 1;
+        BAD_REQUEST = 2;
+    }
+
+    ErrorType error = 1;
+}
+
+message UserGetContactsResponse {
+    enum ErrorType {
+        NONE = 0;
+        UNKNOWN_ERROR = 1;
+    }
+
+    ErrorType error = 1;
+    repeated Contact contacts = 2;
+}
+
+// model
+
+message Contact {
+    ChatUser user = 1;
+}

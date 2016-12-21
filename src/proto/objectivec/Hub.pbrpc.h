@@ -9,152 +9,174 @@
 #import "HubBase.pbobjc.h"
 #import "Profile.pbobjc.h"
 
+
+NS_ASSUME_NONNULL_BEGIN
+
 @protocol HubService <NSObject>
 
 #pragma mark CreateHub(RPCHubCreateHubRequest) returns (RPCHubCreateHubResponse)
 
-- (void)createHubWithRequest:(RPCHubCreateHubRequest *)request handler:(void(^)(RPCHubCreateHubResponse *response, NSError *error))handler;
+- (void)createHubWithRequest:(RPCHubCreateHubRequest *)request handler:(void(^)(RPCHubCreateHubResponse *_Nullable response, NSError *_Nullable error))handler;
 
-- (ProtoRPC *)RPCToCreateHubWithRequest:(RPCHubCreateHubRequest *)request handler:(void(^)(RPCHubCreateHubResponse *response, NSError *error))handler;
+- (GRPCProtoCall *)RPCToCreateHubWithRequest:(RPCHubCreateHubRequest *)request handler:(void(^)(RPCHubCreateHubResponse *_Nullable response, NSError *_Nullable error))handler;
 
 
 #pragma mark EditHub(RPCHubEditHubRequest) returns (RPCHubEditHubResponse)
 
-- (void)editHubWithRequest:(RPCHubEditHubRequest *)request handler:(void(^)(RPCHubEditHubResponse *response, NSError *error))handler;
+- (void)editHubWithRequest:(RPCHubEditHubRequest *)request handler:(void(^)(RPCHubEditHubResponse *_Nullable response, NSError *_Nullable error))handler;
 
-- (ProtoRPC *)RPCToEditHubWithRequest:(RPCHubEditHubRequest *)request handler:(void(^)(RPCHubEditHubResponse *response, NSError *error))handler;
+- (GRPCProtoCall *)RPCToEditHubWithRequest:(RPCHubEditHubRequest *)request handler:(void(^)(RPCHubEditHubResponse *_Nullable response, NSError *_Nullable error))handler;
 
 
 #pragma mark DeleteHub(RPCHubDeleteHubRequest) returns (RPCHubDeleteHubResponse)
 
-- (void)deleteHubWithRequest:(RPCHubDeleteHubRequest *)request handler:(void(^)(RPCHubDeleteHubResponse *response, NSError *error))handler;
+- (void)deleteHubWithRequest:(RPCHubDeleteHubRequest *)request handler:(void(^)(RPCHubDeleteHubResponse *_Nullable response, NSError *_Nullable error))handler;
 
-- (ProtoRPC *)RPCToDeleteHubWithRequest:(RPCHubDeleteHubRequest *)request handler:(void(^)(RPCHubDeleteHubResponse *response, NSError *error))handler;
+- (GRPCProtoCall *)RPCToDeleteHubWithRequest:(RPCHubDeleteHubRequest *)request handler:(void(^)(RPCHubDeleteHubResponse *_Nullable response, NSError *_Nullable error))handler;
 
 
 #pragma mark GetHub(RPCHubGetHubRequest) returns (RPCHubGetHubResponse)
 
-- (void)getHubWithRequest:(RPCHubGetHubRequest *)request handler:(void(^)(RPCHubGetHubResponse *response, NSError *error))handler;
+- (void)getHubWithRequest:(RPCHubGetHubRequest *)request handler:(void(^)(RPCHubGetHubResponse *_Nullable response, NSError *_Nullable error))handler;
 
-- (ProtoRPC *)RPCToGetHubWithRequest:(RPCHubGetHubRequest *)request handler:(void(^)(RPCHubGetHubResponse *response, NSError *error))handler;
+- (GRPCProtoCall *)RPCToGetHubWithRequest:(RPCHubGetHubRequest *)request handler:(void(^)(RPCHubGetHubResponse *_Nullable response, NSError *_Nullable error))handler;
 
 
 #pragma mark GetAllHubs(RPCHubGetAllHubsRequest) returns (RPCHubGetAllHubsResponse)
 
-- (void)getAllHubsWithRequest:(RPCHubGetAllHubsRequest *)request handler:(void(^)(RPCHubGetAllHubsResponse *response, NSError *error))handler;
+- (void)getAllHubsWithRequest:(RPCHubGetAllHubsRequest *)request handler:(void(^)(RPCHubGetAllHubsResponse *_Nullable response, NSError *_Nullable error))handler;
 
-- (ProtoRPC *)RPCToGetAllHubsWithRequest:(RPCHubGetAllHubsRequest *)request handler:(void(^)(RPCHubGetAllHubsResponse *response, NSError *error))handler;
+- (GRPCProtoCall *)RPCToGetAllHubsWithRequest:(RPCHubGetAllHubsRequest *)request handler:(void(^)(RPCHubGetAllHubsResponse *_Nullable response, NSError *_Nullable error))handler;
 
 
 #pragma mark ValidateTitle(RPCHubValidateTitleRequest) returns (RPCHubValidateTitleResponse)
 
-- (void)validateTitleWithRequest:(RPCHubValidateTitleRequest *)request handler:(void(^)(RPCHubValidateTitleResponse *response, NSError *error))handler;
+- (void)validateTitleWithRequest:(RPCHubValidateTitleRequest *)request handler:(void(^)(RPCHubValidateTitleResponse *_Nullable response, NSError *_Nullable error))handler;
 
-- (ProtoRPC *)RPCToValidateTitleWithRequest:(RPCHubValidateTitleRequest *)request handler:(void(^)(RPCHubValidateTitleResponse *response, NSError *error))handler;
+- (GRPCProtoCall *)RPCToValidateTitleWithRequest:(RPCHubValidateTitleRequest *)request handler:(void(^)(RPCHubValidateTitleResponse *_Nullable response, NSError *_Nullable error))handler;
 
 
 #pragma mark AddMember(RPCHubAddMemberRequest) returns (RPCHubAddMemberResponse)
 
-- (void)addMemberWithRequest:(RPCHubAddMemberRequest *)request handler:(void(^)(RPCHubAddMemberResponse *response, NSError *error))handler;
+- (void)addMemberWithRequest:(RPCHubAddMemberRequest *)request handler:(void(^)(RPCHubAddMemberResponse *_Nullable response, NSError *_Nullable error))handler;
 
-- (ProtoRPC *)RPCToAddMemberWithRequest:(RPCHubAddMemberRequest *)request handler:(void(^)(RPCHubAddMemberResponse *response, NSError *error))handler;
+- (GRPCProtoCall *)RPCToAddMemberWithRequest:(RPCHubAddMemberRequest *)request handler:(void(^)(RPCHubAddMemberResponse *_Nullable response, NSError *_Nullable error))handler;
+
+
+#pragma mark AddMembers(RPCHubAddMembersRequest) returns (RPCHubAddMembersResponse)
+
+- (void)addMembersWithRequest:(RPCHubAddMembersRequest *)request handler:(void(^)(RPCHubAddMembersResponse *_Nullable response, NSError *_Nullable error))handler;
+
+- (GRPCProtoCall *)RPCToAddMembersWithRequest:(RPCHubAddMembersRequest *)request handler:(void(^)(RPCHubAddMembersResponse *_Nullable response, NSError *_Nullable error))handler;
 
 
 #pragma mark EditMember(RPCHubEditMemberRequest) returns (RPCHubEditMemberResponse)
 
-- (void)editMemberWithRequest:(RPCHubEditMemberRequest *)request handler:(void(^)(RPCHubEditMemberResponse *response, NSError *error))handler;
+- (void)editMemberWithRequest:(RPCHubEditMemberRequest *)request handler:(void(^)(RPCHubEditMemberResponse *_Nullable response, NSError *_Nullable error))handler;
 
-- (ProtoRPC *)RPCToEditMemberWithRequest:(RPCHubEditMemberRequest *)request handler:(void(^)(RPCHubEditMemberResponse *response, NSError *error))handler;
+- (GRPCProtoCall *)RPCToEditMemberWithRequest:(RPCHubEditMemberRequest *)request handler:(void(^)(RPCHubEditMemberResponse *_Nullable response, NSError *_Nullable error))handler;
 
 
 #pragma mark GetMembers(RPCHubGetMembersRequest) returns (RPCHubGetMembersResponse)
 
-- (void)getMembersWithRequest:(RPCHubGetMembersRequest *)request handler:(void(^)(RPCHubGetMembersResponse *response, NSError *error))handler;
+- (void)getMembersWithRequest:(RPCHubGetMembersRequest *)request handler:(void(^)(RPCHubGetMembersResponse *_Nullable response, NSError *_Nullable error))handler;
 
-- (ProtoRPC *)RPCToGetMembersWithRequest:(RPCHubGetMembersRequest *)request handler:(void(^)(RPCHubGetMembersResponse *response, NSError *error))handler;
+- (GRPCProtoCall *)RPCToGetMembersWithRequest:(RPCHubGetMembersRequest *)request handler:(void(^)(RPCHubGetMembersResponse *_Nullable response, NSError *_Nullable error))handler;
 
 
 #pragma mark GetHubMember(RPCHubGetMemberRequest) returns (RPCHubGetMemberResponse)
 
-- (void)getHubMemberWithRequest:(RPCHubGetMemberRequest *)request handler:(void(^)(RPCHubGetMemberResponse *response, NSError *error))handler;
+- (void)getHubMemberWithRequest:(RPCHubGetMemberRequest *)request handler:(void(^)(RPCHubGetMemberResponse *_Nullable response, NSError *_Nullable error))handler;
 
-- (ProtoRPC *)RPCToGetHubMemberWithRequest:(RPCHubGetMemberRequest *)request handler:(void(^)(RPCHubGetMemberResponse *response, NSError *error))handler;
+- (GRPCProtoCall *)RPCToGetHubMemberWithRequest:(RPCHubGetMemberRequest *)request handler:(void(^)(RPCHubGetMemberResponse *_Nullable response, NSError *_Nullable error))handler;
 
 
 #pragma mark AddExternalMember(RPCHubAddExternalMemberRequest) returns (RPCHubAddExternalMemberResponse)
 
-- (void)addExternalMemberWithRequest:(RPCHubAddExternalMemberRequest *)request handler:(void(^)(RPCHubAddExternalMemberResponse *response, NSError *error))handler;
+- (void)addExternalMemberWithRequest:(RPCHubAddExternalMemberRequest *)request handler:(void(^)(RPCHubAddExternalMemberResponse *_Nullable response, NSError *_Nullable error))handler;
 
-- (ProtoRPC *)RPCToAddExternalMemberWithRequest:(RPCHubAddExternalMemberRequest *)request handler:(void(^)(RPCHubAddExternalMemberResponse *response, NSError *error))handler;
+- (GRPCProtoCall *)RPCToAddExternalMemberWithRequest:(RPCHubAddExternalMemberRequest *)request handler:(void(^)(RPCHubAddExternalMemberResponse *_Nullable response, NSError *_Nullable error))handler;
 
 
 #pragma mark EditExternalMember(RPCHubEditExternalMemberRequest) returns (RPCHubEditExternalMemberResponse)
 
-- (void)editExternalMemberWithRequest:(RPCHubEditExternalMemberRequest *)request handler:(void(^)(RPCHubEditExternalMemberResponse *response, NSError *error))handler;
+- (void)editExternalMemberWithRequest:(RPCHubEditExternalMemberRequest *)request handler:(void(^)(RPCHubEditExternalMemberResponse *_Nullable response, NSError *_Nullable error))handler;
 
-- (ProtoRPC *)RPCToEditExternalMemberWithRequest:(RPCHubEditExternalMemberRequest *)request handler:(void(^)(RPCHubEditExternalMemberResponse *response, NSError *error))handler;
+- (GRPCProtoCall *)RPCToEditExternalMemberWithRequest:(RPCHubEditExternalMemberRequest *)request handler:(void(^)(RPCHubEditExternalMemberResponse *_Nullable response, NSError *_Nullable error))handler;
 
 
 #pragma mark GetExternalMembers(RPCHubGetExternalMembersRequest) returns (RPCHubGetExternalMembersResponse)
 
-- (void)getExternalMembersWithRequest:(RPCHubGetExternalMembersRequest *)request handler:(void(^)(RPCHubGetExternalMembersResponse *response, NSError *error))handler;
+- (void)getExternalMembersWithRequest:(RPCHubGetExternalMembersRequest *)request handler:(void(^)(RPCHubGetExternalMembersResponse *_Nullable response, NSError *_Nullable error))handler;
 
-- (ProtoRPC *)RPCToGetExternalMembersWithRequest:(RPCHubGetExternalMembersRequest *)request handler:(void(^)(RPCHubGetExternalMembersResponse *response, NSError *error))handler;
+- (GRPCProtoCall *)RPCToGetExternalMembersWithRequest:(RPCHubGetExternalMembersRequest *)request handler:(void(^)(RPCHubGetExternalMembersResponse *_Nullable response, NSError *_Nullable error))handler;
 
 
 #pragma mark SendInvite(RPCHubSendInviteRequest) returns (RPCHubSendInviteResponse)
 
-- (void)sendInviteWithRequest:(RPCHubSendInviteRequest *)request handler:(void(^)(RPCHubSendInviteResponse *response, NSError *error))handler;
+- (void)sendInviteWithRequest:(RPCHubSendInviteRequest *)request handler:(void(^)(RPCHubSendInviteResponse *_Nullable response, NSError *_Nullable error))handler;
 
-- (ProtoRPC *)RPCToSendInviteWithRequest:(RPCHubSendInviteRequest *)request handler:(void(^)(RPCHubSendInviteResponse *response, NSError *error))handler;
+- (GRPCProtoCall *)RPCToSendInviteWithRequest:(RPCHubSendInviteRequest *)request handler:(void(^)(RPCHubSendInviteResponse *_Nullable response, NSError *_Nullable error))handler;
 
 
 #pragma mark RequestMembership(RPCHubRequestMembershipRequest) returns (RPCHubRequestMembershipResponse)
 
-- (void)requestMembershipWithRequest:(RPCHubRequestMembershipRequest *)request handler:(void(^)(RPCHubRequestMembershipResponse *response, NSError *error))handler;
+- (void)requestMembershipWithRequest:(RPCHubRequestMembershipRequest *)request handler:(void(^)(RPCHubRequestMembershipResponse *_Nullable response, NSError *_Nullable error))handler;
 
-- (ProtoRPC *)RPCToRequestMembershipWithRequest:(RPCHubRequestMembershipRequest *)request handler:(void(^)(RPCHubRequestMembershipResponse *response, NSError *error))handler;
+- (GRPCProtoCall *)RPCToRequestMembershipWithRequest:(RPCHubRequestMembershipRequest *)request handler:(void(^)(RPCHubRequestMembershipResponse *_Nullable response, NSError *_Nullable error))handler;
 
 
 #pragma mark JoinHub(RPCHubJoinHubRequest) returns (RPCHubJoinHubResponse)
 
-- (void)joinHubWithRequest:(RPCHubJoinHubRequest *)request handler:(void(^)(RPCHubJoinHubResponse *response, NSError *error))handler;
+- (void)joinHubWithRequest:(RPCHubJoinHubRequest *)request handler:(void(^)(RPCHubJoinHubResponse *_Nullable response, NSError *_Nullable error))handler;
 
-- (ProtoRPC *)RPCToJoinHubWithRequest:(RPCHubJoinHubRequest *)request handler:(void(^)(RPCHubJoinHubResponse *response, NSError *error))handler;
+- (GRPCProtoCall *)RPCToJoinHubWithRequest:(RPCHubJoinHubRequest *)request handler:(void(^)(RPCHubJoinHubResponse *_Nullable response, NSError *_Nullable error))handler;
 
 
 #pragma mark LeaveHub(RPCHubLeaveHubRequest) returns (RPCHubLeaveHubResponse)
 
-- (void)leaveHubWithRequest:(RPCHubLeaveHubRequest *)request handler:(void(^)(RPCHubLeaveHubResponse *response, NSError *error))handler;
+- (void)leaveHubWithRequest:(RPCHubLeaveHubRequest *)request handler:(void(^)(RPCHubLeaveHubResponse *_Nullable response, NSError *_Nullable error))handler;
 
-- (ProtoRPC *)RPCToLeaveHubWithRequest:(RPCHubLeaveHubRequest *)request handler:(void(^)(RPCHubLeaveHubResponse *response, NSError *error))handler;
+- (GRPCProtoCall *)RPCToLeaveHubWithRequest:(RPCHubLeaveHubRequest *)request handler:(void(^)(RPCHubLeaveHubResponse *_Nullable response, NSError *_Nullable error))handler;
 
 
 #pragma mark LinkHub(RPCHubLinkHubRequest) returns (RPCHubLinkHubResponse)
 
-- (void)linkHubWithRequest:(RPCHubLinkHubRequest *)request handler:(void(^)(RPCHubLinkHubResponse *response, NSError *error))handler;
+- (void)linkHubWithRequest:(RPCHubLinkHubRequest *)request handler:(void(^)(RPCHubLinkHubResponse *_Nullable response, NSError *_Nullable error))handler;
 
-- (ProtoRPC *)RPCToLinkHubWithRequest:(RPCHubLinkHubRequest *)request handler:(void(^)(RPCHubLinkHubResponse *response, NSError *error))handler;
+- (GRPCProtoCall *)RPCToLinkHubWithRequest:(RPCHubLinkHubRequest *)request handler:(void(^)(RPCHubLinkHubResponse *_Nullable response, NSError *_Nullable error))handler;
 
 
 #pragma mark UnlinkHub(RPCHubUnlinkHubRequest) returns (RPCHubUnlinkHubResponse)
 
-- (void)unlinkHubWithRequest:(RPCHubUnlinkHubRequest *)request handler:(void(^)(RPCHubUnlinkHubResponse *response, NSError *error))handler;
+- (void)unlinkHubWithRequest:(RPCHubUnlinkHubRequest *)request handler:(void(^)(RPCHubUnlinkHubResponse *_Nullable response, NSError *_Nullable error))handler;
 
-- (ProtoRPC *)RPCToUnlinkHubWithRequest:(RPCHubUnlinkHubRequest *)request handler:(void(^)(RPCHubUnlinkHubResponse *response, NSError *error))handler;
+- (GRPCProtoCall *)RPCToUnlinkHubWithRequest:(RPCHubUnlinkHubRequest *)request handler:(void(^)(RPCHubUnlinkHubResponse *_Nullable response, NSError *_Nullable error))handler;
 
 
 #pragma mark RegisterExternalUserID(RPCHubRegisterExternalUserIDRequest) returns (RPCHubRegisterExternalUserIDResponse)
 
-- (void)registerExternalUserIDWithRequest:(RPCHubRegisterExternalUserIDRequest *)request handler:(void(^)(RPCHubRegisterExternalUserIDResponse *response, NSError *error))handler;
+- (void)registerExternalUserIDWithRequest:(RPCHubRegisterExternalUserIDRequest *)request handler:(void(^)(RPCHubRegisterExternalUserIDResponse *_Nullable response, NSError *_Nullable error))handler;
 
-- (ProtoRPC *)RPCToRegisterExternalUserIDWithRequest:(RPCHubRegisterExternalUserIDRequest *)request handler:(void(^)(RPCHubRegisterExternalUserIDResponse *response, NSError *error))handler;
+- (GRPCProtoCall *)RPCToRegisterExternalUserIDWithRequest:(RPCHubRegisterExternalUserIDRequest *)request handler:(void(^)(RPCHubRegisterExternalUserIDResponse *_Nullable response, NSError *_Nullable error))handler;
+
+
+#pragma mark GetUserByExternalID(RPCHubGetUserByExternalIDRequest) returns (RPCHubGetUserByExternalIDResponse)
+
+- (void)getUserByExternalIDWithRequest:(RPCHubGetUserByExternalIDRequest *)request handler:(void(^)(RPCHubGetUserByExternalIDResponse *_Nullable response, NSError *_Nullable error))handler;
+
+- (GRPCProtoCall *)RPCToGetUserByExternalIDWithRequest:(RPCHubGetUserByExternalIDRequest *)request handler:(void(^)(RPCHubGetUserByExternalIDResponse *_Nullable response, NSError *_Nullable error))handler;
 
 
 @end
 
-// Basic service implementation, over gRPC, that only does marshalling and parsing.
-@interface HubService : ProtoService<HubService>
+/**
+ * Basic service implementation, over gRPC, that only does
+ * marshalling and parsing.
+ */
+@interface HubService : GRPCProtoService<HubService>
 - (instancetype)initWithHost:(NSString *)host NS_DESIGNATED_INITIALIZER;
 + (instancetype)serviceWithHost:(NSString *)host;
 @end
+
+NS_ASSUME_NONNULL_END

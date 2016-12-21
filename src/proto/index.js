@@ -1,10 +1,10 @@
 'use strict';
-
 let gosu = require('./gosu.js');
 
 module.exports = {
     Analytics: gosu.proto,
     Api: gosu.proto,
+	Contact: gosu.proto,
     Buildin: gosu.google.protobuf,
     Channel: gosu.proto,
     Hub: gosu.proto,

@@ -1,5 +1,20 @@
 # GOSU ProtoBuf Definitions
 
+## Compatibility
+
+github.com/golang/protobuf - 1e35a3a79e6fc8eedefdbeb905eddf7455fa0f4b
+google.golang.org/grpc - e3df691ebc183e3ec3bc062442e1503b3af17340
+
+```
+cd $GOPATH/src/github.com/golang/protobuf/protoc-gen-go
+git checkout 1e35a3a79e6fc8eedefdbeb905eddf7455fa0f4b
+go install
+
+cd $GOPATH/src/google.golang.org/grpc
+git checkout e3df691ebc183e3ec3bc062442e1503b3af17340
+go install
+```
+
 To regenerate the golang definitions
 
 ```

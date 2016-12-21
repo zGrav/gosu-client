@@ -3,14 +3,11 @@
 #import <ProtoRPC/ProtoRPC.h>
 #import <RxLibrary/GRXWriter+Immediate.h>
 
-static NSString *const kPackageName = @"proto";
-static NSString *const kServiceName = @"ESLService";
-
 @implementation ESLService
 
 // Designated initializer
 - (instancetype)initWithHost:(NSString *)host {
-  return (self = [super initWithHost:host packageName:kPackageName serviceName:kServiceName]);
+  return (self = [super initWithHost:host packageName:@"proto" serviceName:@"ESLService"]);
 }
 
 // Override superclass initializer to disallow different package and service names.
@@ -27,11 +24,23 @@ static NSString *const kServiceName = @"ESLService";
 
 #pragma mark IsStaffMember(StringValue) returns (BoolValue)
 
-- (void)isStaffMemberWithRequest:(GPBStringValue *)request handler:(void(^)(GPBBoolValue *response, NSError *error))handler{
+/**
+ * Check if an email belongs to an esl staff member
+ * 
+ * Only emails ending in @staff.eslgaming.com will
+ * result in a positive value
+ */
+- (void)isStaffMemberWithRequest:(GPBStringValue *)request handler:(void(^)(GPBBoolValue *_Nullable response, NSError *_Nullable error))handler{
   [[self RPCToIsStaffMemberWithRequest:request handler:handler] start];
 }
 // Returns a not-yet-started RPC object.
-- (ProtoRPC *)RPCToIsStaffMemberWithRequest:(GPBStringValue *)request handler:(void(^)(GPBBoolValue *response, NSError *error))handler{
+/**
+ * Check if an email belongs to an esl staff member
+ * 
+ * Only emails ending in @staff.eslgaming.com will
+ * result in a positive value
+ */
+- (GRPCProtoCall *)RPCToIsStaffMemberWithRequest:(GPBStringValue *)request handler:(void(^)(GPBBoolValue *_Nullable response, NSError *_Nullable error))handler{
   return [self RPCToMethod:@"IsStaffMember"
             requestsWriter:[GRXWriter writerWithValue:request]
              responseClass:[GPBBoolValue class]

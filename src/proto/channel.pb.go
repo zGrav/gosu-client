@@ -580,10 +580,11 @@ func (m *ChannelUpdateResponse) GetUser() *User {
 }
 
 type RPCChannelAddUsersToHubChannelRequest struct {
-	ChannelId string   `protobuf:"bytes,1,opt,name=channel_id" json:"channel_id,omitempty"`
-	HubId     string   `protobuf:"bytes,2,opt,name=hub_id" json:"hub_id,omitempty"`
-	UserIds   []string `protobuf:"bytes,3,rep,name=user_ids" json:"user_ids,omitempty"`
-	Remove    bool     `protobuf:"varint,4,opt,name=remove" json:"remove,omitempty"`
+	ChannelId                  string   `protobuf:"bytes,1,opt,name=channel_id" json:"channel_id,omitempty"`
+	HubId                      string   `protobuf:"bytes,2,opt,name=hub_id" json:"hub_id,omitempty"`
+	UserIds                    []string `protobuf:"bytes,3,rep,name=user_ids" json:"user_ids,omitempty"`
+	Remove                     bool     `protobuf:"varint,4,opt,name=remove" json:"remove,omitempty"`
+	PublishProfilePullRequests bool     `protobuf:"varint,5,opt,name=publish_profile_pull_requests" json:"publish_profile_pull_requests,omitempty"`
 }
 
 func (m *RPCChannelAddUsersToHubChannelRequest) Reset()         { *m = RPCChannelAddUsersToHubChannelRequest{} }
@@ -591,7 +592,8 @@ func (m *RPCChannelAddUsersToHubChannelRequest) String() string { return proto.C
 func (*RPCChannelAddUsersToHubChannelRequest) ProtoMessage()    {}
 
 type RPCChannelAddUsersToHubChannelResponse struct {
-	Error RPCChannelAddUsersToHubChannelResponse_ErrorType `protobuf:"varint,1,opt,name=error,enum=proto.RPCChannelAddUsersToHubChannelResponse_ErrorType" json:"error,omitempty"`
+	Error            RPCChannelAddUsersToHubChannelResponse_ErrorType `protobuf:"varint,1,opt,name=error,enum=proto.RPCChannelAddUsersToHubChannelResponse_ErrorType" json:"error,omitempty"`
+	ProcessedUserIds []string                                         `protobuf:"bytes,2,rep,name=processed_user_ids" json:"processed_user_ids,omitempty"`
 }
 
 func (m *RPCChannelAddUsersToHubChannelResponse) Reset() {

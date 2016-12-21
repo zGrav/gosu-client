@@ -123,13 +123,14 @@ func (x UserAccount_AccountType) String() string {
 type UserAgent_UserAgentType int32
 
 const (
-	UserAgent_UNKNOWN      UserAgent_UserAgentType = 0
-	UserAgent_WEB          UserAgent_UserAgentType = 1
-	UserAgent_ANDROID      UserAgent_UserAgentType = 2
-	UserAgent_IOS          UserAgent_UserAgentType = 3
-	UserAgent_WEB_EMBEDDED UserAgent_UserAgentType = 4
-	UserAgent_BOT          UserAgent_UserAgentType = 5
-	UserAgent_LOAD_TEST    UserAgent_UserAgentType = 6
+	UserAgent_UNKNOWN            UserAgent_UserAgentType = 0
+	UserAgent_WEB                UserAgent_UserAgentType = 1
+	UserAgent_ANDROID            UserAgent_UserAgentType = 2
+	UserAgent_IOS                UserAgent_UserAgentType = 3
+	UserAgent_WEB_EMBEDDED       UserAgent_UserAgentType = 4
+	UserAgent_BOT                UserAgent_UserAgentType = 5
+	UserAgent_LOAD_TEST          UserAgent_UserAgentType = 6
+	UserAgent_MANAGEMENT_CONSOLE UserAgent_UserAgentType = 7
 )
 
 var UserAgent_UserAgentType_name = map[int32]string{
@@ -140,15 +141,17 @@ var UserAgent_UserAgentType_name = map[int32]string{
 	4: "WEB_EMBEDDED",
 	5: "BOT",
 	6: "LOAD_TEST",
+	7: "MANAGEMENT_CONSOLE",
 }
 var UserAgent_UserAgentType_value = map[string]int32{
-	"UNKNOWN":      0,
-	"WEB":          1,
-	"ANDROID":      2,
-	"IOS":          3,
-	"WEB_EMBEDDED": 4,
-	"BOT":          5,
-	"LOAD_TEST":    6,
+	"UNKNOWN":            0,
+	"WEB":                1,
+	"ANDROID":            2,
+	"IOS":                3,
+	"WEB_EMBEDDED":       4,
+	"BOT":                5,
+	"LOAD_TEST":          6,
+	"MANAGEMENT_CONSOLE": 7,
 }
 
 func (x UserAgent_UserAgentType) String() string {
@@ -353,29 +356,35 @@ func (x GameMembershipRecord_MembershipType) String() string {
 }
 
 type User struct {
-	Id                 string                        `protobuf:"bytes,1,opt,name=id" json:"id,omitempty"`
-	Login              string                        `protobuf:"bytes,2,opt,name=login" json:"login,omitempty"`
-	Password           []byte                        `protobuf:"bytes,3,opt,name=password,proto3" json:"password,omitempty"`
-	Email              string                        `protobuf:"bytes,4,opt,name=email" json:"email,omitempty"`
-	DisplayName        string                        `protobuf:"bytes,5,opt,name=display_name" json:"display_name,omitempty"`
-	AvatarImage        string                        `protobuf:"bytes,6,opt,name=avatar_image" json:"avatar_image,omitempty"`
-	ChannelIds         []string                      `protobuf:"bytes,7,rep,name=channel_ids" json:"channel_ids,omitempty"`
-	Channels           []*Channel                    `protobuf:"bytes,8,rep,name=channels" json:"channels,omitempty"`
-	EmailConfirmed     bool                          `protobuf:"varint,9,opt,name=email_confirmed" json:"email_confirmed,omitempty"`
-	Status             User_UserStatus               `protobuf:"varint,10,opt,name=status,enum=proto.User_UserStatus" json:"status,omitempty"`
-	TermsOfService     bool                          `protobuf:"varint,11,opt,name=terms_of_service" json:"terms_of_service,omitempty"`
-	Newsletter         bool                          `protobuf:"varint,12,opt,name=newsletter" json:"newsletter,omitempty"`
-	TitleImage         string                        `protobuf:"bytes,13,opt,name=title_image" json:"title_image,omitempty"`
-	BackgroundImage    string                        `protobuf:"bytes,14,opt,name=background_image" json:"background_image,omitempty"`
-	GameIds            []string                      `protobuf:"bytes,15,rep,name=game_ids" json:"game_ids,omitempty"`
-	NormalizedLogin    string                        `protobuf:"bytes,16,opt,name=normalized_login" json:"normalized_login,omitempty"`
-	Biography          *UserBiography                `protobuf:"bytes,17,opt,name=biography" json:"biography,omitempty"`
-	IsSysop            bool                          `protobuf:"varint,18,opt,name=is_sysop" json:"is_sysop,omitempty"`
-	ChannelMemberships []*ChannelMembership          `protobuf:"bytes,19,rep,name=channelMemberships" json:"channelMemberships,omitempty"`
-	Relations          []*ProprietaryUserGroupRecord `protobuf:"bytes,20,rep,name=relations" json:"relations,omitempty"`
-	CreatedAt          int64                         `protobuf:"varint,21,opt,name=created_at" json:"created_at,omitempty"`
-	UpdatedAt          int64                         `protobuf:"varint,22,opt,name=updated_at" json:"updated_at,omitempty"`
-	Ephemeral          bool                          `protobuf:"varint,23,opt,name=ephemeral" json:"ephemeral,omitempty"`
+	Id                         string                        `protobuf:"bytes,1,opt,name=id" json:"id,omitempty"`
+	Login                      string                        `protobuf:"bytes,2,opt,name=login" json:"login,omitempty"`
+	Password                   []byte                        `protobuf:"bytes,3,opt,name=password,proto3" json:"password,omitempty"`
+	Email                      string                        `protobuf:"bytes,4,opt,name=email" json:"email,omitempty"`
+	DisplayName                string                        `protobuf:"bytes,5,opt,name=display_name" json:"display_name,omitempty"`
+	AvatarImage                string                        `protobuf:"bytes,6,opt,name=avatar_image" json:"avatar_image,omitempty"`
+	ChannelIds                 []string                      `protobuf:"bytes,7,rep,name=channel_ids" json:"channel_ids,omitempty"`
+	Channels                   []*Channel                    `protobuf:"bytes,8,rep,name=channels" json:"channels,omitempty"`
+	EmailConfirmed             bool                          `protobuf:"varint,9,opt,name=email_confirmed" json:"email_confirmed,omitempty"`
+	Status                     User_UserStatus               `protobuf:"varint,10,opt,name=status,enum=proto.User_UserStatus" json:"status,omitempty"`
+	TermsOfService             bool                          `protobuf:"varint,11,opt,name=terms_of_service" json:"terms_of_service,omitempty"`
+	Newsletter                 bool                          `protobuf:"varint,12,opt,name=newsletter" json:"newsletter,omitempty"`
+	TitleImage                 string                        `protobuf:"bytes,13,opt,name=title_image" json:"title_image,omitempty"`
+	BackgroundImage            string                        `protobuf:"bytes,14,opt,name=background_image" json:"background_image,omitempty"`
+	GameIds                    []string                      `protobuf:"bytes,15,rep,name=game_ids" json:"game_ids,omitempty"`
+	NormalizedLogin            string                        `protobuf:"bytes,16,opt,name=normalized_login" json:"normalized_login,omitempty"`
+	Biography                  *UserBiography                `protobuf:"bytes,17,opt,name=biography" json:"biography,omitempty"`
+	IsSysop                    bool                          `protobuf:"varint,18,opt,name=is_sysop" json:"is_sysop,omitempty"`
+	ChannelMemberships         []*ChannelMembership          `protobuf:"bytes,19,rep,name=channelMemberships" json:"channelMemberships,omitempty"`
+	Relations                  []*ProprietaryUserGroupRecord `protobuf:"bytes,20,rep,name=relations" json:"relations,omitempty"`
+	CreatedAt                  int64                         `protobuf:"varint,21,opt,name=created_at" json:"created_at,omitempty"`
+	UpdatedAt                  int64                         `protobuf:"varint,22,opt,name=updated_at" json:"updated_at,omitempty"`
+	Ephemeral                  bool                          `protobuf:"varint,23,opt,name=ephemeral" json:"ephemeral,omitempty"`
+	FacebookId                 string                        `protobuf:"bytes,24,opt,name=facebook_id" json:"facebook_id,omitempty"`
+	AvatarImageIsAutogenerated bool                          `protobuf:"varint,25,opt,name=avatar_image_is_autogenerated" json:"avatar_image_is_autogenerated,omitempty"`
+	NameIsAutogenerated        bool                          `protobuf:"varint,26,opt,name=name_is_autogenerated" json:"name_is_autogenerated,omitempty"`
+	GoogleId                   string                        `protobuf:"bytes,27,opt,name=google_id" json:"google_id,omitempty"`
+	HasSetPassword             bool                          `protobuf:"varint,28,opt,name=has_set_password" json:"has_set_password,omitempty"`
+	HasMobileClient            bool                          `protobuf:"varint,29,opt,name=has_mobile_client" json:"has_mobile_client,omitempty"`
 }
 
 func (m *User) Reset()         { *m = User{} }

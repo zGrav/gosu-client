@@ -13,6 +13,7 @@ import "prefs.proto";
 import "wrappers.proto";
 import "hub_base.proto";
 import "hub.proto";
+import "contacts.proto";
 
 // RPC
 
@@ -23,13 +24,19 @@ message RPCGenericResponse {
 // RPC - User
 
 service UserService {
-    rpc Login (RPCAuthLoginRequest) returns (AuthLoginResponse);
+    rpc Login (RPCAuthLoginRequest) returns (RPCAuthLoginResponse);
+    rpc LoginOAuth (RPCAuthLoginOAuthRequest) returns (RPCAuthLoginResponse);
+    rpc LoginEmail (RPCAuthLoginEmailRequest) returns (RPCAuthLoginResponse);
     rpc Register (RPCAuthRegisterRequest) returns (AuthRegisterResponse);
     rpc ConvertEphemeralUser (RPCUserConvertEphemeralUserRequest) returns (RPCUserConvertEphemeralUserResponse);
+    rpc TransferOwnership (RPCUserTransferOwnershipRequest) returns (RPCUserTransferOwnershipResponse);
+    rpc CheckBanStatus (RPCUserCheckBanStatusRequest) returns (RPCUserCheckBanStatusResponse);
+
     rpc GetUser (RPCUserGetUserRequest) returns (RPCUserGetUserResponse);
     rpc DeleteUser (RPCUserDeleteUserRequest) returns (RPCUserDeleteUserResponse);
     rpc RemoveUserFromHubs (RPCUserRemoveUserFromHubsRequest) returns (RPCUserRemoveUserFromHubsResponse);
     rpc ValidateUsername (RPCUserValidateUsernameRequest) returns (RPCUserValidateUsernameResponse);
+    rpc ValidateEmailAddress (RPCUserValidateEmailAddressRequest) returns (RPCUserValidateEmailAddressResponse);
     rpc GetUserAgent (RPCUserGetUserAgentRequest) returns (RPCUserGetUserAgentResponse);
     rpc GetOwnProfile (RPCUserGetOwnProfileRequest) returns (RPCUserGetOwnProfileResponse);
     rpc GetOtherProfile (RPCUserGetOtherProfileRequest) returns (RPCUserGetOtherProfileResponse);
@@ -39,9 +46,12 @@ service UserService {
     rpc GetFriends(RPCUserGetFriendsRequest) returns (RPCUserGetFriendsResponse);
     rpc RequestActivationEmail(RPCUserActivationEmailRequest) returns (RPCUserActivationEmailResponse);
     rpc ExecuteActivation(RPCUserExecuteActivationRequest) returns (RPCUserExecuteActivationResponse);
+
     rpc RequestPasswordReset(RPCUserPasswordResetEmailRequest) returns (RPCUserPasswordResetEmailResponse);
+    rpc GetPasswordResetInfo(RPCUserGetPasswordResetInfoRequest) returns (RPCUserGetPasswordResetInfoResponse);
     rpc ExecutePasswordReset(RPCUserExecutePasswordResetRequest) returns (RPCUserExecutePasswordResetResponse);
     rpc UpdatePassword(RPCUserUpdatePasswordRequest) returns (RPCUserUpdatePasswordResponse);
+
     rpc GetUserProfile (RPCProfileGetRequest) returns (UserProfile);
     rpc UpdateGameEntry (UserGame) returns (UserProfile);
     rpc DeleteGameEntry (UserGame) returns (UserProfile);
@@ -51,6 +61,14 @@ service UserService {
     rpc SetGroupRole (RPCUserSetGroupRoleRequest) returns (RPCUserSetGroupRoleResponse);
     rpc CreateProprietaryGroupMembership (RPCCreateRelationRequest) returns (RPCCreateRelationResponse);
     rpc UpdateVoiceStatus (RPCUserUpdateVoiceStatusRequest) returns (RPCUserUpdateVoiceStatusResponse);
+
+    rpc AddContact (RPCUserAddContactRequest) returns (RPCUserAddContactResponse);
+    rpc RemoveContact (RPCUserRemoveContactRequest) returns (RPCUserRemoveContactResponse);
+    rpc GetContacts (RPCUserGetContactsRequest) returns (RPCUserGetContactsResponse);
+    rpc AddMutualContacts(RPCUserAddMutualContactsRequest) returns (RPCUserAddMutualContactsResponse);
+
+    rpc EditBlockedUser(RPCUserEditBlockedUserRequest) returns (RPCUserEditBlockedUserResponse);
+    rpc GetBlockedUsers(RPCUserGetBlockedUsersRequest) returns (RPCUserGetBlockedUsersResponse);
 }
 
 message RPCCreateRelationRequest {
@@ -72,6 +90,42 @@ message RPCAuthLoginRequest {
     string current_user_id = 7;
 }
 
+message RPCAuthLoginOAuthRequest {
+    string current_user_id = 1;
+    string oauth_token = 2;
+    AuthLoginOAuthRequest.OAuthProvider oauth_provider = 3;
+    string requested_username = 4;
+    string email_address = 5;
+    string agent_id = 6;
+    string agent_name = 7;
+    UserAgent.UserAgentType agent_type = 8;
+    string client_ip = 9;
+    string oauth_code = 10;
+    string oauth_redirect_uri = 11;
+}
+
+message RPCAuthLoginEmailRequest {
+    string current_user_id = 1;
+    string email = 2;
+    string source_url = 3;
+    string code = 4;
+    string requested_username = 5;
+    string agent_id = 6;
+    string agent_name = 7;
+    UserAgent.UserAgentType agent_type = 8;
+    string client_ip = 9;
+    bool reset_password = 10;
+    string new_password = 11;
+}
+
+message RPCAuthLoginResponse {
+    bool success = 1;
+    string token = 2;
+    User user = 3;
+    AuthLoginResponse.ErrorType error = 4;
+    bool new_user = 5;
+}
+
 message RPCAuthRegisterRequest {
     string username = 1;
     string password = 2;
@@ -88,6 +142,7 @@ message RPCAuthRegisterRequest {
     bool ephemeral = 13;
     repeated string join_communities = 14;
     bool auto_generate_name_suffix = 15;
+    string avatar_image = 16;
 }
 
 message RPCUserConvertEphemeralUserRequest {
@@ -98,6 +153,7 @@ message RPCUserConvertEphemeralUserRequest {
     string password = 5;
     bool newsletter = 6;
     bool terms_of_service = 7;
+    string avatar_image = 8;
 }
 
 message RPCUserConvertEphemeralUserResponse {
@@ -120,6 +176,7 @@ message RPCUserUpdateRequest {
     OptionalGames games = 7;
     OptionalString background_image = 8;
     OptionalString title_image = 9;
+    OptionalBool terms_of_service = 10;
 
     BiographyUpdateData biography = 16;
 }
@@ -164,6 +221,14 @@ message RPCUserValidateUsernameRequest {
 
 message RPCUserValidateUsernameResponse {
     AuthRegisterResponse.ErrorType error = 1;
+}
+
+message RPCUserValidateEmailAddressRequest {
+    string email_address = 1;
+}
+
+message RPCUserValidateEmailAddressResponse {
+    UserValidateEmailAddressResponse.ErrorType error = 1;
 }
 
 message RPCUserGetUserResponse {
@@ -226,10 +291,21 @@ message RPCUserExecuteActivationResponse {
 
 message RPCUserPasswordResetEmailRequest {
     string email = 1;
+    string source_url = 2;
 }
 
 message RPCUserPasswordResetEmailResponse {
     bool success = 1;
+}
+
+message RPCUserGetPasswordResetInfoRequest {
+    string secret = 1;
+}
+
+message RPCUserGetPasswordResetInfoResponse {
+    AuthGetPasswordResetInfoResponse.ErrorType error = 1;
+    ChatUser user = 2;
+    string source_url = 3;
 }
 
 message RPCUserExecutePasswordResetRequest {
@@ -239,6 +315,7 @@ message RPCUserExecutePasswordResetRequest {
 
 message RPCUserExecutePasswordResetResponse {
     bool success = 1;
+    string token = 2;
 }
 
 message RPCUserUpdatePasswordRequest {
@@ -248,7 +325,7 @@ message RPCUserUpdatePasswordRequest {
 }
 
 message RPCUserUpdatePasswordResponse {
-    bool success = 1;
+    ProfileUpdatePasswordResponse.ErrorType error = 1;
 }
 
 message RPCUserSetChannelRoleRequest {
@@ -298,6 +375,43 @@ message RPCUserRemoveUserFromHubsRequest {
 }
 
 message RPCUserRemoveUserFromHubsResponse {
+    enum ErrorType {
+        NONE = 0;
+        BAD_REQUEST = 1;
+        UNKNOWN_ERROR = 2;
+    }
+    ErrorType error = 1;
+}
+
+message RPCUserTransferOwnershipRequest {
+    string user_id = 1;
+    string target_user_auth_token = 2;
+}
+
+message RPCUserTransferOwnershipResponse {
+    UserTransferOwnershipResponse.ErrorType error = 1;
+}
+
+message RPCUserCheckBanStatusRequest {
+    string client_ip = 1;
+}
+
+message RPCUserCheckBanStatusResponse {
+    UserCheckBanStatusResponse.ErrorType error = 1;
+    bool is_banned = 2;
+}
+
+message RPCUserAddMutualContactsRequest {
+    repeated AddMutualContactsRequestEntry contacts = 1;
+}
+
+message AddMutualContactsRequestEntry {
+    string first_user_id = 1;
+    string second_user_id = 2;
+    bool mutual = 3;
+}
+
+message RPCUserAddMutualContactsResponse {
     enum ErrorType {
         NONE = 0;
         BAD_REQUEST = 1;
@@ -670,3 +784,24 @@ message RPCMailchimpUnsubscribeRequest {
 message RPCMailchimpUnsubscribeResponse {
 }
 */
+
+// blocked users
+
+message RPCUserEditBlockedUserRequest {
+    string user_id = 1;
+    string blocked_user_id = 2;
+    bool remove = 3;
+}
+
+message RPCUserEditBlockedUserResponse {
+    UserEditBlockedUserResponse.ErrorType error = 1;
+}
+
+message RPCUserGetBlockedUsersRequest {
+    string user_id = 1;
+}
+
+message RPCUserGetBlockedUsersResponse {
+    UserGetBlockedUsersResponse.ErrorType error = 1;
+    repeated ChatUser users = 2;
+}

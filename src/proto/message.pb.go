@@ -52,6 +52,7 @@ const (
 	MessageBodyAnnotation_CHANNEL_LINK MessageBodyAnnotation_SliceType = 4
 	MessageBodyAnnotation_EMAIL        MessageBodyAnnotation_SliceType = 5
 	MessageBodyAnnotation_TEAMSPEAK    MessageBodyAnnotation_SliceType = 6
+	MessageBodyAnnotation_QUESTION     MessageBodyAnnotation_SliceType = 7
 )
 
 var MessageBodyAnnotation_SliceType_name = map[int32]string{
@@ -62,6 +63,7 @@ var MessageBodyAnnotation_SliceType_name = map[int32]string{
 	4: "CHANNEL_LINK",
 	5: "EMAIL",
 	6: "TEAMSPEAK",
+	7: "QUESTION",
 }
 var MessageBodyAnnotation_SliceType_value = map[string]int32{
 	"UNKNOWN":      0,
@@ -71,10 +73,94 @@ var MessageBodyAnnotation_SliceType_value = map[string]int32{
 	"CHANNEL_LINK": 4,
 	"EMAIL":        5,
 	"TEAMSPEAK":    6,
+	"QUESTION":     7,
 }
 
 func (x MessageBodyAnnotation_SliceType) String() string {
 	return proto.EnumName(MessageBodyAnnotation_SliceType_name, int32(x))
+}
+
+type UserMessage_Type int32
+
+const (
+	UserMessage_NONE     UserMessage_Type = 0
+	UserMessage_QUESTION UserMessage_Type = 1
+)
+
+var UserMessage_Type_name = map[int32]string{
+	0: "NONE",
+	1: "QUESTION",
+}
+var UserMessage_Type_value = map[string]int32{
+	"NONE":     0,
+	"QUESTION": 1,
+}
+
+func (x UserMessage_Type) String() string {
+	return proto.EnumName(UserMessage_Type_name, int32(x))
+}
+
+type MessageAttachment_AttachmentType int32
+
+const (
+	MessageAttachment_UNKNOWN       MessageAttachment_AttachmentType = 0
+	MessageAttachment_QUOTE         MessageAttachment_AttachmentType = 1
+	MessageAttachment_IMAGE         MessageAttachment_AttachmentType = 2
+	MessageAttachment_IMAGE_GALLERY MessageAttachment_AttachmentType = 3
+	MessageAttachment_VIDEO         MessageAttachment_AttachmentType = 4
+	MessageAttachment_AUDIO         MessageAttachment_AttachmentType = 5
+	MessageAttachment_WEBSITE       MessageAttachment_AttachmentType = 6
+	MessageAttachment_EMBED         MessageAttachment_AttachmentType = 7
+	MessageAttachment_DOCUMENT      MessageAttachment_AttachmentType = 8
+	MessageAttachment_FILE          MessageAttachment_AttachmentType = 9
+	MessageAttachment_MESSAGE       MessageAttachment_AttachmentType = 10
+	MessageAttachment_REPLY_TO      MessageAttachment_AttachmentType = 11
+	// External services with rich attachment support
+	MessageAttachment_EXTERNAL_TWITCH     MessageAttachment_AttachmentType = 100
+	MessageAttachment_EXTERNAL_YOUTUBE    MessageAttachment_AttachmentType = 101
+	MessageAttachment_EXTERNAL_VIMEO      MessageAttachment_AttachmentType = 102
+	MessageAttachment_EXTERNAL_SOUNDCLOUD MessageAttachment_AttachmentType = 103
+)
+
+var MessageAttachment_AttachmentType_name = map[int32]string{
+	0:   "UNKNOWN",
+	1:   "QUOTE",
+	2:   "IMAGE",
+	3:   "IMAGE_GALLERY",
+	4:   "VIDEO",
+	5:   "AUDIO",
+	6:   "WEBSITE",
+	7:   "EMBED",
+	8:   "DOCUMENT",
+	9:   "FILE",
+	10:  "MESSAGE",
+	11:  "REPLY_TO",
+	100: "EXTERNAL_TWITCH",
+	101: "EXTERNAL_YOUTUBE",
+	102: "EXTERNAL_VIMEO",
+	103: "EXTERNAL_SOUNDCLOUD",
+}
+var MessageAttachment_AttachmentType_value = map[string]int32{
+	"UNKNOWN":             0,
+	"QUOTE":               1,
+	"IMAGE":               2,
+	"IMAGE_GALLERY":       3,
+	"VIDEO":               4,
+	"AUDIO":               5,
+	"WEBSITE":             6,
+	"EMBED":               7,
+	"DOCUMENT":            8,
+	"FILE":                9,
+	"MESSAGE":             10,
+	"REPLY_TO":            11,
+	"EXTERNAL_TWITCH":     100,
+	"EXTERNAL_YOUTUBE":    101,
+	"EXTERNAL_VIMEO":      102,
+	"EXTERNAL_SOUNDCLOUD": 103,
+}
+
+func (x MessageAttachment_AttachmentType) String() string {
+	return proto.EnumName(MessageAttachment_AttachmentType_name, int32(x))
 }
 
 type Website_WebsiteType int32
@@ -156,17 +242,20 @@ const (
 	SystemAction_UNKNOWN        SystemAction_Type = 0
 	SystemAction_GENERAL        SystemAction_Type = 1
 	SystemAction_USER_LOGGED_IN SystemAction_Type = 2
+	SystemAction_DONATION       SystemAction_Type = 3
 )
 
 var SystemAction_Type_name = map[int32]string{
 	0: "UNKNOWN",
 	1: "GENERAL",
 	2: "USER_LOGGED_IN",
+	3: "DONATION",
 }
 var SystemAction_Type_value = map[string]int32{
 	"UNKNOWN":        0,
 	"GENERAL":        1,
 	"USER_LOGGED_IN": 2,
+	"DONATION":       3,
 }
 
 func (x SystemAction_Type) String() string {
@@ -184,6 +273,7 @@ type WebsocketMessage struct {
 	SystemMessage      *SystemMessage               `protobuf:"bytes,8,opt,name=system_message" json:"system_message,omitempty"`
 	SystemAction       *SystemAction                `protobuf:"bytes,10,opt,name=system_action" json:"system_action,omitempty"`
 	Recipient          string                       `protobuf:"bytes,9,opt,name=recipient" json:"recipient,omitempty"`
+	Recipients         []string                     `protobuf:"bytes,11,rep,name=recipients" json:"recipients,omitempty"`
 	ProcessedByCrawler bool                         `protobuf:"varint,16,opt,name=processed_by_crawler" json:"processed_by_crawler,omitempty"`
 	Deleted            bool                         `protobuf:"varint,17,opt,name=deleted" json:"deleted,omitempty"`
 }
@@ -268,8 +358,11 @@ type UserMessage struct {
 	User             *ChatUser                `protobuf:"bytes,3,opt,name=user" json:"user,omitempty"`
 	DeletedTimestamp string                   `protobuf:"bytes,4,opt,name=deleted_timestamp" json:"deleted_timestamp,omitempty"`
 	DeletedUser      string                   `protobuf:"bytes,5,opt,name=deleted_user" json:"deleted_user,omitempty"`
+	Type             UserMessage_Type         `protobuf:"varint,6,opt,name=type,enum=proto.UserMessage_Type" json:"type,omitempty"`
+	ConversationId   string                   `protobuf:"bytes,7,opt,name=conversation_id" json:"conversation_id,omitempty"`
 	Quote            string                   `protobuf:"bytes,16,opt,name=quote" json:"quote,omitempty"`
 	Website          *Website                 `protobuf:"bytes,17,opt,name=website" json:"website,omitempty"`
+	Attachments      []*MessageAttachment     `protobuf:"bytes,18,rep,name=attachments" json:"attachments,omitempty"`
 }
 
 func (m *UserMessage) Reset()         { *m = UserMessage{} }
@@ -296,6 +389,190 @@ func (m *UserMessage) GetWebsite() *Website {
 	}
 	return nil
 }
+
+func (m *UserMessage) GetAttachments() []*MessageAttachment {
+	if m != nil {
+		return m.Attachments
+	}
+	return nil
+}
+
+type MessageAttachment struct {
+	Type          MessageAttachment_AttachmentType `protobuf:"varint,1,opt,name=type,enum=proto.MessageAttachment_AttachmentType" json:"type,omitempty"`
+	PosStart      int32                            `protobuf:"varint,2,opt,name=pos_start" json:"pos_start,omitempty"`
+	PosEnd        int32                            `protobuf:"varint,3,opt,name=pos_end" json:"pos_end,omitempty"`
+	FallbackUrl   string                           `protobuf:"bytes,4,opt,name=fallback_url" json:"fallback_url,omitempty"`
+	Actions       []*AttachmentAction              `protobuf:"bytes,5,rep,name=actions" json:"actions,omitempty"`
+	Quote         string                           `protobuf:"bytes,16,opt,name=quote" json:"quote,omitempty"`
+	Website       *AttachmentWebsite               `protobuf:"bytes,17,opt,name=website" json:"website,omitempty"`
+	Image         *AttachmentImage                 `protobuf:"bytes,18,opt,name=image" json:"image,omitempty"`
+	Gallery       *AttachmentImageGallery          `protobuf:"bytes,19,opt,name=gallery" json:"gallery,omitempty"`
+	Media         *AttachmentMedia                 `protobuf:"bytes,20,opt,name=media" json:"media,omitempty"`
+	ExternalMedia *AttachmentExternalMedia         `protobuf:"bytes,21,opt,name=external_media" json:"external_media,omitempty"`
+	File          *AttachmentFile                  `protobuf:"bytes,22,opt,name=file" json:"file,omitempty"`
+	Message       *WebsocketMessage                `protobuf:"bytes,23,opt,name=message" json:"message,omitempty"`
+}
+
+func (m *MessageAttachment) Reset()         { *m = MessageAttachment{} }
+func (m *MessageAttachment) String() string { return proto.CompactTextString(m) }
+func (*MessageAttachment) ProtoMessage()    {}
+
+func (m *MessageAttachment) GetActions() []*AttachmentAction {
+	if m != nil {
+		return m.Actions
+	}
+	return nil
+}
+
+func (m *MessageAttachment) GetWebsite() *AttachmentWebsite {
+	if m != nil {
+		return m.Website
+	}
+	return nil
+}
+
+func (m *MessageAttachment) GetImage() *AttachmentImage {
+	if m != nil {
+		return m.Image
+	}
+	return nil
+}
+
+func (m *MessageAttachment) GetGallery() *AttachmentImageGallery {
+	if m != nil {
+		return m.Gallery
+	}
+	return nil
+}
+
+func (m *MessageAttachment) GetMedia() *AttachmentMedia {
+	if m != nil {
+		return m.Media
+	}
+	return nil
+}
+
+func (m *MessageAttachment) GetExternalMedia() *AttachmentExternalMedia {
+	if m != nil {
+		return m.ExternalMedia
+	}
+	return nil
+}
+
+func (m *MessageAttachment) GetFile() *AttachmentFile {
+	if m != nil {
+		return m.File
+	}
+	return nil
+}
+
+func (m *MessageAttachment) GetMessage() *WebsocketMessage {
+	if m != nil {
+		return m.Message
+	}
+	return nil
+}
+
+type AttachmentAction struct {
+}
+
+func (m *AttachmentAction) Reset()         { *m = AttachmentAction{} }
+func (m *AttachmentAction) String() string { return proto.CompactTextString(m) }
+func (*AttachmentAction) ProtoMessage()    {}
+
+type AttachmentWebsite struct {
+	Url         string           `protobuf:"bytes,1,opt,name=url" json:"url,omitempty"`
+	Title       string           `protobuf:"bytes,2,opt,name=title" json:"title,omitempty"`
+	Description string           `protobuf:"bytes,3,opt,name=description" json:"description,omitempty"`
+	Favicon     string           `protobuf:"bytes,4,opt,name=favicon" json:"favicon,omitempty"`
+	Image       *AttachmentImage `protobuf:"bytes,16,opt,name=image" json:"image,omitempty"`
+	Media       *AttachmentMedia `protobuf:"bytes,17,opt,name=media" json:"media,omitempty"`
+}
+
+func (m *AttachmentWebsite) Reset()         { *m = AttachmentWebsite{} }
+func (m *AttachmentWebsite) String() string { return proto.CompactTextString(m) }
+func (*AttachmentWebsite) ProtoMessage()    {}
+
+func (m *AttachmentWebsite) GetImage() *AttachmentImage {
+	if m != nil {
+		return m.Image
+	}
+	return nil
+}
+
+func (m *AttachmentWebsite) GetMedia() *AttachmentMedia {
+	if m != nil {
+		return m.Media
+	}
+	return nil
+}
+
+type AttachmentImage struct {
+	Url         string `protobuf:"bytes,1,opt,name=url" json:"url,omitempty"`
+	Width       int32  `protobuf:"varint,2,opt,name=width" json:"width,omitempty"`
+	Height      int32  `protobuf:"varint,3,opt,name=height" json:"height,omitempty"`
+	Placeholder []byte `protobuf:"bytes,4,opt,name=placeholder,proto3" json:"placeholder,omitempty"`
+	Caption     string `protobuf:"bytes,5,opt,name=caption" json:"caption,omitempty"`
+	MimeType    string `protobuf:"bytes,6,opt,name=mime_type" json:"mime_type,omitempty"`
+}
+
+func (m *AttachmentImage) Reset()         { *m = AttachmentImage{} }
+func (m *AttachmentImage) String() string { return proto.CompactTextString(m) }
+func (*AttachmentImage) ProtoMessage()    {}
+
+type AttachmentImageGallery struct {
+	Images []*AttachmentImage `protobuf:"bytes,1,rep,name=images" json:"images,omitempty"`
+}
+
+func (m *AttachmentImageGallery) Reset()         { *m = AttachmentImageGallery{} }
+func (m *AttachmentImageGallery) String() string { return proto.CompactTextString(m) }
+func (*AttachmentImageGallery) ProtoMessage()    {}
+
+func (m *AttachmentImageGallery) GetImages() []*AttachmentImage {
+	if m != nil {
+		return m.Images
+	}
+	return nil
+}
+
+type AttachmentMedia struct {
+	Url         string `protobuf:"bytes,1,opt,name=url" json:"url,omitempty"`
+	Width       int32  `protobuf:"varint,2,opt,name=width" json:"width,omitempty"`
+	Height      int32  `protobuf:"varint,3,opt,name=height" json:"height,omitempty"`
+	Placeholder []byte `protobuf:"bytes,4,opt,name=placeholder,proto3" json:"placeholder,omitempty"`
+	PreviewUrl  string `protobuf:"bytes,5,opt,name=preview_url" json:"preview_url,omitempty"`
+	MimeType    string `protobuf:"bytes,6,opt,name=mime_type" json:"mime_type,omitempty"`
+}
+
+func (m *AttachmentMedia) Reset()         { *m = AttachmentMedia{} }
+func (m *AttachmentMedia) String() string { return proto.CompactTextString(m) }
+func (*AttachmentMedia) ProtoMessage()    {}
+
+type AttachmentExternalMedia struct {
+	Url         string `protobuf:"bytes,1,opt,name=url" json:"url,omitempty"`
+	Width       int32  `protobuf:"varint,2,opt,name=width" json:"width,omitempty"`
+	Height      int32  `protobuf:"varint,3,opt,name=height" json:"height,omitempty"`
+	Placeholder []byte `protobuf:"bytes,4,opt,name=placeholder,proto3" json:"placeholder,omitempty"`
+	PreviewUrl  string `protobuf:"bytes,5,opt,name=preview_url" json:"preview_url,omitempty"`
+	ContentId   string `protobuf:"bytes,6,opt,name=content_id" json:"content_id,omitempty"`
+}
+
+func (m *AttachmentExternalMedia) Reset()         { *m = AttachmentExternalMedia{} }
+func (m *AttachmentExternalMedia) String() string { return proto.CompactTextString(m) }
+func (*AttachmentExternalMedia) ProtoMessage()    {}
+
+type AttachmentFile struct {
+	Url      string `protobuf:"bytes,1,opt,name=url" json:"url,omitempty"`
+	Title    string `protobuf:"bytes,2,opt,name=title" json:"title,omitempty"`
+	Preview  string `protobuf:"bytes,3,opt,name=preview" json:"preview,omitempty"`
+	MimeType string `protobuf:"bytes,4,opt,name=mime_type" json:"mime_type,omitempty"`
+	Encoding string `protobuf:"bytes,5,opt,name=encoding" json:"encoding,omitempty"`
+	Size     int64  `protobuf:"varint,6,opt,name=size" json:"size,omitempty"`
+}
+
+func (m *AttachmentFile) Reset()         { *m = AttachmentFile{} }
+func (m *AttachmentFile) String() string { return proto.CompactTextString(m) }
+func (*AttachmentFile) ProtoMessage()    {}
 
 type Website struct {
 	Url         string              `protobuf:"bytes,1,opt,name=url" json:"url,omitempty"`
@@ -477,6 +754,8 @@ func (m *MessageWithMeta) GetSenderAgent() *UserAgent {
 func init() {
 	proto.RegisterEnum("proto.WebsocketMessage_MessageType", WebsocketMessage_MessageType_name, WebsocketMessage_MessageType_value)
 	proto.RegisterEnum("proto.MessageBodyAnnotation_SliceType", MessageBodyAnnotation_SliceType_name, MessageBodyAnnotation_SliceType_value)
+	proto.RegisterEnum("proto.UserMessage_Type", UserMessage_Type_name, UserMessage_Type_value)
+	proto.RegisterEnum("proto.MessageAttachment_AttachmentType", MessageAttachment_AttachmentType_name, MessageAttachment_AttachmentType_value)
 	proto.RegisterEnum("proto.Website_WebsiteType", Website_WebsiteType_name, Website_WebsiteType_value)
 	proto.RegisterEnum("proto.SystemMessage_MessageType", SystemMessage_MessageType_name, SystemMessage_MessageType_value)
 	proto.RegisterEnum("proto.SystemAction_Type", SystemAction_Type_name, SystemAction_Type_value)

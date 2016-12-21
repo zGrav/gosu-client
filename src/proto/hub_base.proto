@@ -35,4 +35,25 @@ message Hub {
     string normalized_title = 20;
     string normalized_short_title = 21;
     int64 online_user_count = 22;
+	bool wordfilter_enabled = 23;
+	string wordfilter_list = 24;
+	bool linkwhitelist_enabled = 25;
+	string linkwhitelist_list = 26;
+    GeoLocation geo_location = 27;
+    int64 total_user_count = 28;
+    string latest_message_timestamp = 29;
+    string topic = 30;
+    int32 max_message_length = 31;
+    int32 max_messages_per_minute = 32;
+    int32 max_message_length_ephemeral = 33;
+    int32 max_messages_per_minute_ephemeral = 34;
+}
+
+message GeoLocation {
+    float lat = 1;
+    float lng = 2;
+}
+
+message OptionalGeoLocation {
+    GeoLocation Value = 1;
 }
