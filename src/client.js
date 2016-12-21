@@ -246,7 +246,7 @@ function handleMessageEvent(evt) {
 							global.robot.logger.warning("Spammy message caught of type: " + checkForSpamResult + " , sending timeout in channel ID: " + message.channel + " and title " + global.channels_by_index[getTitle].title + " to user: " + message.user.display_name + " ! - Content: " + message.body)
 
 							let channelId = message.channel;
-							let account = {name: message.user.display_name, account_id: message.user.id};
+							let account = {name: message.user.display_name, account_id: message.user.id, is_moderator: message.user.is_moderator};
 							let obj = {message_id: message.id, account: account, body: checkForSpamResult, send_time: message.timestamp, update_time: message.timestamp};
 							global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
 						} else {
@@ -325,7 +325,7 @@ function emitToHubot(message, wrapper) {
 		if (wrapper.type === MessageType.SYSTEM_MESSAGE) {
 			let channelId = message.channel;
 			let getChannelIndex = findKeyIndex(global.channels_by_index, 'id', channelId);
-			let account = {name: message.user.display_name, account_id: message.user.id};
+			let account = {name: message.user.display_name, account_id: message.user.id, is_moderator: message.user.is_moderator};
 			let obj = {message_id: message.id, account: account, body: message.body, send_time: message.timestamp, update_time: message.timestamp};
 
 			if (message.type === 'USER_LEFT') {
@@ -340,7 +340,7 @@ function emitToHubot(message, wrapper) {
 		}
 		if (wrapper.type === MessageType.CHAT_MESSAGE) {
 			let channelId = message.channel;
-			let account = {name: message.user.display_name, account_id: message.user.id};
+			let account = {name: message.user.display_name, account_id: message.user.id, is_moderator: message.user.is_moderator};
 			let obj = {message_id: message.id, account: account, body: message.body, send_time: message.timestamp, update_time: message.timestamp};
 
 			let searchstr = "@" + global.display_name + ":";
@@ -358,6 +358,7 @@ function emitToHubot(message, wrapper) {
 
 			let hardcodedcmds = ['join community'];
 			let searchresult = null;
+			let communityURL = null;
 
 			for (let i = 0; i < hardcodedcmds.length; i++) {
 				let arrstr = hardcodedcmds[i];
@@ -365,6 +366,10 @@ function emitToHubot(message, wrapper) {
 				if (searchstr !== -1) {
 					searchresult = i;
 				}
+			}
+
+			if (message.website !== null) {
+				communityURL = message.website.url;
 			}
 
 			let getChannelIndex = findKeyIndex(global.channels_by_index, 'id', channelId);
@@ -386,8 +391,13 @@ function emitToHubot(message, wrapper) {
 					if (searchresult !== null && getChannelType === ChannelType.DIRECT || getChannelType === ChannelType.DIRECT) {
 						global.robot.logger.info('New WS chat message! (in direct channel (not in global.channels_by_index) with id: ' + channelId + ')');
 						obj.body = obj.body.toLowerCase();
-						obj.body = global.robot.name + " " + obj.body;
-						global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
+						if (communityURL !== null) {
+							obj.body = global.robot.name + " " + obj.body + " direct";
+							global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
+						} else if (searchresult === null) {
+							obj.body = global.robot.name + " " + obj.body;
+							global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
+						}
 					}
 
 					return;
@@ -400,16 +410,28 @@ function emitToHubot(message, wrapper) {
 			if (searchresult !== null && getChannelType === ChannelType.DIRECT || getChannelType === ChannelType.DIRECT) {
 				global.robot.logger.info('New WS chat message! (in direct channel with id: ' + channelId + ' & title ' + global.channels_by_index[getChannelIndex].title + ')');
 				obj.body = obj.body.toLowerCase();
-				obj.body = global.robot.name + " " + obj.body;
-				global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
+				if (communityURL !== null) {
+					obj.body = global.robot.name + " " + obj.body + " direct";
+					global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
+				} else if (searchresult === null) {
+					obj.body = global.robot.name + " " + obj.body;
+					global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
+				}
 			} else if (bodyidx === 0 && getChannelType !== ChannelType.DIRECT) {
 				global.robot.logger.info('New WS chat message! (in channel with id: ' + channelId + ' & title ' + global.channels_by_index[getChannelIndex].title +')');
 				obj.body = obj.body.replace(searchstr, searchstr + " " + global.robot.name);
 				obj.body = obj.body.substring(obj.body.length, searchstrlength);
+				if (communityURL !== null) {
+					obj.body += ' ' + communityURL;
+				}
 				global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
 			} else if (bodyidx > 0 && getChannelType !== ChannelType.DIRECT) {
 				global.robot.logger.info('New WS chat message! (in channel with id: ' + channelId + ' & title ' + global.channels_by_index[getChannelIndex].title +')');
-				obj.body = global.robot.name + " " + obj.body;
+				if (communityURL !== null) {
+					obj.body = global.robot.name + " " + obj.body + communityURL;
+				} else {
+					obj.body = global.robot.name + " " + obj.body;
+				}
 				obj.body = obj.body.replace(", " + searchstr, "");
 				obj.body = obj.body.replace(searchstr, "");
 				global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
@@ -447,7 +469,7 @@ function onReceiveChatMessage(wrapper) {
 
 		if (msg.body_annotations.length > 0) {
 			let result = msg.body_annotations.map(function(keys) {
-				if (keys.type !== 'USER_MENTION') {
+				if (keys.type !== 'USER_MENTION' || keys.type !== 'WEB_LINK') {
 					return null; //because bot isn't really supposed to reply to anything else except these... as of now.
 				}
 			});
