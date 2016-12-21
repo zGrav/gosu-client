@@ -464,9 +464,11 @@ function clearMessageTimer(id) {
 
 function startTrivia() {
 	try {
-		if (conn.readyState !== WebSocket.OPEN) {
-			global.robot.logger.warning('Trying to start trivia on closed websocket');
-			return;
+		if (conn) {
+			if (conn.readyState !== WebSocket.OPEN) {
+				global.robot.logger.warning('Trying to start trivia on closed websocket');
+				return;
+			}
 		}
 
 		for (let i = 0; i < triviaWatcher.length; i++) {
