@@ -429,7 +429,7 @@ function onReceiveChatMessage(wrapper) {
 			});
 		}
 
-		if (msg.attachments > 0) {
+		if (msg.attachments) {
 			msg.attachments.map(function (keys) {
 				if (keys.type !== 'REPLY_TO') {
 					return null; //because bot isn't really supposed to reply to anything else except these... as of now.
