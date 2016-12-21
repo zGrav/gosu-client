@@ -255,17 +255,29 @@ function emitToHubot(message, wrapper) {
 			let account = {name: message.user.display_name, account_id: message.user.id, is_moderator: message.user.is_moderator};
 			let obj = {message_id: message.id, account: account, body: message.body, send_time: message.timestamp, update_time: message.timestamp};
 
-			let searchstr = '@' + global.display_name + ':';
-			let bodyidx = obj.body.indexOf(searchstr);
-			let searchstrlength = global.display_name.length + 3;
+			let searchstr = null;
+			let bodyidx = null;
+			let searchstrlength = null;
 
-			if (bodyidx === -1) {
-				searchstr = '@' + global.display_name;
-				bodyidx = obj.body.indexOf(searchstr);
-				searchstrlength = global.display_name.length + 2;
-			} else if (bodyidx === -1) {
-				searchstr = ' @' + global.display_name;
-				bodyidx = obj.body.indexOf(searchstr);
+			if (message.body_annotations) {
+				message.body_annotations.map(function(key) {
+					if (key.type === 'USER_MENTION') {
+						if (key.target === global.user_id) {
+							searchstr = '@' + global.display_name.toLowerCase() + ':';
+							bodyidx = obj.body.toLowerCase().indexOf(searchstr);
+							searchstrlength = global.display_name.length + 3;
+
+							if (bodyidx === -1) {
+								searchstr = '@' + global.display_name.toLowerCase();
+								bodyidx = obj.body.toLowerCase().indexOf(searchstr);
+								searchstrlength = global.display_name.length + 2;
+							} else if (bodyidx === -1) {
+								searchstr = ' @' + global.display_name.toLowerCase();
+								bodyidx = obj.body.toLowerCase().indexOf(searchstr);
+							}
+						}
+					}
+				});
 			}
 
 			let hardcodedcmds = ['join community'];
@@ -335,6 +347,7 @@ function emitToHubot(message, wrapper) {
 			} else if (bodyidx === 0 && getChannelType !== ChannelType.DIRECT) {
 				global.robot.logger.info('New WS chat message! (in channel with id: ' + channelId + ' & title ' + global.channels_by_index[getChannelIndex].title +')');
 
+				obj.body = obj.body.toLowerCase();
 				obj.body = obj.body.replace(searchstr, searchstr + ' ' + global.robot.name);
 				obj.body = obj.body.substring(obj.body.length, searchstrlength);
 
@@ -352,6 +365,7 @@ function emitToHubot(message, wrapper) {
 					obj.body = global.robot.name + ' ' + obj.body;
 				}
 
+				obj.body = obj.body.toLowerCase();
 				obj.body = obj.body.replace(', ' + searchstr, '');
 				obj.body = obj.body.replace(searchstr, '');
 
