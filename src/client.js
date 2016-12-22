@@ -318,7 +318,7 @@ function emitToHubot(message, wrapper) {
 			if (getChannelIndex !== null) {
 				getChannelType = global.channels_by_index[getChannelIndex].type;
 			} else {
-				global.robot.http(global.api + '/channel' + channelId + '/').headers({
+				global.robot.http(global.api + '/channel/' + channelId + '/').headers({
 				  'Accept': 'application/json',
 				  'Content-Type': 'application/json',
 				  'X-Token': global.user_token,
