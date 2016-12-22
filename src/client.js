@@ -291,16 +291,17 @@ function emitToHubot(message, wrapper) {
 
 				for (let i = 0; i < hardcodedcmds.length; i++) {
 					let arrstr = hardcodedcmds[i];
-					if (obj.body) {
+					if (obj.body && typeof obj.body.search === 'function') {
 						let searchstr = obj.body.search(arrstr);
 						if (searchstr !== -1) {
 							searchresult = i;
 						}
 					}
 				}
-
-				if (message.website !== null) {
-					communityURL = message.website.url;
+				if (message.website) {
+					if (message.website !== null) {
+						communityURL = message.website.url;
+					}
 				}
 
 				let replyToSender = null;
