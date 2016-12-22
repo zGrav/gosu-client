@@ -21,7 +21,7 @@ const MAX_BACKOFF_INTERVAL = 1000 * 60 * 2;
 const BACKOFF_INTERVAL = 1000;
 
 const TRIVIA_INTERVAL = 1000;
-const IDLE_TRIVIA_INTERVAL = 120000;
+const IDLE_TRIVIA_INTERVAL = 600000;
 let triviaWatcher = [];
 
 let savedToken = null;
