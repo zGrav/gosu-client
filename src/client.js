@@ -187,13 +187,15 @@ function handleMessageEvent(evt) {
 								let getTitle = findKeyIndex(global.channels_by_index, 'id', message.channel);
 
 								if (global.channels_by_index.length > 0) {
-									if (global.channels_by_index[getTitle].type !== ChannelType.DIRECT && getTitle !== null) {
-										if (idx !== null) {
-											global.robot.logger.info('Updating ts to triviaWatcher from channel with ID: ' + message.channel + ' and title: ' + global.channels_by_index[getTitle].title);
-											triviaWatcher[idx].ts = message.timestamp;
-										} else {
-											global.robot.logger.info('Pushing chid/ts to triviaWatcher from channel with ID: ' + message.channel + ' and title: ' + global.channels_by_index[getTitle].title);
-											triviaWatcher.push({chid: message.channel, ts: message.timestamp});
+									if (global.channels_by_index[getTitle]) {
+										if (global.channels_by_index[getTitle].type !== ChannelType.DIRECT && getTitle !== null) {
+											if (idx !== null) {
+												global.robot.logger.info('Updating ts to triviaWatcher from channel with ID: ' + message.channel + ' and title: ' + global.channels_by_index[getTitle].title);
+												triviaWatcher[idx].ts = message.timestamp;
+											} else {
+												global.robot.logger.info('Pushing chid/ts to triviaWatcher from channel with ID: ' + message.channel + ' and title: ' + global.channels_by_index[getTitle].title);
+												triviaWatcher.push({chid: message.channel, ts: message.timestamp});
+											}
 										}
 									}
 								}
