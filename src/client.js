@@ -284,115 +284,119 @@ function emitToHubot(message, wrapper) {
 				});
 			}
 
-			let hardcodedcmds = ['join community'];
-			let searchresult = null;
-			let communityURL = null;
+			if (obj) {
+				let hardcodedcmds = ['join community'];
+				let searchresult = null;
+				let communityURL = null;
 
-			for (let i = 0; i < hardcodedcmds.length; i++) {
-				let arrstr = hardcodedcmds[i];
-				let searchstr = obj.body.search(arrstr);
-				if (searchstr !== -1) {
-					searchresult = i;
-				}
-			}
-
-			if (message.website !== null) {
-				communityURL = message.website.url;
-			}
-
-			let replyToSender = null;
-			let replyToMessage = null;
-
-			if (message.attachments) {
-				message.attachments.map(function (key) {
-					if (key.type === 'REPLY_TO') {
-						replyToSender = key.message.sender;
-						replyToMessage = key.message.user_message.body;
-					}
-				});
-			}
-
-			let getChannelIndex = findKeyIndex(global.channels_by_index, 'id', channelId);
-			let getChannelType = null;
-
-			if (getChannelIndex !== null) {
-				getChannelType = global.channels_by_index[getChannelIndex].type;
-			} else {
-				global.robot.http(global.api + '/channel/' + channelId + '/').headers({
-				  'Accept': 'application/json',
-				  'Content-Type': 'application/json',
-				  'X-Token': global.user_token,
-				}).get()(function(err, res, body) {
-				  try {
-					let result = JSON.parse(body);
-
-					getChannelType = result.channel.type;
-
-					if (getChannelType === ChannelType.DIRECT) {
-						global.robot.logger.info('New WS chat message! (in direct channel (not in global.channels_by_index) with id: ' + channelId + ')');
-						obj.body = obj.body.toLowerCase();
-
-						if (searchresult !== null && communityURL !== null) {
-							obj.body = global.robot.name + ' ' + obj.body + ' direct'; // hardcoded to disallow join community via DM channels due to permissions
-							global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
-						} else if (searchresult === null) {
-							obj.body = global.robot.name + ' ' + obj.body;
-							global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
+				for (let i = 0; i < hardcodedcmds.length; i++) {
+					let arrstr = hardcodedcmds[i];
+					if (obj.body) {
+						let searchstr = obj.body.search(arrstr);
+						if (searchstr !== -1) {
+							searchresult = i;
 						}
 					}
-
-					return;
-				  } catch (err) {
-					return global.robot.logger.error('Oh no! We errored :( - ' + err + ' - API Response Code: ' + res.statusCode);
-				  }
-				});
-			}
-
-			if (getChannelType === ChannelType.DIRECT) {
-				global.robot.logger.info('New WS chat message! (in direct channel with id: ' + channelId + ' & title ' + global.channels_by_index[getChannelIndex].title + ')');
-
-				obj.body = obj.body.toLowerCase();
-
-				if (searchresult !== null && communityURL !== null) {
-					obj.body = global.robot.name + ' ' + obj.body + ' direct'; // hardcoded to disallow join community via DM channels due to permissions
-					global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
-				} else if (searchresult === null) {
-					obj.body = global.robot.name + ' ' + obj.body;
-					global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
-				}
-			} else if (bodyidx === 0 && getChannelType !== ChannelType.DIRECT) {
-				global.robot.logger.info('New WS chat message! (in channel with id: ' + channelId + ' & title ' + global.channels_by_index[getChannelIndex].title +')');
-
-				obj.body = obj.body.toLowerCase();
-				obj.body = obj.body.replace(searchstr, searchstr + ' ' + global.robot.name);
-				obj.body = obj.body.substring(obj.body.length, searchstrlength);
-
-				if (communityURL !== null) {
-					obj.body += ' ' + communityURL;
 				}
 
-				global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
-			} else if (bodyidx > 0 && getChannelType !== ChannelType.DIRECT) {
-				global.robot.logger.info('New WS chat message! (in channel with id: ' + channelId + ' & title ' + global.channels_by_index[getChannelIndex].title +')');
+				if (message.website !== null) {
+					communityURL = message.website.url;
+				}
 
-				if (communityURL !== null) {
-					obj.body = global.robot.name + ' ' + obj.body + communityURL;
+				let replyToSender = null;
+				let replyToMessage = null;
+
+				if (message.attachments) {
+					message.attachments.map(function (key) {
+						if (key.type === 'REPLY_TO') {
+							replyToSender = key.message.sender;
+							replyToMessage = key.message.user_message.body;
+						}
+					});
+				}
+
+				let getChannelIndex = findKeyIndex(global.channels_by_index, 'id', channelId);
+				let getChannelType = null;
+
+				if (getChannelIndex !== null) {
+					getChannelType = global.channels_by_index[getChannelIndex].type;
 				} else {
-					obj.body = global.robot.name + ' ' + obj.body;
+					global.robot.http(global.api + '/channel/' + channelId + '/').headers({
+					  'Accept': 'application/json',
+					  'Content-Type': 'application/json',
+					  'X-Token': global.user_token,
+					}).get()(function(err, res, body) {
+					  try {
+						let result = JSON.parse(body);
+
+						getChannelType = result.channel.type;
+
+						if (getChannelType === ChannelType.DIRECT) {
+							global.robot.logger.info('New WS chat message! (in direct channel (not in global.channels_by_index) with id: ' + channelId + ')');
+							obj.body = obj.body.toLowerCase();
+
+							if (searchresult !== null && communityURL !== null) {
+								obj.body = global.robot.name + ' ' + obj.body + ' direct'; // hardcoded to disallow join community via DM channels due to permissions
+								global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
+							} else if (searchresult === null) {
+								obj.body = global.robot.name + ' ' + obj.body;
+								global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
+							}
+						}
+
+						return;
+					  } catch (err) {
+						return global.robot.logger.error('Oh no! We errored :( - ' + err + ' - API Response Code: ' + res.statusCode);
+					  }
+					});
 				}
 
-				obj.body = obj.body.toLowerCase();
-				obj.body = obj.body.replace(', ' + searchstr, '');
-				obj.body = obj.body.replace(searchstr, '');
+				if (getChannelType === ChannelType.DIRECT) {
+					global.robot.logger.info('New WS chat message! (in direct channel with id: ' + channelId + ' & title ' + global.channels_by_index[getChannelIndex].title + ')');
 
-				global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
-			} else if (bodyidx === null && replyToSender === global.user_id && replyToMessage !== null && replyToMessage.indexOf('Answer by mentioning me') > -1) {
-				// used exclusively for trivia message replies.
+					obj.body = obj.body.toLowerCase();
 
-				global.robot.logger.info('New trivia message reply! (in channel with id: ' + channelId + ' & title ' + global.channels_by_index[getChannelIndex].title +')');
-				obj.body = global.robot.name + ' answer ' + obj.body;
+					if (searchresult !== null && communityURL !== null) {
+						obj.body = global.robot.name + ' ' + obj.body + ' direct'; // hardcoded to disallow join community via DM channels due to permissions
+						global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
+					} else if (searchresult === null) {
+						obj.body = global.robot.name + ' ' + obj.body;
+						global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
+					}
+				} else if (bodyidx === 0 && getChannelType !== ChannelType.DIRECT) {
+					global.robot.logger.info('New WS chat message! (in channel with id: ' + channelId + ' & title ' + global.channels_by_index[getChannelIndex].title +')');
 
-				global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
+					obj.body = obj.body.toLowerCase();
+					obj.body = obj.body.replace(searchstr, searchstr + ' ' + global.robot.name);
+					obj.body = obj.body.substring(obj.body.length, searchstrlength);
+
+					if (communityURL !== null) {
+						obj.body += ' ' + communityURL;
+					}
+
+					global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
+				} else if (bodyidx > 0 && getChannelType !== ChannelType.DIRECT) {
+					global.robot.logger.info('New WS chat message! (in channel with id: ' + channelId + ' & title ' + global.channels_by_index[getChannelIndex].title +')');
+
+					if (communityURL !== null) {
+						obj.body = global.robot.name + ' ' + obj.body + communityURL;
+					} else {
+						obj.body = global.robot.name + ' ' + obj.body;
+					}
+
+					obj.body = obj.body.toLowerCase();
+					obj.body = obj.body.replace(', ' + searchstr, '');
+					obj.body = obj.body.replace(searchstr, '');
+
+					global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
+				} else if (bodyidx === null && replyToSender === global.user_id && replyToMessage !== null && replyToMessage.indexOf('Answer by clicking on') > -1) {
+					// used exclusively for trivia message replies.
+
+					global.robot.logger.info('New trivia message reply! (in channel with id: ' + channelId + ' & title ' + global.channels_by_index[getChannelIndex].title +')');
+					obj.body = global.robot.name + ' answer ' + obj.body;
+
+					global.robot.emit('message', channelId, obj.message_id, obj.account, obj.body, obj.send_time, obj.update_time);
+				}
 			}
 		}
 	} catch (e) {
