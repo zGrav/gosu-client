@@ -334,7 +334,10 @@ function emitToHubot(message, wrapper) {
 
 						if (getChannelType === ChannelType.DIRECT) {
 							global.robot.logger.info('New WS chat message! (in direct channel (not in global.channels_by_index) with id: ' + channelId + ')');
-							obj.body = obj.body.toLowerCase();
+
+							if (obj.body && typeof obj.body.toLowerCase === 'function') {
+								obj.body = obj.body.toLowerCase();
+							}
 
 							if (searchresult !== null && communityURL !== null) {
 								obj.body = global.robot.name + ' ' + obj.body + ' direct'; // hardcoded to disallow join community via DM channels due to permissions
@@ -355,7 +358,9 @@ function emitToHubot(message, wrapper) {
 				if (getChannelType === ChannelType.DIRECT) {
 					global.robot.logger.info('New WS chat message! (in direct channel with id: ' + channelId + ' & title ' + global.channels_by_index[getChannelIndex].title + ')');
 
-					obj.body = obj.body.toLowerCase();
+					if (obj.body && typeof obj.body.toLowerCase === 'function') {
+						obj.body = obj.body.toLowerCase();
+					}
 
 					if (searchresult !== null && communityURL !== null) {
 						obj.body = global.robot.name + ' ' + obj.body + ' direct'; // hardcoded to disallow join community via DM channels due to permissions
